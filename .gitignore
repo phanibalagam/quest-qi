@@ -32,3 +32,5 @@ data/processed/dense_embeddings.npz
 # an archive.
 _build/
 _dist/
+venues/*/_build/
+venues/*/_dist/

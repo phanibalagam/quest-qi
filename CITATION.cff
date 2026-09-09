@@ -6,6 +6,7 @@ authors:
   - family-names: Balagam
     given-names: Phani Kumar
     orcid: "https://orcid.org/0009-0007-6762-399X"
+doi: "10.5281/zenodo.22668726"
 repository-code: "https://github.com/phanibalagam/quest-qi"
 url: "https://github.com/phanibalagam/quest-qi"
 version: "1.0.0"

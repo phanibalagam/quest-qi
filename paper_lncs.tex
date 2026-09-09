@@ -72,7 +72,7 @@ Retrieval-augmented generation \cite{lewis2020rag} is the obvious architecture, 
 
 That much is a clean empirical finding. The rest of this paper is about what we could not then demonstrate. The natural next step is to represent the question's structure, parsing out the defect mode, the severity class, the period and the geography, and use it to rank. Doing so raises nDCG@10 from 0.302 to 0.579. But that number is not a retrieval result. Our structured filter compares the same fields, with the same regular expressions, that the benchmark used to define which documents are relevant; the filter \textit{is} the relevance function. We size the problem with controls that do no query understanding at all and simply score documents by gold membership: additively over our 300-document candidate pool such a control reaches 0.823, and ranking the gold set first reaches 1.000. Our best configuration recovers about half of the first of those. When we strip out everything that re-executes the predicate, the remainder, an unsupervised defect-category prior, is worth +0.014 nDCG@10, with a confidence interval spanning zero. That remainder is an upper bound rather than a clean measurement: the prior matches against the same stored \texttt{defect\_category} field the gold rule tests, so even it is not fully independent of the predicate (Section 5.3).
 
-We report this because the failure mode generalises. Predicate-defined relevance is attractive for building benchmarks without an annotation budget, and this paper is a worked example of how it silently converts a retrieval evaluation into a test of predicate reconstruction.
+We report this because the failure mode generalizes. Predicate-defined relevance is attractive for building benchmarks without an annotation budget, and this paper is a worked example of how it silently converts a retrieval evaluation into a test of predicate reconstruction.
 
 \textbf{Contributions.}
 
@@ -407,7 +407,7 @@ Retrieval over pharmaceutical quality records fails where investigators need it 
 
 \needspace{17\baselineskip}
 \section*{Reproducibility}
-The benchmark, the taxonomy, the scripts below and every file in \texttt{results/} are released at \url{https://github.com/phanibalagam/quest-qi}.
+The benchmark, the taxonomy, the scripts below and every file in \texttt{results/} are released at \url{https://github.com/phanibalagam/quest-qi} and archived at \url{https://doi.org/10.5281/zenodo.22668726}. That is the concept DOI, which always resolves to the latest archived version; the v1.0.0 release this manuscript describes is also citable on its own.
 
 Run in order; each script writes JSON into \texttt{results/}.
 

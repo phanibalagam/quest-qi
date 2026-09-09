@@ -83,7 +83,7 @@ zero. That remainder is an upper bound rather than a clean measurement: the prio
 matches against the same stored `defect_category` field the gold rule tests, so even it
 is not fully independent of the predicate (Section 5.3).
 
-We report this because the failure mode generalises. Predicate-defined relevance is
+We report this because the failure mode generalizes. Predicate-defined relevance is
 attractive for building benchmarks without an annotation budget, and this paper is a
 worked example of how it silently converts a retrieval evaluation into a test of
 predicate reconstruction.
@@ -894,7 +894,10 @@ leaderboard, with both its scoring form and its candidate pool stated.
 ## Reproducibility
 
 The benchmark, the taxonomy, the scripts below and every file in `results/` are released
-at <https://github.com/phanibalagam/quest-qi>.
+at <https://github.com/phanibalagam/quest-qi> and archived at
+<https://doi.org/10.5281/zenodo.22668726>. That is the concept DOI, which always
+resolves to the latest archived version; the v1.0.0 release this manuscript describes is
+also citable on its own.
 
 Run in order; each script writes JSON into `results/`.
 

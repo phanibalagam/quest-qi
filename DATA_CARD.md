@@ -16,7 +16,7 @@
   manuscript's bound numbers from `results/`, and compares every decimal in both
   directions between `paper.md` and `paper_lncs.tex` and from the `.tex` into the PDF;
   see the README for what that does and does not guarantee, and for what the PDF
-  comparison normalises away.
+  comparison normalizes away.
 - `figures/` — `gen_figures.py` and the three figures it writes, in vector (`.pdf`,
   used by the typeset paper) and raster (`.png`, used by the Markdown) form.
 - `notes/README.md` — what the review notes are and who produced them: the reviews came
@@ -31,6 +31,12 @@
   pre-submission reviews as received, the citation audits, and the point-by-point
   responses, so a reader can check the responses against the reviews rather than taking
   them on trust.
+- `venues/ecir2027/` — a 12-page cut of the manuscript for the ECIR 2027 Resource Papers
+  track, reframed around the resource rather than the study, with its own README saying
+  what differs from the long version. It shares this folder's `results/`, `figures/` and
+  `references.bib` (the last two as symlinks) so a regenerated figure cannot drift between
+  the two PDFs, and it is checked by `scripts/13_verify_variant.py`, which proves that
+  every number it states is one the long manuscript states and binds to `results/`.
 - `_superseded_20260907/` and `_superseded_20260907/generation_answers/` — material
   withdrawn from the manuscript on 2026-09-07 when Section 5.6 was cut. **Nothing in it
   is cited by the paper.** It ships so the excision can be audited; see the README in
