@@ -1,0 +1,1540 @@
+{
+  "seed": 20260906,
+  "corpus_size": 4652,
+  "n_queries_total": 171,
+  "n_queries_test": 119,
+  "n_bootstrap_clusters": 50,
+  "split": "headline metrics computed on the held-out test split",
+  "top_k": 100,
+  "config": {
+    "svd_dim": 300,
+    "w2v_dim": 200,
+    "rrf_k": 60,
+    "bootstrap_resamples": 2000
+  },
+  "timings": {
+    "bm25_index_s": 0.42,
+    "bm25_query_ms_per_query": 25.6,
+    "tfidf_index_s": 1.08,
+    "tfidf_query_ms_per_query": 0.4,
+    "lsa_index_s": 8.29,
+    "lsa_explained_variance": 0.3619,
+    "lsa_query_ms_per_query": 0.2,
+    "w2v_index_s": 42.19,
+    "w2v_query_ms_per_query": 0.1,
+    "bge_base_query_ms_per_query": 0.2,
+    "minilm_query_ms_per_query": 0.2,
+    "dense_encoder_used_in_fusion": "bge_base"
+  },
+  "dense_encoders": {
+    "seed": 20260906,
+    "models": {
+      "bge_base": {
+        "repo": "BAAI/bge-base-en-v1.5",
+        "revision": "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
+        "dim": 768,
+        "max_seq_length": 512,
+        "query_prefix": "Represent this sentence for searching relevant passages: ",
+        "passage_prefix": "",
+        "normalised": true,
+        "device": "cpu",
+        "n_docs": 4652,
+        "n_queries": 171,
+        "seconds": {
+          "load": 6.0,
+          "encode_docs": 318.5,
+          "encode_queries": 1.5
+        }
+      },
+      "minilm": {
+        "repo": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "dim": 384,
+        "max_seq_length": 256,
+        "query_prefix": "",
+        "passage_prefix": "",
+        "normalised": true,
+        "device": "cpu",
+        "n_docs": 4652,
+        "n_queries": 171,
+        "seconds": {
+          "load": 1.0,
+          "encode_docs": 39.3,
+          "encode_queries": 0.2
+        }
+      }
+    },
+    "encoded_at": "2026-09-07T00:00:34-0400",
+    "host": "run on a host able to reach huggingface.co with the system certificate store injected via truststore; this is a network/TLS-trust requirement of the one-off weight download, not a property of the analysis environment or of a regulated deployment"
+  },
+  "summary": {
+    "bm25": {
+      "recall@10": {
+        "mean": 0.2207,
+        "ci95_cluster": [
+          0.1482,
+          0.338
+        ],
+        "ci95_iid": [
+          0.1624,
+          0.2821
+        ],
+        "macro_over_families": 0.1913
+      },
+      "recall@50": {
+        "mean": 0.3422,
+        "ci95_cluster": [
+          0.2499,
+          0.4851
+        ],
+        "ci95_iid": [
+          0.2733,
+          0.4108
+        ],
+        "macro_over_families": 0.3382
+      },
+      "recall@100": {
+        "mean": 0.3888,
+        "ci95_cluster": [
+          0.2927,
+          0.5299
+        ],
+        "ci95_iid": [
+          0.3151,
+          0.4589
+        ],
+        "macro_over_families": 0.3967
+      },
+      "precision@10": {
+        "mean": 0.1639,
+        "ci95_cluster": [
+          0.1184,
+          0.2316
+        ],
+        "ci95_iid": [
+          0.1227,
+          0.2084
+        ],
+        "macro_over_families": 0.1368
+      },
+      "ndcg@10": {
+        "mean": 0.2363,
+        "ci95_cluster": [
+          0.1693,
+          0.3388
+        ],
+        "ci95_iid": [
+          0.1777,
+          0.2997
+        ],
+        "macro_over_families": 0.1999
+      },
+      "mrr": {
+        "mean": 0.3331,
+        "ci95_cluster": [
+          0.2518,
+          0.4435
+        ],
+        "ci95_iid": [
+          0.2598,
+          0.4064
+        ],
+        "macro_over_families": 0.3154
+      }
+    },
+    "tfidf": {
+      "recall@10": {
+        "mean": 0.2408,
+        "ci95_cluster": [
+          0.1613,
+          0.3685
+        ],
+        "ci95_iid": [
+          0.1752,
+          0.3088
+        ],
+        "macro_over_families": 0.223
+      },
+      "recall@50": {
+        "mean": 0.3617,
+        "ci95_cluster": [
+          0.2654,
+          0.5071
+        ],
+        "ci95_iid": [
+          0.2918,
+          0.4373
+        ],
+        "macro_over_families": 0.369
+      },
+      "recall@100": {
+        "mean": 0.4165,
+        "ci95_cluster": [
+          0.3173,
+          0.5615
+        ],
+        "ci95_iid": [
+          0.3457,
+          0.4898
+        ],
+        "macro_over_families": 0.4373
+      },
+      "precision@10": {
+        "mean": 0.1655,
+        "ci95_cluster": [
+          0.118,
+          0.2379
+        ],
+        "ci95_iid": [
+          0.1252,
+          0.2109
+        ],
+        "macro_over_families": 0.1475
+      },
+      "ndcg@10": {
+        "mean": 0.2638,
+        "ci95_cluster": [
+          0.1862,
+          0.3863
+        ],
+        "ci95_iid": [
+          0.1957,
+          0.333
+        ],
+        "macro_over_families": 0.2488
+      },
+      "mrr": {
+        "mean": 0.3643,
+        "ci95_cluster": [
+          0.2746,
+          0.4906
+        ],
+        "ci95_iid": [
+          0.2885,
+          0.4413
+        ],
+        "macro_over_families": 0.3849
+      }
+    },
+    "lsa": {
+      "recall@10": {
+        "mean": 0.2573,
+        "ci95_cluster": [
+          0.1798,
+          0.3793
+        ],
+        "ci95_iid": [
+          0.1938,
+          0.3229
+        ],
+        "macro_over_families": 0.226
+      },
+      "recall@50": {
+        "mean": 0.4111,
+        "ci95_cluster": [
+          0.3075,
+          0.5572
+        ],
+        "ci95_iid": [
+          0.3393,
+          0.4855
+        ],
+        "macro_over_families": 0.3766
+      },
+      "recall@100": {
+        "mean": 0.4839,
+        "ci95_cluster": [
+          0.3692,
+          0.6345
+        ],
+        "ci95_iid": [
+          0.4142,
+          0.5565
+        ],
+        "macro_over_families": 0.4609
+      },
+      "precision@10": {
+        "mean": 0.2084,
+        "ci95_cluster": [
+          0.1536,
+          0.2851
+        ],
+        "ci95_iid": [
+          0.1655,
+          0.2555
+        ],
+        "macro_over_families": 0.1829
+      },
+      "ndcg@10": {
+        "mean": 0.2995,
+        "ci95_cluster": [
+          0.2212,
+          0.4149
+        ],
+        "ci95_iid": [
+          0.24,
+          0.365
+        ],
+        "macro_over_families": 0.2571
+      },
+      "mrr": {
+        "mean": 0.4123,
+        "ci95_cluster": [
+          0.309,
+          0.5436
+        ],
+        "ci95_iid": [
+          0.3378,
+          0.4897
+        ],
+        "macro_over_families": 0.3606
+      }
+    },
+    "w2v": {
+      "recall@10": {
+        "mean": 0.1472,
+        "ci95_cluster": [
+          0.0901,
+          0.2329
+        ],
+        "ci95_iid": [
+          0.0993,
+          0.1994
+        ],
+        "macro_over_families": 0.1164
+      },
+      "recall@50": {
+        "mean": 0.2443,
+        "ci95_cluster": [
+          0.169,
+          0.3547
+        ],
+        "ci95_iid": [
+          0.1823,
+          0.3094
+        ],
+        "macro_over_families": 0.2202
+      },
+      "recall@100": {
+        "mean": 0.2861,
+        "ci95_cluster": [
+          0.2047,
+          0.4039
+        ],
+        "ci95_iid": [
+          0.2195,
+          0.3527
+        ],
+        "macro_over_families": 0.2676
+      },
+      "precision@10": {
+        "mean": 0.1034,
+        "ci95_cluster": [
+          0.0676,
+          0.1551
+        ],
+        "ci95_iid": [
+          0.0731,
+          0.1395
+        ],
+        "macro_over_families": 0.078
+      },
+      "ndcg@10": {
+        "mean": 0.1592,
+        "ci95_cluster": [
+          0.1048,
+          0.241
+        ],
+        "ci95_iid": [
+          0.1146,
+          0.2119
+        ],
+        "macro_over_families": 0.1194
+      },
+      "mrr": {
+        "mean": 0.2446,
+        "ci95_cluster": [
+          0.1729,
+          0.3487
+        ],
+        "ci95_iid": [
+          0.1833,
+          0.3167
+        ],
+        "macro_over_families": 0.1934
+      }
+    },
+    "hybrid_rrf": {
+      "recall@10": {
+        "mean": 0.2601,
+        "ci95_cluster": [
+          0.1821,
+          0.3839
+        ],
+        "ci95_iid": [
+          0.2,
+          0.33
+        ],
+        "macro_over_families": 0.2341
+      },
+      "recall@50": {
+        "mean": 0.3956,
+        "ci95_cluster": [
+          0.2958,
+          0.5399
+        ],
+        "ci95_iid": [
+          0.3212,
+          0.4702
+        ],
+        "macro_over_families": 0.3679
+      },
+      "recall@100": {
+        "mean": 0.4566,
+        "ci95_cluster": [
+          0.3504,
+          0.5999
+        ],
+        "ci95_iid": [
+          0.3851,
+          0.5283
+        ],
+        "macro_over_families": 0.4617
+      },
+      "precision@10": {
+        "mean": 0.2109,
+        "ci95_cluster": [
+          0.1577,
+          0.2852
+        ],
+        "ci95_iid": [
+          0.1689,
+          0.2572
+        ],
+        "macro_over_families": 0.1873
+      },
+      "ndcg@10": {
+        "mean": 0.3025,
+        "ci95_cluster": [
+          0.2253,
+          0.4201
+        ],
+        "ci95_iid": [
+          0.2399,
+          0.3684
+        ],
+        "macro_over_families": 0.2803
+      },
+      "mrr": {
+        "mean": 0.4096,
+        "ci95_cluster": [
+          0.3167,
+          0.5383
+        ],
+        "ci95_iid": [
+          0.3361,
+          0.4845
+        ],
+        "macro_over_families": 0.4179
+      }
+    },
+    "bge_base": {
+      "recall@10": {
+        "mean": 0.2392,
+        "ci95_cluster": [
+          0.1684,
+          0.3531
+        ],
+        "ci95_iid": [
+          0.1788,
+          0.3063
+        ],
+        "macro_over_families": 0.2428
+      },
+      "recall@50": {
+        "mean": 0.3796,
+        "ci95_cluster": [
+          0.2898,
+          0.5116
+        ],
+        "ci95_iid": [
+          0.3151,
+          0.4498
+        ],
+        "macro_over_families": 0.3643
+      },
+      "recall@100": {
+        "mean": 0.4364,
+        "ci95_cluster": [
+          0.3445,
+          0.5683
+        ],
+        "ci95_iid": [
+          0.371,
+          0.5052
+        ],
+        "macro_over_families": 0.4167
+      },
+      "precision@10": {
+        "mean": 0.2008,
+        "ci95_cluster": [
+          0.1542,
+          0.265
+        ],
+        "ci95_iid": [
+          0.163,
+          0.2403
+        ],
+        "macro_over_families": 0.1943
+      },
+      "ndcg@10": {
+        "mean": 0.2877,
+        "ci95_cluster": [
+          0.2147,
+          0.3933
+        ],
+        "ci95_iid": [
+          0.2296,
+          0.3483
+        ],
+        "macro_over_families": 0.2963
+      },
+      "mrr": {
+        "mean": 0.4098,
+        "ci95_cluster": [
+          0.3231,
+          0.525
+        ],
+        "ci95_iid": [
+          0.3381,
+          0.4782
+        ],
+        "macro_over_families": 0.421
+      }
+    },
+    "minilm": {
+      "recall@10": {
+        "mean": 0.1049,
+        "ci95_cluster": [
+          0.0668,
+          0.1666
+        ],
+        "ci95_iid": [
+          0.0698,
+          0.1451
+        ],
+        "macro_over_families": 0.091
+      },
+      "recall@50": {
+        "mean": 0.2132,
+        "ci95_cluster": [
+          0.1518,
+          0.3061
+        ],
+        "ci95_iid": [
+          0.1628,
+          0.2675
+        ],
+        "macro_over_families": 0.1955
+      },
+      "recall@100": {
+        "mean": 0.2587,
+        "ci95_cluster": [
+          0.1931,
+          0.3535
+        ],
+        "ci95_iid": [
+          0.2048,
+          0.3126
+        ],
+        "macro_over_families": 0.228
+      },
+      "precision@10": {
+        "mean": 0.0882,
+        "ci95_cluster": [
+          0.0597,
+          0.1284
+        ],
+        "ci95_iid": [
+          0.063,
+          0.1151
+        ],
+        "macro_over_families": 0.0797
+      },
+      "ndcg@10": {
+        "mean": 0.1359,
+        "ci95_cluster": [
+          0.0923,
+          0.2012
+        ],
+        "ci95_iid": [
+          0.0964,
+          0.1779
+        ],
+        "macro_over_families": 0.1235
+      },
+      "mrr": {
+        "mean": 0.2562,
+        "ci95_cluster": [
+          0.1851,
+          0.3541
+        ],
+        "ci95_iid": [
+          0.1927,
+          0.3226
+        ],
+        "macro_over_families": 0.2398
+      }
+    },
+    "hybrid_rrf_dense": {
+      "recall@10": {
+        "mean": 0.2835,
+        "ci95_cluster": [
+          0.2023,
+          0.4135
+        ],
+        "ci95_iid": [
+          0.2201,
+          0.3502
+        ],
+        "macro_over_families": 0.2856
+      },
+      "recall@50": {
+        "mean": 0.4239,
+        "ci95_cluster": [
+          0.3259,
+          0.5634
+        ],
+        "ci95_iid": [
+          0.3548,
+          0.4937
+        ],
+        "macro_over_families": 0.4134
+      },
+      "recall@100": {
+        "mean": 0.4935,
+        "ci95_cluster": [
+          0.3888,
+          0.6354
+        ],
+        "ci95_iid": [
+          0.4278,
+          0.5633
+        ],
+        "macro_over_families": 0.4865
+      },
+      "precision@10": {
+        "mean": 0.2286,
+        "ci95_cluster": [
+          0.1743,
+          0.305
+        ],
+        "ci95_iid": [
+          0.184,
+          0.2723
+        ],
+        "macro_over_families": 0.2202
+      },
+      "ndcg@10": {
+        "mean": 0.3409,
+        "ci95_cluster": [
+          0.2596,
+          0.4633
+        ],
+        "ci95_iid": [
+          0.2771,
+          0.4064
+        ],
+        "macro_over_families": 0.3432
+      },
+      "mrr": {
+        "mean": 0.4999,
+        "ci95_cluster": [
+          0.4037,
+          0.6217
+        ],
+        "ci95_iid": [
+          0.4257,
+          0.5758
+        ],
+        "macro_over_families": 0.5097
+      }
+    }
+  },
+  "summary_all_queries": {
+    "bm25": {
+      "recall@10": {
+        "mean": 0.2364
+      },
+      "recall@50": {
+        "mean": 0.3434
+      },
+      "recall@100": {
+        "mean": 0.3887
+      },
+      "precision@10": {
+        "mean": 0.1678
+      },
+      "ndcg@10": {
+        "mean": 0.2555
+      },
+      "mrr": {
+        "mean": 0.3598
+      }
+    },
+    "tfidf": {
+      "recall@10": {
+        "mean": 0.2511
+      },
+      "recall@50": {
+        "mean": 0.3581
+      },
+      "recall@100": {
+        "mean": 0.4076
+      },
+      "precision@10": {
+        "mean": 0.1661
+      },
+      "ndcg@10": {
+        "mean": 0.27
+      },
+      "mrr": {
+        "mean": 0.3564
+      }
+    },
+    "lsa": {
+      "recall@10": {
+        "mean": 0.262
+      },
+      "recall@50": {
+        "mean": 0.4098
+      },
+      "recall@100": {
+        "mean": 0.4821
+      },
+      "precision@10": {
+        "mean": 0.2082
+      },
+      "ndcg@10": {
+        "mean": 0.3044
+      },
+      "mrr": {
+        "mean": 0.4101
+      }
+    },
+    "w2v": {
+      "recall@10": {
+        "mean": 0.1521
+      },
+      "recall@50": {
+        "mean": 0.2475
+      },
+      "recall@100": {
+        "mean": 0.2899
+      },
+      "precision@10": {
+        "mean": 0.1012
+      },
+      "ndcg@10": {
+        "mean": 0.1641
+      },
+      "mrr": {
+        "mean": 0.2587
+      }
+    },
+    "hybrid_rrf": {
+      "recall@10": {
+        "mean": 0.2669
+      },
+      "recall@50": {
+        "mean": 0.3949
+      },
+      "recall@100": {
+        "mean": 0.4515
+      },
+      "precision@10": {
+        "mean": 0.2117
+      },
+      "ndcg@10": {
+        "mean": 0.3097
+      },
+      "mrr": {
+        "mean": 0.4062
+      }
+    },
+    "bge_base": {
+      "recall@10": {
+        "mean": 0.2494
+      },
+      "recall@50": {
+        "mean": 0.3783
+      },
+      "recall@100": {
+        "mean": 0.4379
+      },
+      "precision@10": {
+        "mean": 0.2041
+      },
+      "ndcg@10": {
+        "mean": 0.2966
+      },
+      "mrr": {
+        "mean": 0.4051
+      }
+    },
+    "minilm": {
+      "recall@10": {
+        "mean": 0.1285
+      },
+      "recall@50": {
+        "mean": 0.2319
+      },
+      "recall@100": {
+        "mean": 0.2743
+      },
+      "precision@10": {
+        "mean": 0.0988
+      },
+      "ndcg@10": {
+        "mean": 0.1609
+      },
+      "mrr": {
+        "mean": 0.2758
+      }
+    },
+    "hybrid_rrf_dense": {
+      "recall@10": {
+        "mean": 0.2874
+      },
+      "recall@50": {
+        "mean": 0.4211
+      },
+      "recall@100": {
+        "mean": 0.4878
+      },
+      "precision@10": {
+        "mean": 0.2281
+      },
+      "ndcg@10": {
+        "mean": 0.3452
+      },
+      "mrr": {
+        "mean": 0.489
+      }
+    }
+  },
+  "by_family": {
+    "bm25": {
+      "A_defect_form": {
+        "recall@10": 0.0327,
+        "recall@50": 0.1181,
+        "recall@100": 0.1977,
+        "precision@10": 0.0742,
+        "ndcg@10": 0.0858,
+        "mrr": 0.2224,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.042,
+          0.1374
+        ]
+      },
+      "B_defect_severity": {
+        "recall@10": 0.0176,
+        "recall@50": 0.0855,
+        "recall@100": 0.1226,
+        "precision@10": 0.0611,
+        "ndcg@10": 0.0644,
+        "mrr": 0.1948,
+        "n_queries": 18,
+        "ndcg@10_ci95_iid": [
+          0.024,
+          0.1124
+        ]
+      },
+      "C_firm_history": {
+        "recall@10": 0.7275,
+        "recall@50": 0.9688,
+        "recall@100": 0.9954,
+        "precision@10": 0.4387,
+        "ndcg@10": 0.6823,
+        "mrr": 0.7026,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.5707,
+          0.7872
+        ]
+      },
+      "D_defect_period": {
+        "recall@10": 0.0427,
+        "recall@50": 0.0946,
+        "recall@100": 0.1305,
+        "precision@10": 0.072,
+        "ndcg@10": 0.0804,
+        "mrr": 0.2072,
+        "n_queries": 25,
+        "ndcg@10_ci95_iid": [
+          0.038,
+          0.1299
+        ]
+      },
+      "E_defect_geography": {
+        "recall@10": 0.0,
+        "recall@50": 0.0125,
+        "recall@100": 0.0125,
+        "precision@10": 0.0,
+        "ndcg@10": 0.0,
+        "mrr": 0.002,
+        "n_queries": 10,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.0
+        ]
+      },
+      "F_site_country": {
+        "recall@10": 0.3271,
+        "recall@50": 0.75,
+        "recall@100": 0.9219,
+        "precision@10": 0.175,
+        "ndcg@10": 0.2862,
+        "mrr": 0.5635,
+        "n_queries": 4,
+        "ndcg@10_ci95_iid": [
+          0.137,
+          0.4796
+        ]
+      }
+    },
+    "tfidf": {
+      "A_defect_form": {
+        "recall@10": 0.0226,
+        "recall@50": 0.1234,
+        "recall@100": 0.2113,
+        "precision@10": 0.0548,
+        "ndcg@10": 0.0578,
+        "mrr": 0.162,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.0273,
+          0.0933
+        ]
+      },
+      "B_defect_severity": {
+        "recall@10": 0.0239,
+        "recall@50": 0.1302,
+        "recall@100": 0.2085,
+        "precision@10": 0.05,
+        "ndcg@10": 0.0687,
+        "mrr": 0.2426,
+        "n_queries": 18,
+        "ndcg@10_ci95_iid": [
+          0.0244,
+          0.1239
+        ]
+      },
+      "C_firm_history": {
+        "recall@10": 0.7996,
+        "recall@50": 0.9892,
+        "recall@100": 1.0,
+        "precision@10": 0.4742,
+        "ndcg@10": 0.7983,
+        "mrr": 0.8204,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.6869,
+          0.9009
+        ]
+      },
+      "D_defect_period": {
+        "recall@10": 0.0364,
+        "recall@50": 0.1021,
+        "recall@100": 0.1482,
+        "precision@10": 0.056,
+        "ndcg@10": 0.0638,
+        "mrr": 0.1957,
+        "n_queries": 25,
+        "ndcg@10_ci95_iid": [
+          0.0327,
+          0.0971
+        ]
+      },
+      "E_defect_geography": {
+        "recall@10": 0.0,
+        "recall@50": 0.0303,
+        "recall@100": 0.0556,
+        "precision@10": 0.0,
+        "ndcg@10": 0.0,
+        "mrr": 0.0134,
+        "n_queries": 10,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.0
+        ]
+      },
+      "F_site_country": {
+        "recall@10": 0.4552,
+        "recall@50": 0.8385,
+        "recall@100": 1.0,
+        "precision@10": 0.25,
+        "ndcg@10": 0.5041,
+        "mrr": 0.875,
+        "n_queries": 4,
+        "ndcg@10_ci95_iid": [
+          0.3945,
+          0.686
+        ]
+      }
+    },
+    "lsa": {
+      "A_defect_form": {
+        "recall@10": 0.0787,
+        "recall@50": 0.2044,
+        "recall@100": 0.2959,
+        "precision@10": 0.1323,
+        "ndcg@10": 0.1555,
+        "mrr": 0.3588,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.0881,
+          0.2285
+        ]
+      },
+      "B_defect_severity": {
+        "recall@10": 0.086,
+        "recall@50": 0.2051,
+        "recall@100": 0.3018,
+        "precision@10": 0.1556,
+        "ndcg@10": 0.183,
+        "mrr": 0.3256,
+        "n_queries": 18,
+        "ndcg@10_ci95_iid": [
+          0.0715,
+          0.3139
+        ]
+      },
+      "C_firm_history": {
+        "recall@10": 0.7628,
+        "recall@50": 0.99,
+        "recall@100": 1.0,
+        "precision@10": 0.4484,
+        "ndcg@10": 0.7395,
+        "mrr": 0.7593,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.6318,
+          0.8425
+        ]
+      },
+      "D_defect_period": {
+        "recall@10": 0.0567,
+        "recall@50": 0.1948,
+        "recall@100": 0.2846,
+        "precision@10": 0.116,
+        "ndcg@10": 0.127,
+        "mrr": 0.2563,
+        "n_queries": 25,
+        "ndcg@10_ci95_iid": [
+          0.0597,
+          0.2008
+        ]
+      },
+      "E_defect_geography": {
+        "recall@10": 0.0125,
+        "recall@50": 0.1131,
+        "recall@100": 0.2215,
+        "precision@10": 0.02,
+        "ndcg@10": 0.0133,
+        "mrr": 0.0476,
+        "n_queries": 10,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.0331
+        ]
+      },
+      "F_site_country": {
+        "recall@10": 0.3594,
+        "recall@50": 0.5521,
+        "recall@100": 0.6615,
+        "precision@10": 0.225,
+        "ndcg@10": 0.3244,
+        "mrr": 0.4159,
+        "n_queries": 4,
+        "ndcg@10_ci95_iid": [
+          0.0588,
+          0.59
+        ]
+      }
+    },
+    "w2v": {
+      "A_defect_form": {
+        "recall@10": 0.0075,
+        "recall@50": 0.0425,
+        "recall@100": 0.0683,
+        "precision@10": 0.0129,
+        "ndcg@10": 0.012,
+        "mrr": 0.0478,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.0026,
+          0.0243
+        ]
+      },
+      "B_defect_severity": {
+        "recall@10": 0.0094,
+        "recall@50": 0.0423,
+        "recall@100": 0.0714,
+        "precision@10": 0.0444,
+        "ndcg@10": 0.0592,
+        "mrr": 0.2054,
+        "n_queries": 18,
+        "ndcg@10_ci95_iid": [
+          0.0193,
+          0.107
+        ]
+      },
+      "C_firm_history": {
+        "recall@10": 0.5242,
+        "recall@50": 0.7515,
+        "recall@100": 0.8068,
+        "precision@10": 0.3129,
+        "ndcg@10": 0.5178,
+        "mrr": 0.6709,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.4065,
+          0.6246
+        ]
+      },
+      "D_defect_period": {
+        "recall@10": 0.0113,
+        "recall@50": 0.0746,
+        "recall@100": 0.1275,
+        "precision@10": 0.048,
+        "ndcg@10": 0.0449,
+        "mrr": 0.1008,
+        "n_queries": 25,
+        "ndcg@10_ci95_iid": [
+          0.0116,
+          0.0868
+        ]
+      },
+      "E_defect_geography": {
+        "recall@10": 0.0,
+        "recall@50": 0.0313,
+        "recall@100": 0.0534,
+        "precision@10": 0.0,
+        "ndcg@10": 0.0,
+        "mrr": 0.0119,
+        "n_queries": 10,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.0
+        ]
+      },
+      "F_site_country": {
+        "recall@10": 0.1458,
+        "recall@50": 0.3792,
+        "recall@100": 0.4781,
+        "precision@10": 0.05,
+        "ndcg@10": 0.0827,
+        "mrr": 0.1238,
+        "n_queries": 4,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.1654
+        ]
+      }
+    },
+    "hybrid_rrf": {
+      "A_defect_form": {
+        "recall@10": 0.0728,
+        "recall@50": 0.1792,
+        "recall@100": 0.256,
+        "precision@10": 0.1452,
+        "ndcg@10": 0.1616,
+        "mrr": 0.2982,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.087,
+          0.2457
+        ]
+      },
+      "B_defect_severity": {
+        "recall@10": 0.0566,
+        "recall@50": 0.1759,
+        "recall@100": 0.2677,
+        "precision@10": 0.1222,
+        "ndcg@10": 0.1345,
+        "mrr": 0.276,
+        "n_queries": 18,
+        "ndcg@10_ci95_iid": [
+          0.0622,
+          0.2182
+        ]
+      },
+      "C_firm_history": {
+        "recall@10": 0.7835,
+        "recall@50": 0.9935,
+        "recall@100": 1.0,
+        "precision@10": 0.4613,
+        "ndcg@10": 0.7588,
+        "mrr": 0.8075,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.6534,
+          0.8579
+        ]
+      },
+      "D_defect_period": {
+        "recall@10": 0.0678,
+        "recall@50": 0.1768,
+        "recall@100": 0.2303,
+        "precision@10": 0.12,
+        "ndcg@10": 0.1208,
+        "mrr": 0.2323,
+        "n_queries": 25,
+        "ndcg@10_ci95_iid": [
+          0.0747,
+          0.1745
+        ]
+      },
+      "E_defect_geography": {
+        "recall@10": 0.0,
+        "recall@50": 0.0676,
+        "recall@100": 0.1256,
+        "precision@10": 0.0,
+        "ndcg@10": 0.0,
+        "mrr": 0.0183,
+        "n_queries": 10,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.0
+        ]
+      },
+      "F_site_country": {
+        "recall@10": 0.424,
+        "recall@50": 0.6146,
+        "recall@100": 0.8906,
+        "precision@10": 0.275,
+        "ndcg@10": 0.5061,
+        "mrr": 0.875,
+        "n_queries": 4,
+        "ndcg@10_ci95_iid": [
+          0.3432,
+          0.669
+        ]
+      }
+    },
+    "bge_base": {
+      "A_defect_form": {
+        "recall@10": 0.0749,
+        "recall@50": 0.2244,
+        "recall@100": 0.3112,
+        "precision@10": 0.1323,
+        "ndcg@10": 0.1476,
+        "mrr": 0.2993,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.0868,
+          0.2184
+        ]
+      },
+      "B_defect_severity": {
+        "recall@10": 0.0572,
+        "recall@50": 0.1622,
+        "recall@100": 0.2124,
+        "precision@10": 0.1333,
+        "ndcg@10": 0.1602,
+        "mrr": 0.3168,
+        "n_queries": 18,
+        "ndcg@10_ci95_iid": [
+          0.0717,
+          0.2584
+        ]
+      },
+      "C_firm_history": {
+        "recall@10": 0.6882,
+        "recall@50": 0.907,
+        "recall@100": 0.9421,
+        "precision@10": 0.4,
+        "ndcg@10": 0.6577,
+        "mrr": 0.6993,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.5289,
+          0.7729
+        ]
+      },
+      "D_defect_period": {
+        "recall@10": 0.0566,
+        "recall@50": 0.1568,
+        "recall@100": 0.2254,
+        "precision@10": 0.14,
+        "ndcg@10": 0.1465,
+        "mrr": 0.3333,
+        "n_queries": 25,
+        "ndcg@10_ci95_iid": [
+          0.1027,
+          0.1887
+        ]
+      },
+      "E_defect_geography": {
+        "recall@10": 0.0067,
+        "recall@50": 0.053,
+        "recall@100": 0.0642,
+        "precision@10": 0.01,
+        "ndcg@10": 0.0095,
+        "mrr": 0.044,
+        "n_queries": 10,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.0284
+        ]
+      },
+      "F_site_country": {
+        "recall@10": 0.5729,
+        "recall@50": 0.6823,
+        "recall@100": 0.7448,
+        "precision@10": 0.35,
+        "ndcg@10": 0.6565,
+        "mrr": 0.8333,
+        "n_queries": 4,
+        "ndcg@10_ci95_iid": [
+          0.3377,
+          0.9073
+        ]
+      }
+    },
+    "minilm": {
+      "A_defect_form": {
+        "recall@10": 0.0293,
+        "recall@50": 0.1106,
+        "recall@100": 0.1887,
+        "precision@10": 0.0645,
+        "ndcg@10": 0.0741,
+        "mrr": 0.1958,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.0322,
+          0.1233
+        ]
+      },
+      "B_defect_severity": {
+        "recall@10": 0.0061,
+        "recall@50": 0.0308,
+        "recall@100": 0.0568,
+        "precision@10": 0.0333,
+        "ndcg@10": 0.0378,
+        "mrr": 0.1116,
+        "n_queries": 18,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.0887
+        ]
+      },
+      "C_firm_history": {
+        "recall@10": 0.3298,
+        "recall@50": 0.5883,
+        "recall@100": 0.6351,
+        "precision@10": 0.1935,
+        "ndcg@10": 0.3464,
+        "mrr": 0.5461,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.244,
+          0.4498
+        ]
+      },
+      "D_defect_period": {
+        "recall@10": 0.0207,
+        "recall@50": 0.0492,
+        "recall@100": 0.0915,
+        "precision@10": 0.052,
+        "ndcg@10": 0.0581,
+        "mrr": 0.1335,
+        "n_queries": 25,
+        "ndcg@10_ci95_iid": [
+          0.0173,
+          0.1181
+        ]
+      },
+      "E_defect_geography": {
+        "recall@10": 0.0143,
+        "recall@50": 0.0574,
+        "recall@100": 0.0594,
+        "precision@10": 0.01,
+        "ndcg@10": 0.0173,
+        "mrr": 0.0557,
+        "n_queries": 10,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.052
+        ]
+      },
+      "F_site_country": {
+        "recall@10": 0.1458,
+        "recall@50": 0.3365,
+        "recall@100": 0.3365,
+        "precision@10": 0.125,
+        "ndcg@10": 0.2072,
+        "mrr": 0.3963,
+        "n_queries": 4,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.4145
+        ]
+      }
+    },
+    "hybrid_rrf_dense": {
+      "A_defect_form": {
+        "recall@10": 0.0878,
+        "recall@50": 0.2252,
+        "recall@100": 0.3376,
+        "precision@10": 0.1645,
+        "ndcg@10": 0.1928,
+        "mrr": 0.4074,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.119,
+          0.2736
+        ]
+      },
+      "B_defect_severity": {
+        "recall@10": 0.0631,
+        "recall@50": 0.2079,
+        "recall@100": 0.2906,
+        "precision@10": 0.1167,
+        "ndcg@10": 0.151,
+        "mrr": 0.3792,
+        "n_queries": 18,
+        "ndcg@10_ci95_iid": [
+          0.0794,
+          0.227
+        ]
+      },
+      "C_firm_history": {
+        "recall@10": 0.8121,
+        "recall@50": 0.9828,
+        "recall@100": 1.0,
+        "precision@10": 0.4742,
+        "ndcg@10": 0.7956,
+        "mrr": 0.8317,
+        "n_queries": 31,
+        "ndcg@10_ci95_iid": [
+          0.6883,
+          0.8876
+        ]
+      },
+      "D_defect_period": {
+        "recall@10": 0.0734,
+        "recall@50": 0.2176,
+        "recall@100": 0.2978,
+        "precision@10": 0.136,
+        "ndcg@10": 0.1611,
+        "mrr": 0.3899,
+        "n_queries": 25,
+        "ndcg@10_ci95_iid": [
+          0.1063,
+          0.2157
+        ]
+      },
+      "E_defect_geography": {
+        "recall@10": 0.0262,
+        "recall@50": 0.0708,
+        "recall@100": 0.1022,
+        "precision@10": 0.03,
+        "ndcg@10": 0.0236,
+        "mrr": 0.0498,
+        "n_queries": 10,
+        "ndcg@10_ci95_iid": [
+          0.0,
+          0.0473
+        ]
+      },
+      "F_site_country": {
+        "recall@10": 0.651,
+        "recall@50": 0.776,
+        "recall@100": 0.8906,
+        "precision@10": 0.4,
+        "ndcg@10": 0.7349,
+        "mrr": 1.0,
+        "n_queries": 4,
+        "ndcg@10_ci95_iid": [
+          0.579,
+          0.9127
+        ]
+      }
+    }
+  },
+  "contrasts_vs_hybrid": {
+    "hybrid_rrf - bm25": {
+      "mean_diff_ndcg@10": 0.0662,
+      "ci95_cluster": [
+        0.0343,
+        0.1057
+      ],
+      "p_two_sided_raw": 0.0,
+      "p_holm": 0.0,
+      "p_note": "two-sided p is 2*min(tail); with 2000 resamples the smallest attainable non-zero value is 0.001, so a reported 0.0 means p < 0.001"
+    },
+    "hybrid_rrf - tfidf": {
+      "mean_diff_ndcg@10": 0.0387,
+      "ci95_cluster": [
+        0.0041,
+        0.0722
+      ],
+      "p_two_sided_raw": 0.033,
+      "p_holm": 0.099,
+      "p_note": "two-sided p is 2*min(tail); with 2000 resamples the smallest attainable non-zero value is 0.001, so a reported 0.0 means p < 0.001"
+    },
+    "hybrid_rrf - lsa": {
+      "mean_diff_ndcg@10": 0.003,
+      "ci95_cluster": [
+        -0.0235,
+        0.031
+      ],
+      "p_two_sided_raw": 0.756,
+      "p_holm": 1.0,
+      "p_note": "two-sided p is 2*min(tail); with 2000 resamples the smallest attainable non-zero value is 0.001, so a reported 0.0 means p < 0.001"
+    },
+    "hybrid_rrf - w2v": {
+      "mean_diff_ndcg@10": 0.1433,
+      "ci95_cluster": [
+        0.0908,
+        0.2095
+      ],
+      "p_two_sided_raw": 0.0,
+      "p_holm": 0.0,
+      "p_note": "two-sided p is 2*min(tail); with 2000 resamples the smallest attainable non-zero value is 0.001, so a reported 0.0 means p < 0.001"
+    },
+    "hybrid_rrf - bge_base": {
+      "mean_diff_ndcg@10": 0.0149,
+      "ci95_cluster": [
+        -0.0465,
+        0.0762
+      ],
+      "p_two_sided_raw": 0.625,
+      "p_holm": 1.0,
+      "p_note": "two-sided p is 2*min(tail); with 2000 resamples the smallest attainable non-zero value is 0.001, so a reported 0.0 means p < 0.001"
+    },
+    "hybrid_rrf - minilm": {
+      "mean_diff_ndcg@10": 0.1666,
+      "ci95_cluster": [
+        0.1155,
+        0.2436
+      ],
+      "p_two_sided_raw": 0.0,
+      "p_holm": 0.0,
+      "p_note": "two-sided p is 2*min(tail); with 2000 resamples the smallest attainable non-zero value is 0.001, so a reported 0.0 means p < 0.001"
+    },
+    "hybrid_rrf - hybrid_rrf_dense": {
+      "mean_diff_ndcg@10": -0.0383,
+      "ci95_cluster": [
+        -0.0572,
+        -0.0228
+      ],
+      "p_two_sided_raw": 0.0,
+      "p_holm": 0.0,
+      "p_note": "two-sided p is 2*min(tail); with 2000 resamples the smallest attainable non-zero value is 0.001, so a reported 0.0 means p < 0.001"
+    }
+  }
+}

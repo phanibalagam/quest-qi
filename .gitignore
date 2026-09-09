@@ -1,0 +1,34 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# LaTeX build artifacts. The .bbl is deliberately NOT here: arXiv does not run
+# BibTeX, so the compiled bibliography has to ship with the source.
+*.aux
+*.log
+*.out
+*.blg
+*.synctex.gz
+
+# The raw openFDA export is not redistributed. data/raw/MANIFEST.json carries the
+# source URL and the SHA-256 a reader needs to fetch and verify the same snapshot,
+# and scripts/08_verify_manuscript.py checks any local copy against that digest.
+data/raw/*
+!data/raw/MANIFEST.json
+
+# Encoder embeddings: 20 MB, regenerable in about six minutes on CPU by running
+# scripts/09_dense_encode.py, with the model commit hashes pinned in
+# results/dense_manifest.json. Not worth carrying in a release.
+data/processed/dense_embeddings.npz
+
+# Archives built from this folder must not be committed back into it.
+*.tar
+*.tar.gz
+*.zip
+
+# _build/ holds the LaTeX run's litter so it stays out of the folder listing;
+# _dist/ holds the two packages this folder produces. Neither belongs inside a
+# release of the folder: one is regenerable, the other would nest an archive in
+# an archive.
+_build/
+_dist/

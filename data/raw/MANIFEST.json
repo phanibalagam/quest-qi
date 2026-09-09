@@ -1,0 +1,16 @@
+{
+  "dataset": "openFDA drug enforcement (drug recall enforcement reports), bulk export",
+  "source_url": "https://download.open.fda.gov/drug/enforcement/drug-enforcement-0001-of-0001.json.zip",
+  "index_url": "https://api.fda.gov/download.json",
+  "licence": "US federal government work, public domain (17 U.S.C. 105)",
+  "export_date": "2026-08-27",
+  "retrieved": "2026-08-27",
+  "note": "Raw export is not mirrored in this repository. Download the file at source_url and check its SHA-256 against the digest below to obtain the exact snapshot used for every number in the paper.",
+  "files": [
+    {
+      "path": "data/raw/openfda/drug_enforcement/drug-enforcement-0001-of-0001.json.zip",
+      "bytes": 3974979,
+      "sha256": "7f63ce0a75e281b263f5f6131387d991e429b56dc470ef2eb145eac9711eec4f"
+    }
+  ]
+}

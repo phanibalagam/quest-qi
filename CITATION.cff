@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: "QUEST-QI: a benchmark for evidence retrieval over pharmaceutical quality events"
+message: "If you use this software or data, please cite it as below."
+type: software
+authors:
+  - family-names: Balagam
+    given-names: Phani Kumar
+    orcid: "https://orcid.org/0009-0007-6762-399X"
+repository-code: "https://github.com/phanibalagam/quest-qi"
+url: "https://github.com/phanibalagam/quest-qi"
+version: "1.0.0"
+date-released: "2026-09-07"
+license: MIT
+keywords:
+  - information retrieval
+  - benchmark
+  - pharmaceutical quality
+  - predicate-defined relevance
+  - openFDA

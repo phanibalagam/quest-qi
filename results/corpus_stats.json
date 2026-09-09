@@ -1,0 +1,51 @@
+{
+  "raw_export_path": "data/raw/openfda/drug_enforcement/drug-enforcement-0001-of-0001.json.zip",
+  "openfda_export_date": "2026-08-27",
+  "n_records": 17899,
+  "n_events": 4652,
+  "n_firms": 1655,
+  "n_countries": 24,
+  "records_per_event": {
+    "mean": 3.85,
+    "median": 1,
+    "max": 470
+  },
+  "classification": {
+    "Class II": 2911,
+    "Class III": 1142,
+    "Class I": 598,
+    "Not Yet Classified": 1
+  },
+  "status": {
+    "Terminated": 3646,
+    "Ongoing": 906,
+    "Completed": 100
+  },
+  "year_range": [
+    "2012",
+    "2026"
+  ],
+  "events_per_year": {
+    "2012": 156,
+    "2013": 341,
+    "2014": 384,
+    "2015": 259,
+    "2016": 307,
+    "2017": 340,
+    "2018": 392,
+    "2019": 350,
+    "2020": 350,
+    "2021": 291,
+    "2022": 332,
+    "2023": 291,
+    "2024": 311,
+    "2025": 327,
+    "2026": 221
+  },
+  "doc_length_words": {
+    "mean": 117.4,
+    "median": 93,
+    "p95": 263,
+    "max": 1591
+  }
+}

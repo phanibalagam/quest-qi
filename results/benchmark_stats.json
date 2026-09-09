@@ -1,0 +1,52 @@
+{
+  "seed": 20260906,
+  "n_queries": 171,
+  "n_candidates_before_sampling": 469,
+  "queries_per_family": {
+    "A_defect_form": 45,
+    "B_defect_severity": 26,
+    "C_firm_history": 45,
+    "D_defect_period": 35,
+    "E_defect_geography": 14,
+    "F_site_country": 6
+  },
+  "split_counts": {
+    "test": 119,
+    "dev": 52
+  },
+  "split_by_family": {
+    "A_defect_form": {
+      "test": 31,
+      "dev": 14
+    },
+    "B_defect_severity": {
+      "dev": 8,
+      "test": 18
+    },
+    "C_firm_history": {
+      "test": 31,
+      "dev": 14
+    },
+    "D_defect_period": {
+      "test": 25,
+      "dev": 10
+    },
+    "E_defect_geography": {
+      "dev": 4,
+      "test": 10
+    },
+    "F_site_country": {
+      "dev": 2,
+      "test": 4
+    }
+  },
+  "gold_set_size": {
+    "min": 3,
+    "median": 15,
+    "mean": 21.3,
+    "max": 71
+  },
+  "total_gold_pairs": 3646,
+  "distinct_gold_events": 2185,
+  "corpus_size": 4652
+}

@@ -1,0 +1,174 @@
+{
+  "seed_random_state": 20260906,
+  "n_events": 4652,
+  "n_rule_labelled": 4470,
+  "rule_coverage_pct": 96.1,
+  "tier_counts": {
+    "prefix": 3615,
+    "classifier": 182,
+    "short": 855
+  },
+  "n_classifier_training_examples": 3559,
+  "n_classifier_labelled": 182,
+  "categories_kept": [
+    "APPEARANCE_PHYSICAL",
+    "CONTAINER_CLOSURE_DEVICE",
+    "CROSS_CONTAMINATION",
+    "DISSOLUTION",
+    "GMP_DEVIATION",
+    "IMPURITY_DEGRADATION",
+    "LABELING_PACKAGING",
+    "MICROBIAL_NONSTERILE",
+    "OTHER_SPECIFICATION",
+    "PARTICULATE_FOREIGN_MATTER",
+    "POTENCY_CONTENT",
+    "STABILITY_EXPIRY",
+    "STERILITY_ASSURANCE",
+    "STORAGE_DISTRIBUTION",
+    "UNAPPROVED_MARKETING"
+  ],
+  "categories_dropped_too_small": {},
+  "cv_macro_f1": 0.7167,
+  "cv_micro_f1": 0.7825,
+  "tail_estimate": {
+    "n_rule_free_remainders": 1266,
+    "pct_remainders_still_matching_a_rule": 64.4,
+    "pct_remainders_echoing_own_rule": 34.1,
+    "cv_macro_f1_rule_free_subset": 0.6089,
+    "cv_micro_f1_rule_free_subset": 0.7283,
+    "cv_macro_f1_rule_echoing_subset": 0.7212
+  },
+  "per_category": {
+    "APPEARANCE_PHYSICAL": {
+      "support": 73,
+      "precision": 0.587,
+      "recall": 0.603,
+      "f1": 0.595
+    },
+    "CONTAINER_CLOSURE_DEVICE": {
+      "support": 185,
+      "precision": 0.645,
+      "recall": 0.697,
+      "f1": 0.67
+    },
+    "CROSS_CONTAMINATION": {
+      "support": 122,
+      "precision": 0.591,
+      "recall": 0.533,
+      "f1": 0.56
+    },
+    "DISSOLUTION": {
+      "support": 179,
+      "precision": 0.791,
+      "recall": 0.827,
+      "f1": 0.809
+    },
+    "GMP_DEVIATION": {
+      "support": 561,
+      "precision": 0.81,
+      "recall": 0.747,
+      "f1": 0.777
+    },
+    "IMPURITY_DEGRADATION": {
+      "support": 343,
+      "precision": 0.856,
+      "recall": 0.869,
+      "f1": 0.863
+    },
+    "LABELING_PACKAGING": {
+      "support": 474,
+      "precision": 0.902,
+      "recall": 0.928,
+      "f1": 0.915
+    },
+    "MICROBIAL_NONSTERILE": {
+      "support": 101,
+      "precision": 0.617,
+      "recall": 0.733,
+      "f1": 0.67
+    },
+    "OTHER_SPECIFICATION": {
+      "support": 117,
+      "precision": 0.611,
+      "recall": 0.59,
+      "f1": 0.6
+    },
+    "PARTICULATE_FOREIGN_MATTER": {
+      "support": 397,
+      "precision": 0.828,
+      "recall": 0.887,
+      "f1": 0.856
+    },
+    "POTENCY_CONTENT": {
+      "support": 308,
+      "precision": 0.756,
+      "recall": 0.675,
+      "f1": 0.714
+    },
+    "STABILITY_EXPIRY": {
+      "support": 83,
+      "precision": 0.426,
+      "recall": 0.518,
+      "f1": 0.467
+    },
+    "STERILITY_ASSURANCE": {
+      "support": 349,
+      "precision": 0.78,
+      "recall": 0.734,
+      "f1": 0.756
+    },
+    "STORAGE_DISTRIBUTION": {
+      "support": 25,
+      "precision": 0.516,
+      "recall": 0.64,
+      "f1": 0.571
+    },
+    "UNAPPROVED_MARKETING": {
+      "support": 242,
+      "precision": 0.929,
+      "recall": 0.926,
+      "f1": 0.928
+    }
+  },
+  "final_distribution": {
+    "GMP_DEVIATION": 733,
+    "STERILITY_ASSURANCE": 554,
+    "LABELING_PACKAGING": 514,
+    "PARTICULATE_FOREIGN_MATTER": 496,
+    "POTENCY_CONTENT": 474,
+    "IMPURITY_DEGRADATION": 453,
+    "DISSOLUTION": 308,
+    "UNAPPROVED_MARKETING": 263,
+    "CONTAINER_CLOSURE_DEVICE": 202,
+    "OTHER_SPECIFICATION": 146,
+    "CROSS_CONTAMINATION": 143,
+    "MICROBIAL_NONSTERILE": 129,
+    "STABILITY_EXPIRY": 111,
+    "APPEARANCE_PHYSICAL": 97,
+    "STORAGE_DISTRIBUTION": 29
+  },
+  "final_distribution_seed_only": {
+    "GMP_DEVIATION": 694,
+    "STERILITY_ASSURANCE": 532,
+    "LABELING_PACKAGING": 503,
+    "PARTICULATE_FOREIGN_MATTER": 467,
+    "POTENCY_CONTENT": 455,
+    "IMPURITY_DEGRADATION": 439,
+    "DISSOLUTION": 297,
+    "UNAPPROVED_MARKETING": 256,
+    "CONTAINER_CLOSURE_DEVICE": 195,
+    "CROSS_CONTAMINATION": 139,
+    "OTHER_SPECIFICATION": 135,
+    "MICROBIAL_NONSTERILE": 128,
+    "STABILITY_EXPIRY": 110,
+    "APPEARANCE_PHYSICAL": 93,
+    "STORAGE_DISTRIBUTION": 27
+  },
+  "classifier_confidence_deciles": [
+    0.295,
+    0.426,
+    0.575,
+    0.786,
+    0.928
+  ]
+}

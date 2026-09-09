@@ -1,0 +1,220 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{asadi2011pseudo}
+Asadi, N., Metzler, D., Elsayed, T., Lin, J.: Pseudo test collections for
+  learning web search ranking functions. In: Proceedings of the 34th
+  International ACM SIGIR Conference on Research and Development in Information
+  Retrieval. pp. 1073--1082 (2011). \doi{10.1145/2009916.2010058}
+
+\bibitem{asai2023selfrag}
+Asai, A., Wu, Z., Wang, Y., Sil, A., Hajishirzi, H.: Self-rag: Learning to
+  retrieve, generate, and critique through self-reflection  (2023),
+  arXiv:2310.11511
+
+\bibitem{azzopardi2007simulated}
+Azzopardi, L., de~Rijke, M., Balog, K.: Building simulated queries for
+  known-item topics: an analysis using six european languages. In: Proceedings
+  of the 30th Annual International ACM SIGIR Conference on Research and
+  Development in Information Retrieval. pp. 455--462 (2007).
+  \doi{10.1145/1277741.1277820}
+
+\bibitem{berendsen2013pseudo}
+Berendsen, R., Tsagkias, M., Weerkamp, W., de~Rijke, M.: Pseudo test
+  collections for training and tuning microblog rankers. In: Proceedings of the
+  36th International ACM SIGIR Conference on Research and Development in
+  Information Retrieval. pp. 53--62 (2013). \doi{10.1145/2484028.2484063}
+
+\bibitem{bohnet2022aqa}
+Bohnet, B., Tran, V.Q., Verga, P., Aharoni, R., Andor, D., Soares, L.B.,
+  Ciaramita, M., Eisenstein, J., Ganchev, K., Herzig, J., Hui, K., Kwiatkowski,
+  T., Ma, J., Ni, J., Saralegui, L.S., Schuster, T., Cohen, W.W., Collins, M.,
+  Das, D., Metzler, D., Petrov, S., Webster, K.: Attributed question answering:
+  Evaluation and modeling for attributed large language models  (2022),
+  arXiv:2212.08037
+
+\bibitem{buckley2007bias}
+Buckley, C., Dimmick, D., Soboroff, I., Voorhees, E.: Bias and the limits of
+  pooling for large collections. Information Retrieval  \textbf{10}(6),
+  491--508 (2007). \doi{10.1007/s10791-007-9032-x}
+
+\bibitem{buckley2004incomplete}
+Buckley, C., Voorhees, E.M.: Retrieval evaluation with incomplete information.
+  In: Proceedings of the 27th Annual International ACM SIGIR Conference on
+  Research and Development in Information Retrieval. pp. 25--32 (2004).
+  \doi{10.1145/1008992.1009000}
+
+\bibitem{chen2023benchmarkingrag}
+Chen, J., Lin, H., Han, X., Sun, L.: Benchmarking large language models in
+  retrieval-augmented generation  (2023), arXiv:2309.01431
+
+\bibitem{dehghani2017weak}
+Dehghani, M., Zamani, H., Severyn, A., Kamps, J., Croft, W.B.: Neural ranking
+  models with weak supervision. In: Proceedings of the 40th International ACM
+  SIGIR Conference on Research and Development in Information Retrieval. pp.
+  65--74 (2017). \doi{10.1145/3077136.3080832}
+
+\bibitem{dietz2020humansoptional}
+Dietz, L., Dalton, J.: Humans optional? automatic large-scale test collections
+  for entity, passage, and entity-passage retrieval. Datenbank-Spektrum
+  \textbf{20}(1),  17--28 (2020). \doi{10.1007/s13222-020-00334-y}
+
+\bibitem{es2023ragas}
+Es, S., James, J., Espinosa~Anke, L., Schockaert, S.: {RAGA}s: Automated
+  evaluation of retrieval augmented generation pp. 150--158 (2024).
+  \doi{10.18653/v1/2024.eacl-demo.16}
+
+\bibitem{fuhr2017mistakes}
+Fuhr, N.: Some common mistakes in {IR} evaluation, and how they can be avoided.
+  ACM SIGIR Forum  \textbf{51}(3),  32--41 (2017).
+  \doi{10.1145/3190580.3190586}, sIGIR Forum 51(3) is the December 2017 issue,
+  as dblp and SIGIR's own index record it; ACM's 2018 date is the
+  online-publication date
+
+\bibitem{gao2022hyde}
+Gao, L., Ma, X., Lin, J., Callan, J.: Precise zero-shot dense retrieval without
+  relevance labels  (2022), arXiv:2212.10496
+
+\bibitem{gao2023alce}
+Gao, T., Yen, H., Yu, J., Chen, D.: Enabling large language models to generate
+  text with citations  (2023), arXiv:2305.14627
+
+\bibitem{gao2023ragsurvey}
+Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., Dai, Y., Sun, J., Wang,
+  M., Wang, H.: Retrieval-augmented generation for large language models: A
+  survey  (2023), arXiv:2312.10997
+
+\bibitem{gururangan2018artifacts}
+Gururangan, S., Swayamdipta, S., Levy, O., Schwartz, R., Bowman, S.R., Smith,
+  N.A.: Annotation artifacts in natural language inference data. In:
+  Proceedings of the 2018 Conference of the North American Chapter of the
+  Association for Computational Linguistics: Human Language Technologies,
+  Volume 2 (Short Papers). pp. 107--112 (2018). \doi{10.18653/v1/N18-2017}
+
+\bibitem{izacard2021contriever}
+Izacard, G., Caron, M., Hosseini, L., Riedel, S., Bojanowski, P., Joulin, A.,
+  Grave, E.: Unsupervised dense information retrieval with contrastive learning
+   (2021), arXiv:2112.09118
+
+\bibitem{ji2022hallucination}
+Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., Ishii, E., Bang, Y.,
+  Chen, D., Dai, W., Chan, H.S., Madotto, A., Fung, P.: Survey of hallucination
+  in natural language generation. ACM Computing Surveys  \textbf{55}(12),
+  1--38 (2023). \doi{10.1145/3571730}
+
+\bibitem{karpukhin2020dpr}
+Karpukhin, V., O{\u{g}}uz, B., Min, S., Lewis, P., Wu, L., Edunov, S., Chen,
+  D., Yih, W.t.: Dense passage retrieval for open-domain question answering
+  (2020), arXiv:2004.04906
+
+\bibitem{lewis2020rag}
+Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N.,
+  K{\"u}ttler, H., Lewis, M., Yih, W.t., Rockt{\"a}schel, T., Riedel, S.,
+  Kiela, D.: Retrieval-augmented generation for knowledge-intensive nlp tasks
+  (2020), arXiv:2005.11401
+
+\bibitem{liu2023lostinmiddle}
+Liu, N.F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F.,
+  Liang, P.: Lost in the middle: How language models use long contexts  (2023),
+  arXiv:2307.03172
+
+\bibitem{min2023factscore}
+Min, S., Krishna, K., Lyu, X., Lewis, M., Yih, W.t., Koh, P.W., Iyyer, M.,
+  Zettlemoyer, L., Hajishirzi, H.: Factscore: Fine-grained atomic evaluation of
+  factual precision in long form text generation  (2023), arXiv:2305.14251
+
+\bibitem{muennighoff2022mteb}
+Muennighoff, N., Tazi, N., Magne, L., Reimers, N.: Mteb: Massive text embedding
+  benchmark  (2022), arXiv:2210.07316
+
+\bibitem{ni2025trustworthyrag}
+Ni, B., Liu, Z., Wang, L., Lei, Y., Zhao, Y., Cheng, X., Zeng, Q., Dong, L.,
+  Xia, Y., Kenthapadi, K., Rossi, R., Dernoncourt, F., Tanjim, M.M., Ahmed, N.,
+  Liu, X., Fan, W., Blasch, E., Wang, Y., Jiang, M., Derr, T.: Towards
+  trustworthy retrieval augmented generation for large language models: A
+  survey  (2025), arXiv:2502.06872
+
+\bibitem{rahmani2024synthetic}
+Rahmani, H.A., Craswell, N., Yilmaz, E., Mitra, B., Campos, D.: Synthetic test
+  collections for retrieval evaluation. In: Proceedings of the 47th
+  International ACM SIGIR Conference on Research and Development in Information
+  Retrieval. pp. 2647--2651 (2024). \doi{10.1145/3626772.3657942}, short paper
+
+\bibitem{rashkin2021attribution}
+Rashkin, H., Nikolaev, V., Lamm, M., Aroyo, L., Collins, M., Das, D., Petrov,
+  S., Tomar, G.S., Turc, I., Reitter, D.: Measuring attribution in natural
+  language generation models. Computational Linguistics  \textbf{49}(4),
+  777--840 (2023). \doi{10.1162/coli_a_00486}
+
+\bibitem{reimers2019sbert}
+Reimers, N., Gurevych, I.: Sentence-bert: Sentence embeddings using siamese
+  bert-networks  (2019), arXiv:1908.10084
+
+\bibitem{robertson2009bm25}
+Robertson, S., Zaragoza, H.: The probabilistic relevance framework: {BM25} and
+  beyond. Foundations and Trends in Information Retrieval  \textbf{3}(4),
+  333--389 (2009). \doi{10.1561/1500000019}, volume, issue and pages per the
+  published article's own citation line. The publisher's CrossRef deposit
+  against this DOI erroneously carries 4(1--2):1--174, which are the fields of
+  Silvestri, \emph{Mining Query Logs} (10.1561/1500000013); FnTIR 3(3) ends at
+  p.~331 and this monograph begins at 333. An earlier version of this entry
+  followed the deposit. Verified 2026-09-07
+
+\bibitem{saadfalcon2023ares}
+Saad-Falcon, J., Khattab, O., Potts, C., Zaharia, M.: Ares: An automated
+  evaluation framework for retrieval-augmented generation systems  (2023),
+  arXiv:2311.09476
+
+\bibitem{schuster2019fever}
+Schuster, T., Shah, D., Yeo, Y.J.S., Roberto Filizzola~Ortiz, D., Santus, E.,
+  Barzilay, R.: Towards debiasing fact verification models. In: Proceedings of
+  the 2019 Conference on Empirical Methods in Natural Language Processing and
+  the 9th International Joint Conference on Natural Language Processing
+  (EMNLP-IJCNLP). pp. 3419--3425 (2019). \doi{10.18653/v1/D19-1341}
+
+\bibitem{singhal2022clinicalknowledge}
+Singhal, K., Azizi, S., Tu, T., Mahdavi, S.S., Wei, J., Chung, H.W., Scales,
+  N., Tanwani, A., Cole-Lewis, H., Pfohl, S., Payne, P., Seneviratne, M.,
+  Gamble, P., Kelly, C., Scharli, N., Chowdhery, A., Mansfield, P., Aguera~y
+  Arcas, B., Webster, D., Corrado, G.S., Matias, Y., Chou, K., Gottweis, J.,
+  Tomasev, N., Liu, Y., Rajkomar, A., Barral, J., Semturs, C.,
+  Karthikesalingam, A., Natarajan, V.: Large language models encode clinical
+  knowledge. Nature  \textbf{620}(7972),  172--180 (2023).
+  \doi{10.1038/s41586-023-06291-2}
+
+\bibitem{thakur2021beir}
+Thakur, N., Reimers, N., R{\"u}ckl{\'e}, A., Srivastava, A., Gurevych, I.:
+  Beir: A heterogenous benchmark for zero-shot evaluation of information
+  retrieval models  (2021), arXiv:2104.08663
+
+\bibitem{fda_ai_credibility}
+{U.S. Food and Drug Administration}: Considerations for the use of artificial
+  intelligence to support regulatory decision-making for drug and biological
+  products.
+  \url{https://www.fda.gov/regulatory-information/search-fda-guidance-documents/considerations-use-artificial-intelligence-support-regulatory-decision-making-drug-and-biological},
+  draft guidance; accessed 2026-09-06
+
+\bibitem{openfda_enforcement}
+{U.S. Food and Drug Administration}: openfda drug enforcement reports api.
+  \url{https://open.fda.gov/apis/drug/enforcement/}, public domain data;
+  accessed 2026-09-06
+
+\bibitem{wang2022e5}
+Wang, L., Yang, N., Huang, X., Jiao, B., Yang, L., Jiang, D., Majumder, R.,
+  Wei, F.: Text embeddings by weakly-supervised contrastive pre-training
+  (2022), arXiv:2212.03533
+
+\bibitem{zheng2023llmjudge}
+Zheng, L., Chiang, W.L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z.,
+  Li, Z., Li, D., Xing, E.P., Zhang, H., Gonzalez, J.E., Stoica, I.: Judging
+  llm-as-a-judge with mt-bench and chatbot arena  (2023), arXiv:2306.05685
+
+\bibitem{zobel1998reliable}
+Zobel, J.: How reliable are the results of large-scale information retrieval
+  experiments? In: Proceedings of the 21st Annual International ACM SIGIR
+  Conference on Research and Development in Information Retrieval. pp. 307--314
+  (1998). \doi{10.1145/290941.291014}
+
+\end{thebibliography}

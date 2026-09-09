@@ -1,0 +1,41 @@
+{
+  "seed": 20260906,
+  "models": {
+    "bge_base": {
+      "repo": "BAAI/bge-base-en-v1.5",
+      "revision": "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
+      "dim": 768,
+      "max_seq_length": 512,
+      "query_prefix": "Represent this sentence for searching relevant passages: ",
+      "passage_prefix": "",
+      "normalised": true,
+      "device": "cpu",
+      "n_docs": 4652,
+      "n_queries": 171,
+      "seconds": {
+        "load": 6.0,
+        "encode_docs": 318.5,
+        "encode_queries": 1.5
+      }
+    },
+    "minilm": {
+      "repo": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "dim": 384,
+      "max_seq_length": 256,
+      "query_prefix": "",
+      "passage_prefix": "",
+      "normalised": true,
+      "device": "cpu",
+      "n_docs": 4652,
+      "n_queries": 171,
+      "seconds": {
+        "load": 1.0,
+        "encode_docs": 39.3,
+        "encode_queries": 0.2
+      }
+    }
+  },
+  "encoded_at": "2026-09-07T00:00:34-0400",
+  "host": "run on a host able to reach huggingface.co with the system certificate store injected via truststore; this is a network/TLS-trust requirement of the one-off weight download, not a property of the analysis environment or of a regulated deployment"
+}

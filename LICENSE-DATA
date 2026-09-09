@@ -1,0 +1,14 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+The derived data in `data/processed/` and the result files in `results/` are
+released under CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+
+You may share and adapt them for any purpose, including commercially, provided
+you give appropriate credit and indicate if changes were made.
+
+The upstream sources are US federal government works in the public domain:
+  - openFDA drug enforcement reports  https://open.fda.gov/apis/drug/enforcement/
+  - FDA Data Dashboard API            https://datadashboard.fda.gov/ora/api/
+The derived files here are transformations of that public-domain material; the
+attribution requested above is for the derivation, taxonomy and benchmark
+construction, not for the underlying records.
