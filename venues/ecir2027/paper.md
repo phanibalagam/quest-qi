@@ -471,14 +471,3 @@ performance results were used at any point. Firm names appear in the corpus beca
 are part of the public record; nothing here should be read as an assessment of any firm's
 current quality state, and recall records reflect, among other things, differences in
 reporting and inspection intensity.
-
-## Declaration of generative AI and AI-assisted technologies
-
-During the preparation of this manuscript, the author used Claude (Anthropic) to support the
-drafting and editing of manuscript text, the development and revision of analysis code, and
-the adversarial pre-submission review of the manuscript recorded in `notes/`. The author
-retained sole responsibility for all final decisions concerning the research question, study
-design, data selection, outcome definitions, analytical methods and experimental controls;
-independently verified all sources, data and results; executed and validated the analyses;
-interpreted the findings; reviewed and edited all AI-assisted content; and assumes full
-responsibility for the accuracy and integrity of the manuscript.

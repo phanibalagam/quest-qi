@@ -119,6 +119,13 @@ def main():
     ap.add_argument("variant", help="variant directory, e.g. venues/ecir2027")
     ap.add_argument("--page-limit", type=int, default=None,
                     help="max body pages, references excluded")
+    ap.add_argument("--disclosure-on-form", action="store_true",
+                    help="the venue collects the generative-AI disclosure on its "
+                         "submission form, so the manuscript must NOT carry the "
+                         "declaration. Inverts that check: the declaration is "
+                         "required to be absent, and the run says so loudly, because "
+                         "a disclosure that lives only on a form is one nothing in "
+                         "this repository can verify was actually made.")
     a = ap.parse_args()
 
     vdir = a.variant if os.path.isabs(a.variant) else os.path.join(ROOT, a.variant)
@@ -228,12 +235,23 @@ def main():
                        "No proprietary, confidential or internal data"):
             if phrase not in flat:
                 fails.append(f"{name} is missing disclaimer text: {phrase!r}")
-        if "Declaration of generative AI" not in flat:
-            fails.append(f"{name} has no GenAI declaration")
-        if "adversarial pre-submission review" not in flat:
-            fails.append(f"{name}: the GenAI declaration does not disclose the "
-                         "AI-assisted pre-submission review")
+        if a.disclosure_on_form:
+            if "Declaration of generative AI" in flat:
+                fails.append(f"{name} still carries the GenAI declaration, but this "
+                             "variant is built for a venue that collects the "
+                             "disclosure on its submission form. Two disclosures that "
+                             "can drift apart is worse than one.")
+        else:
+            if "Declaration of generative AI" not in flat:
+                fails.append(f"{name} has no GenAI declaration")
+            if "adversarial pre-submission review" not in flat:
+                fails.append(f"{name}: the GenAI declaration does not disclose the "
+                             "AI-assisted pre-submission review")
 
+    if a.disclosure_on_form:
+        print("NOTE: this variant carries no generative-AI declaration, by design. "
+              "The disclosure MUST be made on the venue's submission form. Nothing "
+              "here can check that it was; the author is the only gate.")
     print(f"variant: {a.variant}")
     print(f"numbers checked for containment: {len(v_nums)} "
           f"(parent states {len(parent_nums)})")
