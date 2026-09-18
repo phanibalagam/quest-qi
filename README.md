@@ -3,7 +3,7 @@
 Code and data for *When the Benchmark Answers Itself: Predicate-Defined Relevance
 and the Limits of Query Understanding in Pharmaceutical Quality-Event Retrieval*.
 
-**Paper**: `paper.md` (source), `paper_lncs.pdf` (typeset).
+**Paper**: `paper.md` (source), `paper_acm.pdf` (typeset, ACM `acmart`).
 Every number in the manuscript is produced by the scripts here and re-checked
 against `results/` by `scripts/08_verify_manuscript.py`, which exits non-zero on
 any disagreement.
@@ -53,9 +53,8 @@ python scripts/09_dense_encode.py   # NEEDS NETWORK. Downloads two encoders once
 python scripts/04_retrieval.py
 python scripts/05_taxonomy_aware_retrieval.py
 python figures/gen_figures.py
-python scripts/10_build_latex.py --compile  # paper_lncs.tex + paper_lncs.pdf
+python scripts/10_build_latex.py --venue acm --out paper_acm.tex --compile
 python scripts/08_verify_manuscript.py      # must print 0 failures
-python scripts/11_arxiv_package.py          # arxiv_submission.tar.gz
 python scripts/12_release_package.py        # quest-qi_release.tar.gz
 ```
 
@@ -68,8 +67,8 @@ scripts 04 and 05 still complete and the rest of the paper reproduces, but Table
 will be short two rows.
 
 `scripts/08_verify_manuscript.py` reads every number back out of `results/` and
-checks it against `paper.md`, `paper_lncs.tex` and the text extracted from
-`paper_lncs.pdf`, and prints its binding count and the artifacts it covered. Table 2,
+checks it against `paper.md`, `paper_acm.tex` and the text extracted from
+`paper_acm.pdf`, and prints its binding count and the artifacts it covered. Table 2,
 the text-only retrieval table, is parsed out of each surface and compared to
 `results/` numerically, and every numeric table is checked **row by row** against its
 own region of the compiled PDF — a table that overflows the text block is silently
@@ -87,10 +86,10 @@ to end only when both kinds are present, which is why the arithmetic checks are 
 with text bindings rather than trusted alone.
 
 Every other decimal is covered by a weaker guarantee: a set comparison in both
-directions between `paper.md` and `paper_lncs.tex`, and from the source into the PDF, so
+directions between `paper.md` and `paper_acm.tex`, and from the source into the PDF, so
 a number that exists in one surface and not another is caught even though its value is
-not independently checked. The source side for the PDF comparison is `paper_lncs.tex`
-and `paper_lncs.bbl` together, since the bibliography's text reaches the PDF from the
+not independently checked. The source side for the PDF comparison is `paper_acm.tex`
+and `paper_acm.bbl` together, since the bibliography's text reaches the PDF from the
 `.bbl`. The reverse direction — decimals the PDF carries and the source does not — is
 reported rather than enforced, because what is left after both source files is the three
 embedded figures, whose axis ticks and bar labels are checked against `results/` in
@@ -98,14 +97,14 @@ embedded figures, whose axis ticks and bar labels are checked against `results/`
 renderer. The script identifies which extras came from where rather than assuming a
 single cause, and says so when it cannot.
 
-The PDF artifact also has LNCS running heads stripped before comparison, along with each
+The PDF artifact also has its running heads stripped before comparison, along with each
 page's own folio — a bare integer is removed only when it equals the number of the page
 it sits on and sits at a page boundary, which is what makes it a folio rather than a
 table cell or a section number that happens to match. Both are stripped so that a
 sentence spanning a page break is not broken by the page furniture set between its
 halves.
 
-When `paper_lncs.log` is present — that is, after a build with
+When `paper_acm.log` is present — that is, after a build with
 `scripts/10_build_latex.py --compile` — a body-prose or bibliography line running past
 the right margin by 5 pt or more is a hard failure, as is a vertical overrun of 5 pt or
 more that is neither routine page-breaking output nor inside a float, which is the case

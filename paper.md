@@ -4,7 +4,7 @@
 [0009-0007-6762-399X](https://orcid.org/0009-0007-6762-399X) · <balagam.phani@gmail.com>
 · <https://github.com/phanibalagam>
 
-*Preprint.* Every number in this manuscript is produced by the scripts in `scripts/`
+Every number in this manuscript is produced by the scripts in `scripts/`
 from the public data described in Section 3 and read from the JSON files in `results/`;
 `scripts/08_verify_manuscript.py` re-checks each one against the result files and fails
 on any disagreement.
@@ -23,28 +23,21 @@ public repositories with their commit hashes recorded.
 
 ## Abstract
 
-We release QUEST-QI, a benchmark for evidence retrieval over pharmaceutical quality
-events and, to our knowledge, the first public one in this domain: 171 questions from six
-templates yielding 15 distinct stems, with gold sets defined by executable predicates over
-structured fields. We report two results that point in opposite directions. First, a
-diagnosis: eight retrievers, including a pretrained BGE encoder and a fusion that uses it,
-span 0.136–0.341 nDCG@10, and the best overall of them scores 0.193, 0.151, 0.161 and
-0.024 on the four question families carrying defect semantics — the last effectively zero
-because no document contains the phrase a geography-constrained question uses. The
-pretrained encoder alone (0.288 micro, 0.296 macro) is statistically indistinguishable
-from corpus-trained fusion (0.302 micro, 0.280 macro), and the two aggregates disagree on
-which leads. Second, a null we cannot resolve at this sample size: the only
-query-understanding component we could build that infers its slot rather than reading it
-off, an unsupervised defect-category centroid prior, recovers +0.014 nDCG@10 (95% CI
-[−0.005, 0.033], Holm p = 0.304). We also show why the obvious stronger result is not a
-retrieval result. Adding that prior to a filter over the metadata a question names reaches
-0.579 (the soft metadata filter alone reaches 0.423; a hard prefilter with no defect prior
-reaches 0.464), but the filter re-executes the gold predicate: a control adding a constant
-to every gold document, over the same 300-document pool, reaches 0.823, and the answer key
-1.000. The configuration recovers about half of what that control is worth (0.53, 95% CI
-[0.31, 0.72]), and none of it is retrieval. Any benchmark whose relevance is defined by an
-executable predicate rewards systems for reconstructing it; we quantify how much on this
-one.
+QUEST-QI is a benchmark for evidence retrieval over pharmaceutical quality events, and
+to the author's knowledge the first public one in this domain: 171 questions from six
+templates, with gold sets defined by executable predicates over structured fields. Its
+baselines point in two directions. Eight retrievers span 0.136--0.341 nDCG@10; the best
+of them scores 0.024 on the question family whose defect semantics no document states in
+words, a pretrained encoder is statistically indistinguishable from corpus-trained
+fusion, and the micro and macro aggregates disagree on which leads. The only
+query-understanding component that infers its slot rather than reading it off recovers
++0.014 nDCG@10, a null at this sample size. The apparently stronger result is not a
+retrieval result. A filter over the metadata a question names reaches 0.579, but it
+re-executes the gold predicate: a control that adds a constant to every gold document,
+over the same 300-document pool, reaches 0.823. The configuration recovers about half of
+what that control is worth, and none of that half is retrieval. The point generalizes.
+Any benchmark whose relevance is defined by an executable predicate rewards systems for
+reconstructing it, and how much can be measured.
 
 ---
 
@@ -59,7 +52,7 @@ effectiveness-check design, and they must be traceable to source records because
 regulator will ask where each statement came from.
 
 Retrieval-augmented generation [@lewis2020rag] is the obvious architecture, and the
-obvious build is to embed the records, retrieve the nearest neighbours of the question,
+obvious build is to embed the records, retrieve the nearest neighbors of the question,
 and let a language model write the answer with citations [@gao2023alce]. We find that
 this fails on precisely the questions investigators ask. A question about sterility
 assurance in injectables retrieves records about sterility assurance in tablets; a
@@ -124,7 +117,7 @@ generator so that answers can be attributed to non-parametric memory [@lewis2020
 @gao2023ragsurvey]. Evaluation has followed two lines. One measures attribution
 directly, asking whether each generated statement is supported by the cited passage
 [@rashkin2021attribution; @bohnet2022aqa; @gao2023alce; @min2023factscore]. The other
-automates end-to-end judgement with a second language model [@es2023ragas;
+automates end-to-end judgment with a second language model [@es2023ragas;
 @saadfalcon2023ares; @zheng2023llmjudge]. Both lines presuppose that the retrieved
 passages are the right ones; surveys of hallucination [@ji2022hallucination] and of
 trustworthy RAG [@ni2025trustworthyrag] identify retrieval failure as an upstream cause
@@ -149,27 +142,71 @@ asymmetry produced a null, and the apparent success we first measured was an art
 benchmark construction. Position effects in long contexts [@liu2023lostinmiddle] are
 downstream of everything here.
 
-**Benchmark construction and its biases.** That test collections encode biases which
-flatter some systems over others is an old and well-established result, and our finding
-is a special case of it rather than a new phenomenon. Zobel showed that pooled
-collections are incomplete in ways that systematically disadvantage systems absent from
-the pool [@zobel1998reliable], and Buckley and Voorhees quantified how incompleteness
-changes measured ordering [@buckley2004incomplete]; Buckley et al. named the limits of
-pooling for large collections directly [@buckley2007bias]. Fuhr catalogued the
-evaluation errors that follow when these properties are ignored [@fuhr2017mistakes].
+**Benchmark construction and what a test collection measures.** That test collections
+encode biases which flatter some systems over others is an old and well-established
+result, and our finding is a special case of it rather than a new phenomenon. Zobel
+showed that pooled collections are incomplete in ways that systematically disadvantage
+systems absent from the pool [@zobel1998reliable], and Buckley and Voorhees quantified
+how incompleteness changes measured ordering [@buckley2004incomplete]; Buckley et al.
+named the limits of pooling for large collections directly [@buckley2007bias]. Sanderson
+surveys the whole test-collection paradigm and the assumptions it rests on
+[@sanderson2010testcollections], and Fuhr catalogued the evaluation errors that follow
+when those properties are ignored [@fuhr2017mistakes].
 
-Automatically generated collections trade annotation cost for exactly this risk.
+Two strands of that literature bear directly on what follows. The first asks how much of
+a measured score is a property of the judgments rather than of the systems. Voorhees
+showed that relative system ordering survives substantial disagreement between assessors
+even though absolute scores move [@voorhees2000variations]; Scholer et al. turned
+assessor consistency into a measure of collection quality [@scholer2011consistency];
+Roitero et al. asked how many judgments a collection needs before its comparisons have
+statistical power [@roitero2023crowdpower]; Sakai et al. examined how the order in which
+pooled documents are presented for assessment changes the resulting collection
+[@sakai2022pooling]; and Arabzadeh et al. showed that sparse, shallow pools misrank
+modern systems [@arabzadeh2022shallow]. Ferro and Sanderson examine the significance
+tests that turn those scores into claims [@ferro2022testatest]. The second strand is
+infrastructure: `ir_datasets` [@macavaney2021irdatasets] and the Information Retrieval
+Experiment Platform [@frobe2023platform] exist so that a released collection can be run
+against by someone other than its author, which is the condition under which a
+construction artifact gets found at all.
+
+**Collections built without human judgments, and the circularity that follows.**
+Automatically generated collections trade annotation cost for exactly the risk above.
 Azzopardi and de Rijke showed that simulated known-item queries carry a bias determined
-by the generation procedure [@azzopardi2007simulated]; pseudo test collections built
-from anchor text or from microblog structure inherit the biases of the signal used to
-build them [@asadi2011pseudo; @berendsen2013pseudo], and weak supervision derived from
-an existing ranker teaches a model that ranker's behavior [@dehghani2017weak]. Dietz et
-al. survey the general case of human-optional collections [@dietz2020humansoptional],
-and Rahmani et al. examine the same question for collections generated by language
-models [@rahmani2024synthetic]. The parallel outside IR is annotation artifacts: models
-reach high accuracy on NLI and fact-verification benchmarks by exploiting regularities
+by the generation procedure [@azzopardi2007simulated]; pseudo test collections built from
+anchor text or from microblog structure inherit the biases of the signal used to build
+them [@asadi2011pseudo; @berendsen2013pseudo], and weak supervision derived from an
+existing ranker teaches a model that ranker's behavior [@dehghani2017weak]. Dietz et al.
+survey the general case of human-optional collections [@dietz2020humansoptional], and
+Rahmani et al. examine the same question for collections generated by language models
+[@rahmani2024synthetic].
+
+The current form of the question is whether a language model can produce the relevance
+labels themselves. Faggioli et al. set out the positions [@faggioli2023perspectives];
+MacAvaney and Soldaini estimate relevance from a single labeled example
+[@macavaney2023oneshot]; Thomas et al. report that model judgments track searcher
+preferences [@thomas2024preferences]; Upadhyay et al. study the behavior of one such
+assessor at scale [@upadhyay2025umbrela]; Arabzadeh and Clarke measure how much the
+resulting labels move with the prompt [@arabzadeh2025prompt]; Sakai et al. compare
+open-source model assessment against highly reliable manual assessment
+[@sakai2025opensource]; Meng et al. build query performance prediction on model-generated
+judgments [@meng2025qpp]; Turkmen et al. construct a test collection generated by
+language models outright [@turkmen2026gentrec]; and Soboroff argues the practice should
+stop [@soboroff2025dontuse]. The worry animating that debate is structural rather than
+empirical: where the judge and the system under test draw on the same model, a collection
+can reward agreement with the judge rather than retrieval, and no score computed on that
+collection can separate the two.
+
+**Our case is the same shape with a different judge.** Nothing in this paper concerns
+language-model assessors. But a relevance rule that is an executable predicate over
+structured fields is a judge of exactly that kind: it is a procedure, it is available to
+the system at query time in the form of the metadata it tests, and a system that
+re-executes it scores well without retrieving. The asymmetry is that a predicate is
+legible in a way a model is not, so the reward for reconstructing it can be measured
+rather than argued about. The parallel outside IR is annotation artifacts: models reach
+high accuracy on NLI and fact-verification benchmarks by exploiting regularities
 introduced during dataset construction rather than by performing the task
-[@gururangan2018artifacts; @schuster2019fever].
+[@gururangan2018artifacts; @schuster2019fever], which Geirhos et al. place in the general
+category of shortcut learning [@geirhos2020shortcut].
 
 What we add is not the observation but a measurement recipe. Where the relevance rule is
 an executable predicate, the rule can itself be run as a ranking signal, and doing so
@@ -178,6 +215,20 @@ contribution is that this control needs two choices stated together, not one: ho
 gold signal enters the score, and what candidate set it can reach. Getting either wrong
 moves the number by more than any system in our Table 2 (Section 5.1), and the second
 choice is the one the literature above does not force an author to declare.
+
+**Domain collections and the relevance rules they use.** Specialist domains have built
+their own collections, and the rule each one uses to declare a document relevant is the
+part worth comparing. NFCorpus pairs consumer health questions with linked medical
+literature [@boteva2016nfcorpus]; BioASQ draws its relevance from expert-curated
+biomedical questions and answers [@tsatsaronis2015bioasq]; TREC-COVID assembled a
+pandemic collection under the standard pooled-assessment protocol
+[@voorhees2020treccovid]. Two are closer to our case than those. DBpedia-Entity v2
+defines relevance for entity search over a structured knowledge base
+[@hasibi2017dbpedia], where what makes an entity relevant is partly a property of fields
+rather than of prose; and Shao et al. study relevance judgments in legal case retrieval
+[@shao2023legal], a professional domain in which the criterion is closer to a rule than
+to a topical impression. Neither builds its gold sets by executing a predicate, which is
+the specific move this paper measures.
 
 **Domain applications.** Language models encode substantial clinical knowledge
 [@singhal2022clinicalknowledge], but recall records are operational documents rather
@@ -235,13 +286,13 @@ macro F1 (0.717), which overstates performance on the free-text tail by about 0.
 
 Well-separated categories are unapproved marketing (0.93), labeling and packaging (0.92)
 and impurity/degradation (0.86). Weak ones are stability/expiry (0.47) and
-cross-contamination (0.56), both sharing vocabulary with neighbours.
+cross-contamination (0.56), both sharing vocabulary with neighbors.
 
 ### 3.3 Benchmark construction
 
 Each query pairs a natural-language question with a structured predicate; the gold
 evidence set is every corpus event satisfying that predicate. This removes human
-relevance judgement from the benchmark and makes it reproducible from the corpus alone.
+relevance judgment from the benchmark and makes it reproducible from the corpus alone.
 Table 1 gives the six families with an example of each; Section 5.4 shows what the
 arrangement costs.
 
@@ -476,7 +527,7 @@ The last is the clearest case, and it is the one we can now test rather than ass
 document contains "outside the United States", so a question built on that constraint
 retrieves almost nothing relevant. Every lexical channel scores exactly 0.000 on this
 family; corpus-trained LSA reaches 0.013; **BGE, a pretrained retrieval encoder, reaches
-0.010**, and the fusion that includes it reaches 0.024. Adding a strong pretrained
+0.009**, and the fusion that includes it reaches 0.024. Adding a strong pretrained
 encoder moves this family from nothing to nothing.
 
 The reason is not that the country is missing from the text. It is written down in every
@@ -510,8 +561,8 @@ constraint from those that read one off the question.
 ![Figure 3](figures/fig3_main.png)
 
 *Figure 3: nDCG@10 on the held-out test split with 95% clustered bootstrap
-intervals. Grey, text-only baselines; coral, query-understanding systems that infer the
-defect category from the question rather than reading a constraint off it; dark grey,
+intervals. Gray, text-only baselines; coral, query-understanding systems that infer the
+defect category from the question rather than reading a constraint off it; dark gray,
 configurations that read constraints off the question and so re-execute the gold
 predicate directly. The coral systems are not predicate-free: they match against the
 same stored category label the gold rule tests, with a noisy query side, so their gains
@@ -593,6 +644,11 @@ help" from "helps by an amount we cannot see".
 
 The obvious way to do better is to parse the severity class, period and geography out of
 the question and filter on them. It works spectacularly and is not a retrieval result.
+
+The soft metadata filter alone reaches 0.423, and a hard prefilter with no defect
+prior reaches 0.464, against a text-only baseline of 0.302. Both figures name what
+the filter does rather than what a retriever learns, which is the distinction the
+rest of this section is about.
 
 | Configuration | **nDCG@10** | Δ vs Hybrid RRF |
 |---|---|---|
@@ -710,7 +766,127 @@ on this benchmark, decisive.
 We keep the metadata numbers in the paper because a reader building such a system should
 know what filtering buys operationally. We do not claim them as a research result.
 
-### 5.5 What would perfect defect-category inference buy?
+### 5.5 The full per-family matrix
+
+Figure 2 and the aggregates above show the family effect for a subset of systems. The three
+tables here give it in full, every system against every family on the held-out test split,
+because the paper's central claim is a claim about variance across families and a
+micro-average is the one summary that hides it. Query counts per family are in the column
+headers.
+
+| System | Form (31) | Severity (18) | Firm (31) | Period (25) | Geography (10) | Country (4) |
+|---|---|---|---|---|---|---|
+| BM25 | 0.086 | 0.064 | 0.682 | 0.080 | 0.000 | 0.286 |
+| TF-IDF | 0.058 | 0.069 | 0.798 | 0.064 | 0.000 | 0.504 |
+| LSA | 0.155 | 0.183 | 0.740 | 0.127 | 0.013 | 0.324 |
+| word2vec | 0.012 | 0.059 | 0.518 | 0.045 | 0.000 | 0.083 |
+| Hybrid RRF | 0.162 | 0.135 | 0.759 | 0.121 | 0.000 | 0.506 |
+| BGE-base | 0.148 | 0.160 | 0.658 | 0.146 | 0.009 | 0.656 |
+| MiniLM | 0.074 | 0.038 | 0.346 | 0.058 | 0.017 | 0.207 |
+| Hybrid RRF + dense | 0.193 | 0.151 | 0.796 | 0.161 | 0.024 | 0.735 |
+
+*Table 6: nDCG@10 by question family, text-only systems, test split. Column headers carry
+the number of test queries in each family.*
+
+Firm history is the only family every text-only system answers: the spread there runs from
+0.346 to 0.798, while no system reaches 0.200 on form, severity or period. On
+geography four of the eight score exactly 0.000 and the best of them reaches 0.024. The
+ordering is not stable across families either. TF-IDF leads firm history at 0.798 and
+sits second from last on form at 0.058; hybrid RRF with the dense channel leads four
+of the six families -- form, period, geography and site country -- and leads neither
+severity nor firm history. A single leaderboard position
+is therefore a property of the family mix in the benchmark as much as of the system.
+Site country is the one column to read with care: it carries 4 test queries, and the
+0.735 at the foot of it rests on those four.
+
+| System | Form (31) | Severity (18) | Firm (31) | Period (25) | Geography (10) | Country (4) |
+|---|---|---|---|---|---|---|
+| Hybrid RRF (text only) | 0.162 | 0.135 | 0.759 | 0.121 | 0.000 | 0.506 |
+| Classifier prior | 0.162 | 0.136 | 0.765 | 0.115 | 0.000 | 0.459 |
+| Centroid prior | 0.195 | 0.170 | 0.743 | 0.153 | 0.000 | 0.443 |
+| Oracle defect category | 0.328 | 0.360 | 0.759 | 0.262 | 0.000 | 0.506 |
+| Soft metadata filter | 0.282 | 0.302 | 0.759 | 0.315 | 0.121 | 0.893 |
+| Hard metadata prefilter | 0.297 | 0.376 | 0.759 | 0.341 | 0.323 | 1.000 |
+| Classifier prior + filter | 0.418 | 0.507 | 0.668 | 0.333 | 0.308 | 0.776 |
+| Centroid prior + filter | 0.497 | 0.551 | 0.714 | 0.538 | 0.426 | 0.945 |
+| Oracle category + filter | 0.730 | 0.872 | 0.759 | 0.784 | 0.501 | 0.893 |
+| *Control:* gold, down-weight | 0.409 | 0.533 | 0.997 | 0.439 | 0.138 | 0.893 |
+| *Control:* gold, additive | 0.730 | 0.872 | 1.000 | 0.784 | 0.501 | 1.000 |
+| *Ceiling:* gold ranked first | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+
+*Table 7: nDCG@10 by question family for the query-understanding systems and the gold
+controls, test split. The ceiling row is 1.000 by construction.*
+
+The geography column is the sharpest result in the matrix. Every system that reads a
+constraint off the question moves it -- 0.121 for the soft filter, 0.323 for the
+hard prefilter, 0.426 with the centroid prior on top -- and every system that infers the
+defect category without reading a slot stays at exactly 0.000, the oracle over the true
+defect category included. Perfect knowledge of one component of the gold predicate buys
+nothing on a family whose predicate constrains something else. The oracle-with-filter row
+also reproduces the additive gold control exactly on form, severity, period and geography
+(0.730, 0.872, 0.784, 0.501) and departs from it only on firm history and
+site country, which is the per-family form of the identity recorded in
+`results/proposed_results.json` under `oracle_vs_gold_control_by_family`.
+
+| System | Form (31) | Severity (18) | Firm (31) | Period (25) | Geography (10) | Country (4) |
+|---|---|---|---|---|---|---|
+| BM25 | 0.198 | 0.123 | 0.995 | 0.131 | 0.013 | 0.922 |
+| TF-IDF | 0.211 | 0.208 | 1.000 | 0.148 | 0.056 | 1.000 |
+| LSA | 0.296 | 0.302 | 1.000 | 0.285 | 0.222 | 0.661 |
+| word2vec | 0.068 | 0.071 | 0.807 | 0.128 | 0.053 | 0.478 |
+| Hybrid RRF | 0.256 | 0.268 | 1.000 | 0.230 | 0.126 | 0.891 |
+| BGE-base | 0.311 | 0.212 | 0.942 | 0.225 | 0.064 | 0.745 |
+| MiniLM | 0.189 | 0.057 | 0.635 | 0.091 | 0.059 | 0.337 |
+| Hybrid RRF + dense | 0.338 | 0.291 | 1.000 | 0.298 | 0.102 | 0.891 |
+
+*Table 8: recall@100 by question family, text-only systems, test split. This is what the
+candidate pool makes reachable before any ranking decision.*
+
+Table 8 explains the geography column rather than restating it. On firm history recall@100
+is 1.000 for four of the eight systems: the gold set is already inside the pool and the task
+is ranking. On geography it runs from 0.013 to 0.222 -- the gold documents are
+mostly not in the pool at all, so no reranker can recover them, and the collapse is a
+reachability failure rather than a ranking failure. Adding the metadata prefilter lifts
+geography recall@100 only to 0.288, which is the ceiling any downstream ranking on this
+family is working under.
+
+None of the cells above carries an interval, and three readings here turn on their width.
+
+| Hybrid RRF + dense | Form (31) | Severity (18) | Firm (31) | Period (25) | Geography (10) | Country (4) |
+|---|---|---|---|---|---|---|
+| nDCG@10 | 0.193 | 0.151 | 0.796 | 0.161 | 0.024 | 0.735 |
+| 95% CI | [0.119, 0.274] | [0.079, 0.227] | [0.688, 0.888] | [0.106, 0.216] | [0.000, 0.047] | [0.579, 0.913] |
+
+*Table 9: nDCG@10 with 95% confidence intervals for the strongest text-only system, test
+split. IID bootstrap over queries, `ndcg@10_ci95_iid` in `results/retrieval_results.json`.*
+
+Two columns say less than their point estimates do. **Site country rests on four queries**,
+and its interval [0.579, 0.913] is wider than the gap between this system at 0.735 and the
+fusion without a dense channel at 0.506 [0.343, 0.669], or BGE-base at 0.656 [0.338,
+0.907]; all three overlap, so the column orders these systems without separating them.
+**Geography runs [0.000, 0.047]**, lower bound zero: what survives is not 0.024 rather than
+0.000 but that the family sits against the floor. Firm history is the one column that
+clears the four defect-semantics families outright; it does not clear site country.
+
+| System, geography only | nDCG@10 | 95% CI |
+|---|---|---|
+| Hybrid RRF (text only) | 0.000 | [0.000, 0.000] |
+| Soft metadata filter | 0.121 | [0.052, 0.206] |
+| Hard metadata prefilter | 0.323 | [0.186, 0.463] |
+| Centroid prior + filter | 0.426 | [0.251, 0.613] |
+| Oracle category + filter | 0.501 | [0.296, 0.686] |
+
+*Table 10: the geography column of Table 7 with 95% confidence intervals, test split, 10
+queries. `ndcg@10_ci95_iid` in `results/proposed_results.json`.*
+
+The geography gains are real and far less precise than Table 7 suggests. The centroid prior
+with a metadata filter reaches 0.426, but its interval [0.251, 0.613] is 0.362 wide --
+fifteen times the whole text-only reading of 0.024, and wide enough that its distance from
+the hard prefilter at 0.323 [0.186, 0.463] is not resolved by ten queries. The intervals
+establish direction and floor: every configuration that reads a constraint has a lower
+bound above zero. They do not establish an ordering among them.
+
+### 5.6 What would perfect defect-category inference buy?
 
 A configuration given the true defect category, an oracle over one component of the gold
 predicate and so subject to the caveat above, reaches 0.410 nDCG@10 without metadata
@@ -719,7 +895,7 @@ filtering it reaches 0.757, but as Table 4's caption records, that configuration
 per-family identical to the gold-membership control on every family where a defect slot
 exists, so it is a control and not a ceiling on anything.) Read narrowly, that is the
 ceiling on the category channel *as this benchmark defines categories*: about 0.11
-nDCG@10, of which the centroid prior captures 0.014. Read sceptically, it is another
+nDCG@10, of which the centroid prior captures 0.014. Read skeptically, it is another
 measurement of how much of the predicate a system has reconstructed. Both readings
 support the same conclusion: the category channel is where the remaining headroom sits,
 and we did not reach it.
@@ -771,7 +947,7 @@ whose failure-mode field has house conventions.
 
 ## 7 Limitations
 
-**No human adjudicated any relevance judgement, and the questions are generated.** This
+**No human adjudicated any relevance judgment, and the questions are generated.** This
 is the benchmark's principal limitation and it bounds every number in the paper. Gold
 membership is whatever the predicate returns, so a document a domain expert would call
 relevant is scored wrong if the predicate excludes it, and vice versa; nothing here
@@ -896,8 +1072,8 @@ leaderboard, with both its scoring form and its candidate pool stated.
 The benchmark, the taxonomy, the scripts below and every file in `results/` are released
 at <https://github.com/phanibalagam/quest-qi> and archived at
 <https://doi.org/10.5281/zenodo.22668726>. That is the concept DOI, which always
-resolves to the latest archived version; the v1.0.0 release this manuscript describes is
-also citable on its own.
+resolves to the latest archived version; the release this manuscript describes is
+v1.1.0, which carries this manuscript and its bibliography as submitted.
 
 Run in order; each script writes JSON into `results/`.
 
@@ -910,7 +1086,6 @@ scripts/04_retrieval.py        # text-only baselines
 scripts/05_taxonomy_aware_retrieval.py   # query understanding + controls
 scripts/08_verify_manuscript.py          # re-checks every number here
 scripts/10_build_latex.py      # .md -> .tex; --compile builds the PDF
-scripts/11_arxiv_package.py    # arXiv source tarball
 scripts/12_release_package.py  # repository release archive
 figures/gen_figures.py         # all figures, from results/ only
 ```
@@ -932,9 +1107,21 @@ in `data/raw/MANIFEST.json`; the resolved path is echoed into
 rank_bm25, matplotlib, and, for script 09 only, sentence-transformers. Total runtime a
 few minutes on one CPU core.
 
-This version is an extended preprint. It runs longer than the 12--15 page limit of a
-Springer LNCS proceedings paper, and would be cut to a venue's limit before submission;
-the LNCS class is used here for typesetting only and no venue is claimed.
+### Use of AI tools in the research process
+
+Claude (Anthropic) was used in developing and revising the analysis code in `scripts/`
+and `figures/`, and in the ten rounds of adversarial pre-submission review recorded in
+`notes/review-2026-09-07*`. Every script it contributed to is released in full and was
+executed by the author against the released data; no number reported in this manuscript
+comes from a model's account of what code would do. The review rounds are released as
+they ran: each round's findings file and the response to it sit in `notes/`, so what was
+challenged and what changed are both on the record. No AI system selected the corpus,
+defined the defect taxonomy, wrote the gold predicates, chose the retrievers or the
+evaluation measures, or decided what the results mean; those are the author's decisions,
+recorded in `notes/00-study-design.md`. `scripts/08_verify_manuscript.py` re-checks every
+number here against the files in `results/` and fails on any disagreement, which is the
+check that stands behind these numbers rather than any assurance about how the code was
+written.
 
 ## Ethics and data statement
 
@@ -946,34 +1133,13 @@ because they are part of the public record; nothing
 here should be read as an assessment of any firm's current quality state, and recall
 records reflect, among other things, differences in reporting and inspection intensity.
 
-## Declaration of generative AI and AI-assisted technologies
+## Acknowledgments
 
-During the preparation of this manuscript, the author used Claude (Anthropic) to support the
-drafting and editing of manuscript text, the development and revision of analysis code, and
-the adversarial pre-submission review of the manuscript recorded in `notes/`. The author
-retained sole responsibility for all final decisions concerning the research question, study
-design, data selection, outcome definitions, analytical methods and experimental controls;
-independently verified all sources, data and results; executed and validated the analyses;
-interpreted the findings; reviewed and edited all AI-assisted content; and assumes full
-responsibility for the accuracy and integrity of the manuscript.
-
-
----
-
----
-
-## On the references
-
-See `references.bib`. Every entry was retrieved programmatically from the arXiv API,
-CrossRef, OpenAlex, the ACL Anthology or the publisher's own page and checked at the
-source for title, first author, venue, year and page range; where a preprint has since
-appeared at a venue, the version of record is cited and the eprint retained. No
-reference was written from memory, and no citation in this manuscript is a placeholder.
-
-One entry carries a note recording a disagreement between sources. The publisher's
-CrossRef deposit for `robertson2009bm25` gives 4(1--2):1--174, but those are the fields
-of a different monograph in the same series (Silvestri, *Mining Query Logs*,
-10.1561/1500000013); the published article's own citation line reads 3(4):333--389, and
-FnTIR 3(3) ends at p. 331. An earlier version of this bibliography followed the deposit.
-Where an aggregator and the printed article disagree on volume and pages, we cite the
-article.
+Claude (Anthropic) was used to draft and edit manuscript text; its use in the research
+process is described in the Reproducibility section. No AI system is an author of this
+work and none could be, because authorship carries accountability that a tool cannot
+hold. The author retained sole responsibility for all final decisions concerning the
+research question, study design, data selection, outcome definitions, analytical methods
+and experimental controls; independently verified all sources, data and results; reviewed
+and edited all AI-assisted content; and assumes full responsibility for the accuracy and
+integrity of the manuscript.

@@ -1,0 +1,1053 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{61}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{} and \showURL{}.  The latter does
+%%% not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showURL}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showURL #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+\makeatletter
+\@ifundefined{NAT@parse@date}{}{\let\NAT@parse@date@orig\NAT@parse@date}
+\@ifundefined{NAT@parse@date}{}{\def\NAT@parse@date#1#2#3#4#5#6@@{\NAT@parse@date@orig#1#2#3#4#5#6@@\def\NAT@tempyear{0000}\def\NAT@tempexlab{{?}}\ifx\NAT@year\NAT@tempyear\ifx\NAT@exlab\NAT@tempexlab\def\NAT@date{[n.\,d.]}\else\edef\NAT@date{[n.\,d.]\NAT@exlab}\fi\fi}}
+\makeatother
+
+\bibitem[Arabzadeh and Clarke(2025)]%
+        {arabzadeh2025prompt}
+\bibfield{author}{\bibinfo{person}{Negar Arabzadeh} {and}
+  \bibinfo{person}{Charles L.~A. Clarke}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{A Human-AI Comparative Analysis of Prompt
+  Sensitivity in {LLM}-Based Relevance Judgment}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 48th International ACM SIGIR
+  Conference on Research and Development in Information Retrieval}}
+  \emph{(\bibinfo{series}{SIGIR '25})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{2784--2788}.
+\newblock
+\href{https://doi.org/10.1145/3726302.3730159}{doi:\nolinkurl{10.1145/3726302.3730159}}
+
+
+\bibitem[Arabzadeh et~al\mbox{.}(2022)]%
+        {arabzadeh2022shallow}
+\bibfield{author}{\bibinfo{person}{Negar Arabzadeh}, \bibinfo{person}{Alexandra
+  Vtyurina}, \bibinfo{person}{Xinyi Yan}, {and} \bibinfo{person}{Charles L.~A.
+  Clarke}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Shallow pooling for sparse labels}.
+\newblock \bibinfo{journal}{\emph{Information Retrieval Journal}}
+  \bibinfo{volume}{25}, \bibinfo{number}{4} (\bibinfo{year}{2022}),
+  \bibinfo{pages}{365--385}.
+\newblock
+\showISSN{1386-4564}
+\href{https://doi.org/10.1007/s10791-022-09411-0}{doi:\nolinkurl{10.1007/s10791-022-09411-0}}
+
+
+\bibitem[Asadi et~al\mbox{.}(2011)]%
+        {asadi2011pseudo}
+\bibfield{author}{\bibinfo{person}{Nima Asadi}, \bibinfo{person}{Donald
+  Metzler}, \bibinfo{person}{Tamer Elsayed}, {and} \bibinfo{person}{Jimmy
+  Lin}.} \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Pseudo test collections for learning web search
+  ranking functions}. In \bibinfo{booktitle}{\emph{Proceedings of the 34th
+  International ACM SIGIR Conference on Research and Development in Information
+  Retrieval}}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{1073--1082}.
+\newblock
+\href{https://doi.org/10.1145/2009916.2010058}{doi:\nolinkurl{10.1145/2009916.2010058}}
+
+
+\bibitem[Asai et~al\mbox{.}(2023)]%
+        {asai2023selfrag}
+\bibfield{author}{\bibinfo{person}{Akari Asai}, \bibinfo{person}{Zeqiu Wu},
+  \bibinfo{person}{Yizhong Wang}, \bibinfo{person}{Avirup Sil}, {and}
+  \bibinfo{person}{Hannaneh Hajishirzi}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{title}{Self-RAG: Learning to Retrieve, Generate, and
+  Critique through Self-Reflection}.
+\newblock \bibinfo{howpublished}{arXiv:2310.11511}.
+\newblock
+\showeprint[arxiv]{2310.11511}
+\href{https://doi.org/10.48550/arXiv.2310.11511}{doi:\nolinkurl{10.48550/arXiv.2310.11511}}
+\newblock
+\shownote{Preprint; no peer-reviewed version located in Crossref as of
+  2026-09-18}.
+
+
+\bibitem[Azzopardi et~al\mbox{.}(2007)]%
+        {azzopardi2007simulated}
+\bibfield{author}{\bibinfo{person}{Leif Azzopardi}, \bibinfo{person}{Maarten de
+  Rijke}, {and} \bibinfo{person}{Krisztian Balog}.}
+  \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{Building simulated queries for known-item topics:
+  an analysis using six European languages}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 30th Annual International ACM
+  SIGIR Conference on Research and Development in Information Retrieval}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{455--462}.
+\newblock
+\href{https://doi.org/10.1145/1277741.1277820}{doi:\nolinkurl{10.1145/1277741.1277820}}
+
+
+\bibitem[Berendsen et~al\mbox{.}(2013)]%
+        {berendsen2013pseudo}
+\bibfield{author}{\bibinfo{person}{Richard Berendsen}, \bibinfo{person}{Manos
+  Tsagkias}, \bibinfo{person}{Wouter Weerkamp}, {and} \bibinfo{person}{Maarten
+  de Rijke}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Pseudo test collections for training and tuning
+  microblog rankers}. In \bibinfo{booktitle}{\emph{Proceedings of the 36th
+  International ACM SIGIR Conference on Research and Development in Information
+  Retrieval}}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{53--62}.
+\newblock
+\href{https://doi.org/10.1145/2484028.2484063}{doi:\nolinkurl{10.1145/2484028.2484063}}
+
+
+\bibitem[Bohnet et~al\mbox{.}(2022)]%
+        {bohnet2022aqa}
+\bibfield{author}{\bibinfo{person}{Bernd Bohnet}, \bibinfo{person}{Vinh~Q.
+  Tran}, \bibinfo{person}{Pat Verga}, \bibinfo{person}{Roee Aharoni},
+  \bibinfo{person}{Daniel Andor}, \bibinfo{person}{Livio~Baldini Soares},
+  \bibinfo{person}{Massimiliano Ciaramita}, \bibinfo{person}{Jacob Eisenstein},
+  \bibinfo{person}{Kuzman Ganchev}, \bibinfo{person}{Jonathan Herzig},
+  \bibinfo{person}{Kai Hui}, \bibinfo{person}{Tom Kwiatkowski},
+  \bibinfo{person}{Ji Ma}, \bibinfo{person}{Jianmo Ni},
+  \bibinfo{person}{Lierni~Sestorain Saralegui}, \bibinfo{person}{Tal Schuster},
+  \bibinfo{person}{William~W. Cohen}, \bibinfo{person}{Michael Collins},
+  \bibinfo{person}{Dipanjan Das}, \bibinfo{person}{Donald Metzler},
+  \bibinfo{person}{Slav Petrov}, {and} \bibinfo{person}{Kellie Webster}.}
+  \bibinfo{year}{2022}\natexlab{}.
+\newblock \bibinfo{title}{Attributed Question Answering: Evaluation and
+  Modeling for Attributed Large Language Models}.
+\newblock \bibinfo{howpublished}{arXiv:2212.08037}.
+\newblock
+\showeprint[arxiv]{2212.08037}
+\href{https://doi.org/10.48550/arXiv.2212.08037}{doi:\nolinkurl{10.48550/arXiv.2212.08037}}
+\newblock
+\shownote{Preprint; no peer-reviewed version located in Crossref as of
+  2026-09-18}.
+
+
+\bibitem[Boteva et~al\mbox{.}(2016)]%
+        {boteva2016nfcorpus}
+\bibfield{author}{\bibinfo{person}{Vera Boteva}, \bibinfo{person}{Demian
+  Gholipour}, \bibinfo{person}{Artem Sokolov}, {and} \bibinfo{person}{Stefan
+  Riezler}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{A Full-Text Learning to Rank Dataset for Medical
+  Information Retrieval}. In \bibinfo{booktitle}{\emph{Advances in Information
+  Retrieval: 38th European Conference on IR Research, ECIR 2016}}
+  \emph{(\bibinfo{series}{Lecture Notes in Computer Science},
+  Vol.~\bibinfo{volume}{9626})}. \bibinfo{publisher}{Springer International
+  Publishing}, \bibinfo{address}{Cham}, \bibinfo{pages}{716--722}.
+\newblock
+\showISBNx{978-3-319-30670-4}
+\href{https://doi.org/10.1007/978-3-319-30671-1_58}{doi:\nolinkurl{10.1007/978-3-319-30671-1_58}}
+
+
+\bibitem[Buckley et~al\mbox{.}(2007)]%
+        {buckley2007bias}
+\bibfield{author}{\bibinfo{person}{Chris Buckley}, \bibinfo{person}{Darrin
+  Dimmick}, \bibinfo{person}{Ian Soboroff}, {and} \bibinfo{person}{Ellen
+  Voorhees}.} \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{Bias and the limits of pooling for large
+  collections}.
+\newblock \bibinfo{journal}{\emph{Information Retrieval}} \bibinfo{volume}{10},
+  \bibinfo{number}{6} (\bibinfo{year}{2007}), \bibinfo{pages}{491--508}.
+\newblock
+\href{https://doi.org/10.1007/s10791-007-9032-x}{doi:\nolinkurl{10.1007/s10791-007-9032-x}}
+
+
+\bibitem[Buckley and Voorhees(2004)]%
+        {buckley2004incomplete}
+\bibfield{author}{\bibinfo{person}{Chris Buckley} {and}
+  \bibinfo{person}{Ellen~M. Voorhees}.} \bibinfo{year}{2004}\natexlab{}.
+\newblock \showarticletitle{Retrieval evaluation with incomplete information}.
+  In \bibinfo{booktitle}{\emph{Proceedings of the 27th Annual International ACM
+  SIGIR Conference on Research and Development in Information Retrieval}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{25--32}.
+\newblock
+\href{https://doi.org/10.1145/1008992.1009000}{doi:\nolinkurl{10.1145/1008992.1009000}}
+
+
+\bibitem[Chen et~al\mbox{.}(2024)]%
+        {chen2023benchmarkingrag}
+\bibfield{author}{\bibinfo{person}{Jiawei Chen}, \bibinfo{person}{Hongyu Lin},
+  \bibinfo{person}{Xianpei Han}, {and} \bibinfo{person}{Le Sun}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Benchmarking Large Language Models in
+  Retrieval-Augmented Generation}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the AAAI Conference on
+  Artificial Intelligence}} \bibinfo{volume}{38}, \bibinfo{number}{16}
+  (\bibinfo{year}{2024}), \bibinfo{pages}{17754--17762}.
+\newblock
+\href{https://doi.org/10.1609/aaai.v38i16.29728}{doi:\nolinkurl{10.1609/aaai.v38i16.29728}}
+\newblock
+\shownote{Also arXiv:2309.01431}.
+
+
+\bibitem[Dehghani et~al\mbox{.}(2017)]%
+        {dehghani2017weak}
+\bibfield{author}{\bibinfo{person}{Mostafa Dehghani}, \bibinfo{person}{Hamed
+  Zamani}, \bibinfo{person}{Aliaksei Severyn}, \bibinfo{person}{Jaap Kamps},
+  {and} \bibinfo{person}{W.~Bruce Croft}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Neural Ranking Models with Weak Supervision}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 40th International ACM SIGIR
+  Conference on Research and Development in Information Retrieval}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{65--74}.
+\newblock
+\href{https://doi.org/10.1145/3077136.3080832}{doi:\nolinkurl{10.1145/3077136.3080832}}
+
+
+\bibitem[Dietz and Dalton(2020)]%
+        {dietz2020humansoptional}
+\bibfield{author}{\bibinfo{person}{Laura Dietz} {and} \bibinfo{person}{Jeffrey
+  Dalton}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Humans Optional? Automatic Large-Scale Test
+  Collections for Entity, Passage, and Entity-Passage Retrieval}.
+\newblock \bibinfo{journal}{\emph{Datenbank-Spektrum}} \bibinfo{volume}{20},
+  \bibinfo{number}{1} (\bibinfo{year}{2020}), \bibinfo{pages}{17--28}.
+\newblock
+\href{https://doi.org/10.1007/s13222-020-00334-y}{doi:\nolinkurl{10.1007/s13222-020-00334-y}}
+
+
+\bibitem[Es et~al\mbox{.}(2024)]%
+        {es2023ragas}
+\bibfield{author}{\bibinfo{person}{Shahul Es}, \bibinfo{person}{Jithin James},
+  \bibinfo{person}{Luis Espinosa~Anke}, {and} \bibinfo{person}{Steven
+  Schockaert}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{RAGAs}: Automated Evaluation of Retrieval
+  Augmented Generation}. In \bibinfo{booktitle}{\emph{Proceedings of the 18th
+  Conference of the European Chapter of the Association for Computational
+  Linguistics: System Demonstrations}}. \bibinfo{publisher}{Association for
+  Computational Linguistics}, \bibinfo{address}{Stroudsburg, PA, USA},
+  \bibinfo{pages}{150--158}.
+\newblock
+\href{https://doi.org/10.18653/v1/2024.eacl-demo.16}{doi:\nolinkurl{10.18653/v1/2024.eacl-demo.16}}
+\newblock
+\shownote{Also arXiv:2309.15217}.
+
+
+\bibitem[Faggioli et~al\mbox{.}(2023)]%
+        {faggioli2023perspectives}
+\bibfield{author}{\bibinfo{person}{Guglielmo Faggioli}, \bibinfo{person}{Laura
+  Dietz}, \bibinfo{person}{Charles L.~A. Clarke}, \bibinfo{person}{Gianluca
+  Demartini}, \bibinfo{person}{Matthias Hagen}, \bibinfo{person}{Claudia
+  Hauff}, \bibinfo{person}{Noriko Kando}, \bibinfo{person}{Evangelos Kanoulas},
+  \bibinfo{person}{Martin Potthast}, \bibinfo{person}{Benno Stein}, {and}
+  \bibinfo{person}{Henning Wachsmuth}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Perspectives on Large Language Models for Relevance
+  Judgment}. In \bibinfo{booktitle}{\emph{Proceedings of the 2023 ACM SIGIR
+  International Conference on Theory of Information Retrieval}}
+  \emph{(\bibinfo{series}{ICTIR '23})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{39--50}.
+\newblock
+\href{https://doi.org/10.1145/3578337.3605136}{doi:\nolinkurl{10.1145/3578337.3605136}}
+
+
+\bibitem[Ferro and Sanderson(2022)]%
+        {ferro2022testatest}
+\bibfield{author}{\bibinfo{person}{Nicola Ferro} {and} \bibinfo{person}{Mark
+  Sanderson}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{How Do You Test a Test? A Multifaceted Examination
+  of Significance Tests}. In \bibinfo{booktitle}{\emph{Proceedings of the
+  Fifteenth ACM International Conference on Web Search and Data Mining}}
+  \emph{(\bibinfo{series}{WSDM '22})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{280--288}.
+\newblock
+\href{https://doi.org/10.1145/3488560.3498406}{doi:\nolinkurl{10.1145/3488560.3498406}}
+
+
+\bibitem[Fr{\"o}be et~al\mbox{.}(2023)]%
+        {frobe2023platform}
+\bibfield{author}{\bibinfo{person}{Maik Fr{\"o}be},
+  \bibinfo{person}{Jan~Heinrich Reimer}, \bibinfo{person}{Sean MacAvaney},
+  \bibinfo{person}{Niklas Deckers}, \bibinfo{person}{Simon Reich},
+  \bibinfo{person}{Janek Bevendorff}, \bibinfo{person}{Benno Stein},
+  \bibinfo{person}{Matthias Hagen}, {and} \bibinfo{person}{Martin Potthast}.}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{The Information Retrieval Experiment Platform}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 46th International ACM SIGIR
+  Conference on Research and Development in Information Retrieval}}
+  \emph{(\bibinfo{series}{SIGIR '23})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{2826--2836}.
+\newblock
+\href{https://doi.org/10.1145/3539618.3591888}{doi:\nolinkurl{10.1145/3539618.3591888}}
+
+
+\bibitem[Fuhr(2017)]%
+        {fuhr2017mistakes}
+\bibfield{author}{\bibinfo{person}{Norbert Fuhr}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Some Common Mistakes In {IR} Evaluation, And How
+  They Can Be Avoided}.
+\newblock \bibinfo{journal}{\emph{ACM SIGIR Forum}} \bibinfo{volume}{51},
+  \bibinfo{number}{3} (\bibinfo{year}{2017}), \bibinfo{pages}{32--41}.
+\newblock
+\href{https://doi.org/10.1145/3190580.3190586}{doi:\nolinkurl{10.1145/3190580.3190586}}
+\newblock
+\shownote{SIGIR Forum 51(3) is the December 2017 issue, as dblp and SIGIR's own
+  index record it; ACM's 2018 date is the online-publication date}.
+
+
+\bibitem[Gao et~al\mbox{.}(2023a)]%
+        {gao2022hyde}
+\bibfield{author}{\bibinfo{person}{Luyu Gao}, \bibinfo{person}{Xueguang Ma},
+  \bibinfo{person}{Jimmy Lin}, {and} \bibinfo{person}{Jamie Callan}.}
+  \bibinfo{year}{2023}\natexlab{a}.
+\newblock \showarticletitle{Precise Zero-Shot Dense Retrieval without Relevance
+  Labels}. In \bibinfo{booktitle}{\emph{Proceedings of the 61st Annual Meeting
+  of the Association for Computational Linguistics (Volume 1: Long Papers)}}.
+  \bibinfo{publisher}{Association for Computational Linguistics},
+  \bibinfo{address}{Stroudsburg, PA, USA}, \bibinfo{pages}{1762--1777}.
+\newblock
+\href{https://doi.org/10.18653/v1/2023.acl-long.99}{doi:\nolinkurl{10.18653/v1/2023.acl-long.99}}
+\newblock
+\shownote{Also arXiv:2212.10496}.
+
+
+\bibitem[Gao et~al\mbox{.}(2023c)]%
+        {gao2023alce}
+\bibfield{author}{\bibinfo{person}{Tianyu Gao}, \bibinfo{person}{Howard Yen},
+  \bibinfo{person}{Jiatong Yu}, {and} \bibinfo{person}{Danqi Chen}.}
+  \bibinfo{year}{2023}\natexlab{c}.
+\newblock \showarticletitle{Enabling Large Language Models to Generate Text
+  with Citations}. In \bibinfo{booktitle}{\emph{Proceedings of the 2023
+  Conference on Empirical Methods in Natural Language Processing}}.
+  \bibinfo{publisher}{Association for Computational Linguistics},
+  \bibinfo{address}{Stroudsburg, PA, USA}, \bibinfo{pages}{6465--6488}.
+\newblock
+\href{https://doi.org/10.18653/v1/2023.emnlp-main.398}{doi:\nolinkurl{10.18653/v1/2023.emnlp-main.398}}
+\newblock
+\shownote{Also arXiv:2305.14627}.
+
+
+\bibitem[Gao et~al\mbox{.}(2023b)]%
+        {gao2023ragsurvey}
+\bibfield{author}{\bibinfo{person}{Yunfan Gao}, \bibinfo{person}{Yun Xiong},
+  \bibinfo{person}{Xinyu Gao}, \bibinfo{person}{Kangxiang Jia},
+  \bibinfo{person}{Jinliu Pan}, \bibinfo{person}{Yuxi Bi}, \bibinfo{person}{Yi
+  Dai}, \bibinfo{person}{Jiawei Sun}, \bibinfo{person}{Meng Wang}, {and}
+  \bibinfo{person}{Haofen Wang}.} \bibinfo{year}{2023}\natexlab{b}.
+\newblock \bibinfo{title}{Retrieval-Augmented Generation for Large Language
+  Models: A Survey}.
+\newblock \bibinfo{howpublished}{arXiv:2312.10997}.
+\newblock
+\showeprint[arxiv]{2312.10997}
+\href{https://doi.org/10.48550/arXiv.2312.10997}{doi:\nolinkurl{10.48550/arXiv.2312.10997}}
+\newblock
+\shownote{Preprint; no peer-reviewed version located in Crossref as of
+  2026-09-18}.
+
+
+\bibitem[Geirhos et~al\mbox{.}(2020)]%
+        {geirhos2020shortcut}
+\bibfield{author}{\bibinfo{person}{Robert Geirhos},
+  \bibinfo{person}{J{\"o}rn-Henrik Jacobsen}, \bibinfo{person}{Claudio
+  Michaelis}, \bibinfo{person}{Richard Zemel}, \bibinfo{person}{Wieland
+  Brendel}, \bibinfo{person}{Matthias Bethge}, {and} \bibinfo{person}{Felix~A.
+  Wichmann}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Shortcut learning in deep neural networks}.
+\newblock \bibinfo{journal}{\emph{Nature Machine Intelligence}}
+  \bibinfo{volume}{2}, \bibinfo{number}{11} (\bibinfo{year}{2020}),
+  \bibinfo{pages}{665--673}.
+\newblock
+\showISSN{2522-5839}
+\href{https://doi.org/10.1038/s42256-020-00257-z}{doi:\nolinkurl{10.1038/s42256-020-00257-z}}
+
+
+\bibitem[Gururangan et~al\mbox{.}(2018)]%
+        {gururangan2018artifacts}
+\bibfield{author}{\bibinfo{person}{Suchin Gururangan}, \bibinfo{person}{Swabha
+  Swayamdipta}, \bibinfo{person}{Omer Levy}, \bibinfo{person}{Roy Schwartz},
+  \bibinfo{person}{Samuel~R. Bowman}, {and} \bibinfo{person}{Noah~A. Smith}.}
+  \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{Annotation Artifacts in Natural Language Inference
+  Data}. In \bibinfo{booktitle}{\emph{Proceedings of the 2018 Conference of the
+  North American Chapter of the Association for Computational Linguistics:
+  Human Language Technologies, Volume 2 (Short Papers)}}.
+  \bibinfo{publisher}{Association for Computational Linguistics},
+  \bibinfo{address}{Stroudsburg, PA, USA}, \bibinfo{pages}{107--112}.
+\newblock
+\href{https://doi.org/10.18653/v1/N18-2017}{doi:\nolinkurl{10.18653/v1/N18-2017}}
+
+
+\bibitem[Hasibi et~al\mbox{.}(2017)]%
+        {hasibi2017dbpedia}
+\bibfield{author}{\bibinfo{person}{Faegheh Hasibi}, \bibinfo{person}{Fedor
+  Nikolaev}, \bibinfo{person}{Chenyan Xiong}, \bibinfo{person}{Krisztian
+  Balog}, \bibinfo{person}{Svein~Erik Bratsberg}, \bibinfo{person}{Alexander
+  Kotov}, {and} \bibinfo{person}{Jamie Callan}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{{DBpedia-Entity} v2: A Test Collection for Entity
+  Search}. In \bibinfo{booktitle}{\emph{Proceedings of the 40th International
+  ACM SIGIR Conference on Research and Development in Information Retrieval}}
+  \emph{(\bibinfo{series}{SIGIR '17})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{1265--1268}.
+\newblock
+\href{https://doi.org/10.1145/3077136.3080751}{doi:\nolinkurl{10.1145/3077136.3080751}}
+
+
+\bibitem[Izacard et~al\mbox{.}(2021)]%
+        {izacard2021contriever}
+\bibfield{author}{\bibinfo{person}{Gautier Izacard}, \bibinfo{person}{Mathilde
+  Caron}, \bibinfo{person}{Lucas Hosseini}, \bibinfo{person}{Sebastian Riedel},
+  \bibinfo{person}{Piotr Bojanowski}, \bibinfo{person}{Armand Joulin}, {and}
+  \bibinfo{person}{Edouard Grave}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \bibinfo{title}{Unsupervised Dense Information Retrieval with
+  Contrastive Learning}.
+\newblock \bibinfo{howpublished}{arXiv:2112.09118}.
+\newblock
+\showeprint[arxiv]{2112.09118}
+\href{https://doi.org/10.48550/arXiv.2112.09118}{doi:\nolinkurl{10.48550/arXiv.2112.09118}}
+\newblock
+\shownote{Preprint; no peer-reviewed version located in Crossref as of
+  2026-09-18}.
+
+
+\bibitem[Ji et~al\mbox{.}(2023)]%
+        {ji2022hallucination}
+\bibfield{author}{\bibinfo{person}{Ziwei Ji}, \bibinfo{person}{Nayeon Lee},
+  \bibinfo{person}{Rita Frieske}, \bibinfo{person}{Tiezheng Yu},
+  \bibinfo{person}{Dan Su}, \bibinfo{person}{Yan Xu}, \bibinfo{person}{Etsuko
+  Ishii}, \bibinfo{person}{Yejin Bang}, \bibinfo{person}{Delong Chen},
+  \bibinfo{person}{Wenliang Dai}, \bibinfo{person}{Ho~Shu Chan},
+  \bibinfo{person}{Andrea Madotto}, {and} \bibinfo{person}{Pascale Fung}.}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Survey of Hallucination in Natural Language
+  Generation}.
+\newblock \bibinfo{journal}{\emph{Comput. Surveys}} \bibinfo{volume}{55},
+  \bibinfo{number}{12} (\bibinfo{year}{2023}), \bibinfo{pages}{1--38}.
+\newblock
+\showeprint[arxiv]{2202.03629}
+\href{https://doi.org/10.1145/3571730}{doi:\nolinkurl{10.1145/3571730}}
+
+
+\bibitem[Karpukhin et~al\mbox{.}(2020)]%
+        {karpukhin2020dpr}
+\bibfield{author}{\bibinfo{person}{Vladimir Karpukhin}, \bibinfo{person}{Barlas
+  O{\u{g}}uz}, \bibinfo{person}{Sewon Min}, \bibinfo{person}{Patrick Lewis},
+  \bibinfo{person}{Ledell Wu}, \bibinfo{person}{Sergey Edunov},
+  \bibinfo{person}{Danqi Chen}, {and} \bibinfo{person}{Wen-tau Yih}.}
+  \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Dense Passage Retrieval for Open-Domain Question
+  Answering}. In \bibinfo{booktitle}{\emph{Proceedings of the 2020 Conference
+  on Empirical Methods in Natural Language Processing (EMNLP)}}.
+  \bibinfo{publisher}{Association for Computational Linguistics},
+  \bibinfo{address}{Stroudsburg, PA, USA}, \bibinfo{pages}{6769--6781}.
+\newblock
+\href{https://doi.org/10.18653/v1/2020.emnlp-main.550}{doi:\nolinkurl{10.18653/v1/2020.emnlp-main.550}}
+\newblock
+\shownote{Also arXiv:2004.04906}.
+
+
+\bibitem[Lewis et~al\mbox{.}(2020)]%
+        {lewis2020rag}
+\bibfield{author}{\bibinfo{person}{Patrick Lewis}, \bibinfo{person}{Ethan
+  Perez}, \bibinfo{person}{Aleksandra Piktus}, \bibinfo{person}{Fabio Petroni},
+  \bibinfo{person}{Vladimir Karpukhin}, \bibinfo{person}{Naman Goyal},
+  \bibinfo{person}{Heinrich K{\"u}ttler}, \bibinfo{person}{Mike Lewis},
+  \bibinfo{person}{Wen-tau Yih}, \bibinfo{person}{Tim Rockt{\"a}schel},
+  \bibinfo{person}{Sebastian Riedel}, {and} \bibinfo{person}{Douwe Kiela}.}
+  \bibinfo{year}{2020}\natexlab{}.
+\newblock \bibinfo{title}{Retrieval-Augmented Generation for
+  Knowledge-Intensive NLP Tasks}.
+\newblock \bibinfo{howpublished}{arXiv:2005.11401}.
+\newblock
+\showeprint[arxiv]{2005.11401}
+\href{https://doi.org/10.48550/arXiv.2005.11401}{doi:\nolinkurl{10.48550/arXiv.2005.11401}}
+\newblock
+\shownote{Preprint; no peer-reviewed version located in Crossref as of
+  2026-09-18}.
+
+
+\bibitem[Liu et~al\mbox{.}(2024)]%
+        {liu2023lostinmiddle}
+\bibfield{author}{\bibinfo{person}{Nelson~F. Liu}, \bibinfo{person}{Kevin Lin},
+  \bibinfo{person}{John Hewitt}, \bibinfo{person}{Ashwin Paranjape},
+  \bibinfo{person}{Michele Bevilacqua}, \bibinfo{person}{Fabio Petroni}, {and}
+  \bibinfo{person}{Percy Liang}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Lost in the Middle: How Language Models Use Long
+  Contexts}.
+\newblock \bibinfo{journal}{\emph{Transactions of the Association for
+  Computational Linguistics}}  \bibinfo{volume}{12} (\bibinfo{year}{2024}),
+  \bibinfo{pages}{157--173}.
+\newblock
+\href{https://doi.org/10.1162/tacl_a_00638}{doi:\nolinkurl{10.1162/tacl_a_00638}}
+\newblock
+\shownote{Also arXiv:2307.03172}.
+
+
+\bibitem[MacAvaney and Soldaini(2023)]%
+        {macavaney2023oneshot}
+\bibfield{author}{\bibinfo{person}{Sean MacAvaney} {and} \bibinfo{person}{Luca
+  Soldaini}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{One-Shot Labeling for Automatic Relevance
+  Estimation}. In \bibinfo{booktitle}{\emph{Proceedings of the 46th
+  International ACM SIGIR Conference on Research and Development in Information
+  Retrieval}} \emph{(\bibinfo{series}{SIGIR '23})}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{2230--2235}.
+\newblock
+\href{https://doi.org/10.1145/3539618.3592032}{doi:\nolinkurl{10.1145/3539618.3592032}}
+
+
+\bibitem[MacAvaney et~al\mbox{.}(2021)]%
+        {macavaney2021irdatasets}
+\bibfield{author}{\bibinfo{person}{Sean MacAvaney}, \bibinfo{person}{Andrew
+  Yates}, \bibinfo{person}{Sergey Feldman}, \bibinfo{person}{Doug Downey},
+  \bibinfo{person}{Arman Cohan}, {and} \bibinfo{person}{Nazli Goharian}.}
+  \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Simplified Data Wrangling with ir\_datasets}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 44th International ACM SIGIR
+  Conference on Research and Development in Information Retrieval}}
+  \emph{(\bibinfo{series}{SIGIR '21})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{2429--2436}.
+\newblock
+\href{https://doi.org/10.1145/3404835.3463254}{doi:\nolinkurl{10.1145/3404835.3463254}}
+
+
+\bibitem[Meng et~al\mbox{.}(2025)]%
+        {meng2025qpp}
+\bibfield{author}{\bibinfo{person}{Chuan Meng}, \bibinfo{person}{Negar
+  Arabzadeh}, \bibinfo{person}{Arian Askari}, \bibinfo{person}{Mohammad
+  Aliannejadi}, {and} \bibinfo{person}{Maarten de Rijke}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Query Performance Prediction Using Relevance
+  Judgments Generated by Large Language Models}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Information Systems}}
+  \bibinfo{volume}{43}, \bibinfo{number}{4} (\bibinfo{year}{2025}),
+  \bibinfo{pages}{1--35}.
+\newblock
+\showISSN{1046-8188}
+\href{https://doi.org/10.1145/3736402}{doi:\nolinkurl{10.1145/3736402}}
+
+
+\bibitem[Min et~al\mbox{.}(2023)]%
+        {min2023factscore}
+\bibfield{author}{\bibinfo{person}{Sewon Min}, \bibinfo{person}{Kalpesh
+  Krishna}, \bibinfo{person}{Xinxi Lyu}, \bibinfo{person}{Mike Lewis},
+  \bibinfo{person}{Wen-tau Yih}, \bibinfo{person}{Pang~Wei Koh},
+  \bibinfo{person}{Mohit Iyyer}, \bibinfo{person}{Luke Zettlemoyer}, {and}
+  \bibinfo{person}{Hannaneh Hajishirzi}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{{FActScore}: Fine-grained Atomic Evaluation of
+  Factual Precision in Long Form Text Generation}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 2023 Conference on Empirical
+  Methods in Natural Language Processing}}. \bibinfo{publisher}{Association for
+  Computational Linguistics}, \bibinfo{address}{Stroudsburg, PA, USA},
+  \bibinfo{pages}{12076--12100}.
+\newblock
+\href{https://doi.org/10.18653/v1/2023.emnlp-main.741}{doi:\nolinkurl{10.18653/v1/2023.emnlp-main.741}}
+\newblock
+\shownote{Also arXiv:2305.14251}.
+
+
+\bibitem[Muennighoff et~al\mbox{.}(2023)]%
+        {muennighoff2022mteb}
+\bibfield{author}{\bibinfo{person}{Niklas Muennighoff},
+  \bibinfo{person}{Nouamane Tazi}, \bibinfo{person}{Lo{\"i}c Magne}, {and}
+  \bibinfo{person}{Nils Reimers}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{{MTEB}: Massive Text Embedding Benchmark}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 17th Conference of the European
+  Chapter of the Association for Computational Linguistics}}.
+  \bibinfo{publisher}{Association for Computational Linguistics},
+  \bibinfo{address}{Stroudsburg, PA, USA}, \bibinfo{pages}{2014--2037}.
+\newblock
+\href{https://doi.org/10.18653/v1/2023.eacl-main.148}{doi:\nolinkurl{10.18653/v1/2023.eacl-main.148}}
+\newblock
+\shownote{Also arXiv:2210.07316}.
+
+
+\bibitem[Ni et~al\mbox{.}(2025)]%
+        {ni2025trustworthyrag}
+\bibfield{author}{\bibinfo{person}{Bo Ni}, \bibinfo{person}{Zheyuan Liu},
+  \bibinfo{person}{Leyao Wang}, \bibinfo{person}{Yongjia Lei},
+  \bibinfo{person}{Yuying Zhao}, \bibinfo{person}{Xueqi Cheng},
+  \bibinfo{person}{Qingkai Zeng}, \bibinfo{person}{Luna Dong},
+  \bibinfo{person}{Yinglong Xia}, \bibinfo{person}{Krishnaram Kenthapadi},
+  \bibinfo{person}{Ryan Rossi}, \bibinfo{person}{Franck Dernoncourt},
+  \bibinfo{person}{Md~Mehrab Tanjim}, \bibinfo{person}{Nesreen Ahmed},
+  \bibinfo{person}{Xiaorui Liu}, \bibinfo{person}{Wenqi Fan},
+  \bibinfo{person}{Erik Blasch}, \bibinfo{person}{Yu Wang},
+  \bibinfo{person}{Meng Jiang}, {and} \bibinfo{person}{Tyler Derr}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Towards Trustworthy Retrieval Augmented Generation
+  for Large Language Models: A Survey}.
+\newblock \bibinfo{howpublished}{arXiv:2502.06872}.
+\newblock
+\showeprint[arxiv]{2502.06872}
+\href{https://doi.org/10.48550/arXiv.2502.06872}{doi:\nolinkurl{10.48550/arXiv.2502.06872}}
+\newblock
+\shownote{Preprint; no peer-reviewed version located in Crossref as of
+  2026-09-18}.
+
+
+\bibitem[Rahmani et~al\mbox{.}(2024)]%
+        {rahmani2024synthetic}
+\bibfield{author}{\bibinfo{person}{Hossein~A. Rahmani}, \bibinfo{person}{Nick
+  Craswell}, \bibinfo{person}{Emine Yilmaz}, \bibinfo{person}{Bhaskar Mitra},
+  {and} \bibinfo{person}{Daniel Campos}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Synthetic Test Collections for Retrieval
+  Evaluation}. In \bibinfo{booktitle}{\emph{Proceedings of the 47th
+  International ACM SIGIR Conference on Research and Development in Information
+  Retrieval}}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{2647--2651}.
+\newblock
+\showeprint[arxiv]{2405.07767}
+\href{https://doi.org/10.1145/3626772.3657942}{doi:\nolinkurl{10.1145/3626772.3657942}}
+\newblock
+\shownote{Short paper}.
+
+
+\bibitem[Rashkin et~al\mbox{.}(2023)]%
+        {rashkin2021attribution}
+\bibfield{author}{\bibinfo{person}{Hannah Rashkin}, \bibinfo{person}{Vitaly
+  Nikolaev}, \bibinfo{person}{Matthew Lamm}, \bibinfo{person}{Lora Aroyo},
+  \bibinfo{person}{Michael Collins}, \bibinfo{person}{Dipanjan Das},
+  \bibinfo{person}{Slav Petrov}, \bibinfo{person}{Gaurav~Singh Tomar},
+  \bibinfo{person}{Iulia Turc}, {and} \bibinfo{person}{David Reitter}.}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Measuring Attribution in Natural Language
+  Generation Models}.
+\newblock \bibinfo{journal}{\emph{Computational Linguistics}}
+  \bibinfo{volume}{49}, \bibinfo{number}{4} (\bibinfo{year}{2023}),
+  \bibinfo{pages}{777--840}.
+\newblock
+\showeprint[arxiv]{2112.12870}
+\href{https://doi.org/10.1162/coli_a_00486}{doi:\nolinkurl{10.1162/coli_a_00486}}
+
+
+\bibitem[Reimers and Gurevych(2019)]%
+        {reimers2019sbert}
+\bibfield{author}{\bibinfo{person}{Nils Reimers} {and} \bibinfo{person}{Iryna
+  Gurevych}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{{Sentence-BERT}: Sentence Embeddings using Siamese
+  {BERT}-Networks}. In \bibinfo{booktitle}{\emph{Proceedings of the 2019
+  Conference on Empirical Methods in Natural Language Processing and the 9th
+  International Joint Conference on Natural Language Processing
+  (EMNLP-IJCNLP)}}. \bibinfo{publisher}{Association for Computational
+  Linguistics}, \bibinfo{address}{Stroudsburg, PA, USA},
+  \bibinfo{pages}{3980--3990}.
+\newblock
+\href{https://doi.org/10.18653/v1/D19-1410}{doi:\nolinkurl{10.18653/v1/D19-1410}}
+\newblock
+\shownote{Also arXiv:1908.10084}.
+
+
+\bibitem[Robertson and Zaragoza(2009)]%
+        {robertson2009bm25}
+\bibfield{author}{\bibinfo{person}{Stephen Robertson} {and}
+  \bibinfo{person}{Hugo Zaragoza}.} \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{The Probabilistic Relevance Framework: {BM25} and
+  Beyond}.
+\newblock \bibinfo{journal}{\emph{Foundations and Trends in Information
+  Retrieval}} \bibinfo{volume}{3}, \bibinfo{number}{4} (\bibinfo{year}{2009}),
+  \bibinfo{pages}{333--389}.
+\newblock
+\href{https://doi.org/10.1561/1500000019}{doi:\nolinkurl{10.1561/1500000019}}
+\newblock
+\shownote{Volume, issue and pages per the published article's own citation
+  line. The publisher's CrossRef deposit against this DOI erroneously carries
+  4(1--2):1--174, which are the fields of Silvestri, \emph{Mining Query Logs}
+  (10.1561/1500000013); FnTIR 3(3) ends at p.~331 and this monograph begins at
+  333. An earlier version of this entry followed the deposit. Verified
+  2026-09-07}.
+
+
+\bibitem[Roitero et~al\mbox{.}(2023)]%
+        {roitero2023crowdpower}
+\bibfield{author}{\bibinfo{person}{Kevin Roitero}, \bibinfo{person}{David
+  La~Barbera}, \bibinfo{person}{Michael Soprano}, \bibinfo{person}{Gianluca
+  Demartini}, \bibinfo{person}{Stefano Mizzaro}, {and} \bibinfo{person}{Tetsuya
+  Sakai}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{How Many Crowd Workers Do I Need? On Statistical
+  Power when Crowdsourcing Relevance Judgments}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Information Systems}}
+  \bibinfo{volume}{42}, \bibinfo{number}{1} (\bibinfo{year}{2023}),
+  \bibinfo{pages}{1--26}.
+\newblock
+\showISSN{1046-8188}
+\href{https://doi.org/10.1145/3597201}{doi:\nolinkurl{10.1145/3597201}}
+
+
+\bibitem[Saad-Falcon et~al\mbox{.}(2024)]%
+        {saadfalcon2023ares}
+\bibfield{author}{\bibinfo{person}{Jon Saad-Falcon}, \bibinfo{person}{Omar
+  Khattab}, \bibinfo{person}{Christopher Potts}, {and} \bibinfo{person}{Matei
+  Zaharia}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{ARES}: An Automated Evaluation Framework for
+  Retrieval-Augmented Generation Systems}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 2024 Conference of the North
+  American Chapter of the Association for Computational Linguistics: Human
+  Language Technologies (Volume 1: Long Papers)}}.
+  \bibinfo{publisher}{Association for Computational Linguistics},
+  \bibinfo{address}{Stroudsburg, PA, USA}, \bibinfo{pages}{338--354}.
+\newblock
+\href{https://doi.org/10.18653/v1/2024.naacl-long.20}{doi:\nolinkurl{10.18653/v1/2024.naacl-long.20}}
+\newblock
+\shownote{Also arXiv:2311.09476}.
+
+
+\bibitem[Sakai et~al\mbox{.}(2025)]%
+        {sakai2025opensource}
+\bibfield{author}{\bibinfo{person}{Tetsuya Sakai}, \bibinfo{person}{Khant
+  Myoe~Rain}, \bibinfo{person}{Rikiya Takehi}, \bibinfo{person}{Sijie Tao},
+  {and} \bibinfo{person}{Young-In Song}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Open-Source {LLM}-based Relevance Assessment vs.
+  Highly Reliable Manual Relevance Assessment: A Case Study}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 34th ACM International
+  Conference on Information and Knowledge Management}}
+  \emph{(\bibinfo{series}{CIKM '25})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{5186--5190}.
+\newblock
+\href{https://doi.org/10.1145/3746252.3760934}{doi:\nolinkurl{10.1145/3746252.3760934}}
+
+
+\bibitem[Sakai et~al\mbox{.}(2022)]%
+        {sakai2022pooling}
+\bibfield{author}{\bibinfo{person}{Tetsuya Sakai}, \bibinfo{person}{Sijie Tao},
+  {and} \bibinfo{person}{Zhaohao Zeng}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Relevance Assessments for Web Search Evaluation:
+  Should We Randomise or Prioritise the Pooled Documents?}
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Information Systems}}
+  \bibinfo{volume}{40}, \bibinfo{number}{4} (\bibinfo{year}{2022}),
+  \bibinfo{pages}{1--35}.
+\newblock
+\showISSN{1046-8188}
+\href{https://doi.org/10.1145/3494833}{doi:\nolinkurl{10.1145/3494833}}
+
+
+\bibitem[Sanderson(2010)]%
+        {sanderson2010testcollections}
+\bibfield{author}{\bibinfo{person}{Mark Sanderson}.}
+  \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Test Collection Based Evaluation of Information
+  Retrieval Systems}.
+\newblock \bibinfo{journal}{\emph{Foundations and Trends in Information
+  Retrieval}} \bibinfo{volume}{4}, \bibinfo{number}{4} (\bibinfo{year}{2010}),
+  \bibinfo{pages}{247--375}.
+\newblock
+\showISSN{1554-0669}
+\href{https://doi.org/10.1561/1500000009}{doi:\nolinkurl{10.1561/1500000009}}
+
+
+\bibitem[Scholer et~al\mbox{.}(2011)]%
+        {scholer2011consistency}
+\bibfield{author}{\bibinfo{person}{Falk Scholer}, \bibinfo{person}{Andrew
+  Turpin}, {and} \bibinfo{person}{Mark Sanderson}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Quantifying test collection quality based on the
+  consistency of relevance judgements}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 34th International ACM SIGIR
+  Conference on Research and Development in Information Retrieval}}
+  \emph{(\bibinfo{series}{SIGIR '11})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{1063--1072}.
+\newblock
+\href{https://doi.org/10.1145/2009916.2010057}{doi:\nolinkurl{10.1145/2009916.2010057}}
+
+
+\bibitem[Schuster et~al\mbox{.}(2019)]%
+        {schuster2019fever}
+\bibfield{author}{\bibinfo{person}{Tal Schuster}, \bibinfo{person}{Darsh Shah},
+  \bibinfo{person}{Yun Jie~Serene Yeo}, \bibinfo{person}{Daniel Roberto
+  Filizzola~Ortiz}, \bibinfo{person}{Enrico Santus}, {and}
+  \bibinfo{person}{Regina Barzilay}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{Towards Debiasing Fact Verification Models}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 2019 Conference on Empirical
+  Methods in Natural Language Processing and the 9th International Joint
+  Conference on Natural Language Processing (EMNLP-IJCNLP)}}.
+  \bibinfo{publisher}{Association for Computational Linguistics},
+  \bibinfo{address}{Stroudsburg, PA, USA}, \bibinfo{pages}{3419--3425}.
+\newblock
+\href{https://doi.org/10.18653/v1/D19-1341}{doi:\nolinkurl{10.18653/v1/D19-1341}}
+
+
+\bibitem[Shao et~al\mbox{.}(2023)]%
+        {shao2023legal}
+\bibfield{author}{\bibinfo{person}{Yunqiu Shao}, \bibinfo{person}{Yueyue Wu},
+  \bibinfo{person}{Yiqun Liu}, \bibinfo{person}{Jiaxin Mao}, {and}
+  \bibinfo{person}{Shaoping Ma}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Understanding Relevance Judgments in Legal Case
+  Retrieval}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Information Systems}}
+  \bibinfo{volume}{41}, \bibinfo{number}{3} (\bibinfo{year}{2023}),
+  \bibinfo{pages}{1--32}.
+\newblock
+\showISSN{1046-8188}
+\href{https://doi.org/10.1145/3569929}{doi:\nolinkurl{10.1145/3569929}}
+
+
+\bibitem[Singhal et~al\mbox{.}(2023)]%
+        {singhal2022clinicalknowledge}
+\bibfield{author}{\bibinfo{person}{Karan Singhal}, \bibinfo{person}{Shekoofeh
+  Azizi}, \bibinfo{person}{Tao Tu}, \bibinfo{person}{S.~Sara Mahdavi},
+  \bibinfo{person}{Jason Wei}, \bibinfo{person}{Hyung~Won Chung},
+  \bibinfo{person}{Nathan Scales}, \bibinfo{person}{Ajay Tanwani},
+  \bibinfo{person}{Heather Cole-Lewis}, \bibinfo{person}{Stephen Pfohl},
+  \bibinfo{person}{Perry Payne}, \bibinfo{person}{Martin Seneviratne},
+  \bibinfo{person}{Paul Gamble}, \bibinfo{person}{Chris Kelly},
+  \bibinfo{person}{Nathaneal Scharli}, \bibinfo{person}{Aakanksha Chowdhery},
+  \bibinfo{person}{Philip Mansfield}, \bibinfo{person}{Blaise Aguera~y Arcas},
+  \bibinfo{person}{Dale Webster}, \bibinfo{person}{Greg~S. Corrado},
+  \bibinfo{person}{Yossi Matias}, \bibinfo{person}{Katherine Chou},
+  \bibinfo{person}{Juraj Gottweis}, \bibinfo{person}{Nenad Tomasev},
+  \bibinfo{person}{Yun Liu}, \bibinfo{person}{Alvin Rajkomar},
+  \bibinfo{person}{Joelle Barral}, \bibinfo{person}{Christopher Semturs},
+  \bibinfo{person}{Alan Karthikesalingam}, {and} \bibinfo{person}{Vivek
+  Natarajan}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Large Language Models Encode Clinical Knowledge}.
+\newblock \bibinfo{journal}{\emph{Nature}} \bibinfo{volume}{620},
+  \bibinfo{number}{7972} (\bibinfo{year}{2023}), \bibinfo{pages}{172--180}.
+\newblock
+\showeprint[arxiv]{2212.13138}
+\href{https://doi.org/10.1038/s41586-023-06291-2}{doi:\nolinkurl{10.1038/s41586-023-06291-2}}
+
+
+\bibitem[Soboroff(2025)]%
+        {soboroff2025dontuse}
+\bibfield{author}{\bibinfo{person}{Ian Soboroff}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Don't Use {LLM}s to Make Relevance Judgments}.
+\newblock \bibinfo{journal}{\emph{Information Retrieval Research}}
+  \bibinfo{volume}{1}, \bibinfo{number}{1} (\bibinfo{year}{2025}),
+  \bibinfo{pages}{29--46}.
+\newblock
+\showISSN{3050-9114}
+\href{https://doi.org/10.54195/irrj.19625}{doi:\nolinkurl{10.54195/irrj.19625}}
+
+
+\bibitem[Thakur et~al\mbox{.}(2021)]%
+        {thakur2021beir}
+\bibfield{author}{\bibinfo{person}{Nandan Thakur}, \bibinfo{person}{Nils
+  Reimers}, \bibinfo{person}{Andreas R{\"u}ckl{\'e}}, \bibinfo{person}{Abhishek
+  Srivastava}, {and} \bibinfo{person}{Iryna Gurevych}.}
+  \bibinfo{year}{2021}\natexlab{}.
+\newblock \bibinfo{title}{BEIR: A Heterogenous Benchmark for Zero-shot
+  Evaluation of Information Retrieval Models}.
+\newblock \bibinfo{howpublished}{arXiv:2104.08663}.
+\newblock
+\showeprint[arxiv]{2104.08663}
+\href{https://doi.org/10.48550/arXiv.2104.08663}{doi:\nolinkurl{10.48550/arXiv.2104.08663}}
+\newblock
+\shownote{Preprint; no peer-reviewed version located in Crossref as of
+  2026-09-18}.
+
+
+\bibitem[Thomas et~al\mbox{.}(2024)]%
+        {thomas2024preferences}
+\bibfield{author}{\bibinfo{person}{Paul Thomas}, \bibinfo{person}{Seth
+  Spielman}, \bibinfo{person}{Nick Craswell}, {and} \bibinfo{person}{Bhaskar
+  Mitra}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Large Language Models can Accurately Predict
+  Searcher Preferences}. In \bibinfo{booktitle}{\emph{Proceedings of the 47th
+  International ACM SIGIR Conference on Research and Development in Information
+  Retrieval}} \emph{(\bibinfo{series}{SIGIR '24})}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{1930--1940}.
+\newblock
+\href{https://doi.org/10.1145/3626772.3657707}{doi:\nolinkurl{10.1145/3626772.3657707}}
+
+
+\bibitem[Tsatsaronis et~al\mbox{.}(2015)]%
+        {tsatsaronis2015bioasq}
+\bibfield{author}{\bibinfo{person}{George Tsatsaronis},
+  \bibinfo{person}{Georgios Balikas}, \bibinfo{person}{Prodromos Malakasiotis},
+  \bibinfo{person}{Ioannis Partalas}, \bibinfo{person}{Matthias Zschunke},
+  \bibinfo{person}{Michael~R. Alvers}, \bibinfo{person}{Dirk Weissenborn},
+  \bibinfo{person}{Anastasia Krithara}, \bibinfo{person}{Sergios Petridis},
+  \bibinfo{person}{Dimitris Polychronopoulos}, \bibinfo{person}{Yannis
+  Almirantis}, \bibinfo{person}{John Pavlopoulos}, \bibinfo{person}{Nicolas
+  Baskiotis}, \bibinfo{person}{Patrick Gallinari}, \bibinfo{person}{Thierry
+  Arti{\'e}res}, \bibinfo{person}{Axel-Cyrille Ngonga~Ngomo},
+  \bibinfo{person}{Norman Heino}, \bibinfo{person}{Eric Gaussier},
+  \bibinfo{person}{Liliana Barrio-Alvers}, \bibinfo{person}{Michael Schroeder},
+  \bibinfo{person}{Ion Androutsopoulos}, {and} \bibinfo{person}{Georgios
+  Paliouras}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{An overview of the {BIOASQ} large-scale biomedical
+  semantic indexing and question answering competition}.
+\newblock \bibinfo{journal}{\emph{BMC Bioinformatics}} \bibinfo{volume}{16},
+  \bibinfo{number}{1} (\bibinfo{year}{2015}), \bibinfo{pages}{138}.
+\newblock
+\showISSN{1471-2105}
+\href{https://doi.org/10.1186/s12859-015-0564-6}{doi:\nolinkurl{10.1186/s12859-015-0564-6}}
+\newblock
+\shownote{Article 138}.
+
+
+\bibitem[T{\"u}rkmen et~al\mbox{.}(2026)]%
+        {turkmen2026gentrec}
+\bibfield{author}{\bibinfo{person}{Mehmet~Deniz T{\"u}rkmen},
+  \bibinfo{person}{Mucahid Kutlu}, \bibinfo{person}{Bahadir Altun}, {and}
+  \bibinfo{person}{Gokalp Cosgun}.} \bibinfo{year}{2026}\natexlab{}.
+\newblock \showarticletitle{{GenTREC}: The First Test Collection Generated by
+  Large Language Models for Evaluating Information Retrieval Systems}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Information Systems}}
+  (\bibinfo{year}{2026}).
+\newblock
+\showISSN{1046-8188}
+\href{https://doi.org/10.1145/3841465}{doi:\nolinkurl{10.1145/3841465}}
+\newblock
+\shownote{Just Accepted 2026-08-19; volume, issue and page numbers not yet
+  assigned by the publisher}.
+
+
+\bibitem[Upadhyay et~al\mbox{.}(2025)]%
+        {upadhyay2025umbrela}
+\bibfield{author}{\bibinfo{person}{Shivani Upadhyay}, \bibinfo{person}{Ronak
+  Pradeep}, \bibinfo{person}{Nandan Thakur}, \bibinfo{person}{Daniel Campos},
+  \bibinfo{person}{Nick Craswell}, \bibinfo{person}{Ian Soboroff}, {and}
+  \bibinfo{person}{Jimmy Lin}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{A Large-Scale Study of Relevance Assessments with
+  Large Language Models Using {UMBRELA}}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 2025 International ACM SIGIR
+  Conference on Innovative Concepts and Theories in Information Retrieval
+  (ICTIR)}} \emph{(\bibinfo{series}{ICTIR '25})}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{358--368}.
+\newblock
+\href{https://doi.org/10.1145/3731120.3744605}{doi:\nolinkurl{10.1145/3731120.3744605}}
+
+
+\bibitem[{U.S. Food and Drug Administration}(2025)]%
+        {fda_ai_credibility}
+\bibfield{author}{\bibinfo{person}{{U.S. Food and Drug Administration}}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Considerations for the Use of Artificial Intelligence
+  To Support Regulatory Decision-Making for Drug and Biological Products}.
+\newblock
+  \bibinfo{howpublished}{\url{https://www.fda.gov/regulatory-information/search-fda-guidance-documents/considerations-use-artificial-intelligence-support-regulatory-decision-making-drug-and-biological}}.
+\newblock
+\newblock
+\shownote{Draft guidance, January 2025, Docket FDA-2024-D-4689; accessed
+  2026-09-06}.
+
+
+\bibitem[{U.S. Food and Drug Administration}(2026)]%
+        {openfda_enforcement}
+\bibfield{author}{\bibinfo{person}{{U.S. Food and Drug Administration}}.}
+  \bibinfo{year}{2026}\natexlab{}.
+\newblock \bibinfo{title}{openFDA Drug Enforcement Reports API}.
+\newblock
+  \bibinfo{howpublished}{\url{https://open.fda.gov/apis/drug/enforcement/}}.
+\newblock
+\newblock
+\shownote{Public domain data, continuously updated; year is the access year,
+  accessed 2026-09-06}.
+
+
+\bibitem[Voorhees et~al\mbox{.}(2020)]%
+        {voorhees2020treccovid}
+\bibfield{author}{\bibinfo{person}{Ellen Voorhees}, \bibinfo{person}{Tasmeer
+  Alam}, \bibinfo{person}{Steven Bedrick}, \bibinfo{person}{Dina
+  Demner-Fushman}, \bibinfo{person}{William~R. Hersh}, \bibinfo{person}{Kyle
+  Lo}, \bibinfo{person}{Kirk Roberts}, \bibinfo{person}{Ian Soboroff}, {and}
+  \bibinfo{person}{Lucy~Lu Wang}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{{TREC-COVID}: constructing a pandemic information
+  retrieval test collection}.
+\newblock \bibinfo{journal}{\emph{ACM SIGIR Forum}} \bibinfo{volume}{54},
+  \bibinfo{number}{1} (\bibinfo{year}{2020}), \bibinfo{pages}{1--12}.
+\newblock
+\showISSN{0163-5840}
+\href{https://doi.org/10.1145/3451964.3451965}{doi:\nolinkurl{10.1145/3451964.3451965}}
+
+
+\bibitem[Voorhees(2000)]%
+        {voorhees2000variations}
+\bibfield{author}{\bibinfo{person}{Ellen~M. Voorhees}.}
+  \bibinfo{year}{2000}\natexlab{}.
+\newblock \showarticletitle{Variations in relevance judgments and the
+  measurement of retrieval effectiveness}.
+\newblock \bibinfo{journal}{\emph{Information Processing \& Management}}
+  \bibinfo{volume}{36}, \bibinfo{number}{5} (\bibinfo{year}{2000}),
+  \bibinfo{pages}{697--716}.
+\newblock
+\showISSN{0306-4573}
+\href{https://doi.org/10.1016/S0306-4573(00)00010-8}{doi:\nolinkurl{10.1016/S0306-4573(00)00010-8}}
+
+
+\bibitem[Wang et~al\mbox{.}(2022)]%
+        {wang2022e5}
+\bibfield{author}{\bibinfo{person}{Liang Wang}, \bibinfo{person}{Nan Yang},
+  \bibinfo{person}{Xiaolong Huang}, \bibinfo{person}{Binxing Jiao},
+  \bibinfo{person}{Linjun Yang}, \bibinfo{person}{Daxin Jiang},
+  \bibinfo{person}{Rangan Majumder}, {and} \bibinfo{person}{Furu Wei}.}
+  \bibinfo{year}{2022}\natexlab{}.
+\newblock \bibinfo{title}{Text Embeddings by Weakly-Supervised Contrastive
+  Pre-training}.
+\newblock \bibinfo{howpublished}{arXiv:2212.03533}.
+\newblock
+\showeprint[arxiv]{2212.03533}
+\href{https://doi.org/10.48550/arXiv.2212.03533}{doi:\nolinkurl{10.48550/arXiv.2212.03533}}
+\newblock
+\shownote{Preprint; no peer-reviewed version located in Crossref as of
+  2026-09-18}.
+
+
+\bibitem[Zheng et~al\mbox{.}(2023)]%
+        {zheng2023llmjudge}
+\bibfield{author}{\bibinfo{person}{Lianmin Zheng}, \bibinfo{person}{Wei-Lin
+  Chiang}, \bibinfo{person}{Ying Sheng}, \bibinfo{person}{Siyuan Zhuang},
+  \bibinfo{person}{Zhanghao Wu}, \bibinfo{person}{Yonghao Zhuang},
+  \bibinfo{person}{Zi Lin}, \bibinfo{person}{Zhuohan Li},
+  \bibinfo{person}{Dacheng Li}, \bibinfo{person}{Eric~P. Xing},
+  \bibinfo{person}{Hao Zhang}, \bibinfo{person}{Joseph~E. Gonzalez}, {and}
+  \bibinfo{person}{Ion Stoica}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Judging {LLM}-as-a-Judge with {MT-Bench} and
+  Chatbot Arena}. In \bibinfo{booktitle}{\emph{Advances in Neural Information
+  Processing Systems 36}}. \bibinfo{publisher}{Neural Information Processing
+  Systems Foundation, Inc. (NeurIPS)}, \bibinfo{address}{San Diego, California,
+  USA}, \bibinfo{pages}{46595--46623}.
+\newblock
+\href{https://doi.org/10.52202/075280-2020}{doi:\nolinkurl{10.52202/075280-2020}}
+\newblock
+\shownote{Also arXiv:2306.05685}.
+
+
+\bibitem[Zobel(1998)]%
+        {zobel1998reliable}
+\bibfield{author}{\bibinfo{person}{Justin Zobel}.}
+  \bibinfo{year}{1998}\natexlab{}.
+\newblock \showarticletitle{How reliable are the results of large-scale
+  information retrieval experiments?}. In \bibinfo{booktitle}{\emph{Proceedings
+  of the 21st Annual International ACM SIGIR Conference on Research and
+  Development in Information Retrieval}}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{307--314}.
+\newblock
+\href{https://doi.org/10.1145/290941.291014}{doi:\nolinkurl{10.1145/290941.291014}}
+
+
+\end{thebibliography}

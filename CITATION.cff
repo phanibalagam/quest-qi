@@ -9,8 +9,8 @@ authors:
 doi: "10.5281/zenodo.22668726"
 repository-code: "https://github.com/phanibalagam/quest-qi"
 url: "https://github.com/phanibalagam/quest-qi"
-version: "1.0.0"
-date-released: "2026-09-09"
+version: "1.1.0"
+date-released: "2026-09-18"
 license: MIT
 keywords:
   - information retrieval

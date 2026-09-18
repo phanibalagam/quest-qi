@@ -208,6 +208,7 @@ def convert(md, title_override=None):
     lines = md.split("\n")
     body, i = [], 0
     title, authors, abstract, disclaimer = None, [], [], []
+    _unnumbered_section = False
     pending_float = None          # ("figure", path) awaiting its caption
 
     # ---- front matter -----------------------------------------------------
@@ -315,7 +316,14 @@ def convert(md, title_override=None):
 
         m = re.match(r"^### (?:(\d+\.\d+)\s+)?(.*)$", ln)
         if m:
-            body += ["", "\\subsection{" + inline(m.group(2)) + "}"]
+            # 2026-09-18: a subsection inside an UNNUMBERED endmatter section was
+            # still emitted numbered, so "### Use of AI tools in the research
+            # process" under \section*{Reproducibility} set as "8.1", continuing
+            # the Conclusion's number inside a section that has none. Caught by the
+            # verifier as a number present in the PDF and absent from paper.md.
+            # Track the enclosing section and match it.
+            body += ["", "\\subsection" + ("*" if _unnumbered_section else "")
+                     + "{" + inline(m.group(2)) + "}"]
             i += 1
             continue
         m = re.match(r"^## (?:(\d+)\s+)?(.*)$", ln)
@@ -325,12 +333,24 @@ def convert(md, title_override=None):
             # list: it is a required statement about the work, not a numbered
             # part of the argument, and it was rendering as "9 Declaration of
             # generative AI and AI-assisted technologies" in the body sequence.
+            # 2026-09-18: the Elsevier-headed GenAI declaration was removed for the
+            # ACM submission. ACM requires research-process AI use in Methods and no
+            # longer requires a writing-assistance declaration, so the house-standard
+            # disclosure now sits in Acknowledgments. Keep it unnumbered for the same
+            # reason the old declaration was: it is a statement about the work, not a
+            # numbered part of the argument.
+            # 2026-09-18: "On the references" is gone from the manuscript -- the
+            # author's judgment is that a bibliography-provenance section defends a
+            # bibliography nobody has questioned, and no TOIS paper carries one. The
+            # robertson2009bm25 volume/page finding it recorded lives in that entry's
+            # note field in references.bib, which is where a reader of the reference
+            # meets it. Its name is dropped from this list so the list describes the
+            # document that exists.
             cmd = "section*" if name in ("Abstract", "Disclaimer", "References",
-                                         "On the references",
                                          "Reproducibility",
                                          "Ethics and data statement",
-                                         "Declaration of generative AI and "
-                                         "AI-assisted technologies") else "section"
+                                         "Acknowledgments") else "section"
+            _unnumbered_section = cmd.endswith("*")
             body += ["", "\\" + cmd + "{" + inline(name) + "}"]
             i += 1
             continue
@@ -479,6 +499,116 @@ TEMPLATE = r"""\documentclass[runningheads]{llncs}
 """
 
 
+# ---------------------------------------------------------------------------
+# ACM journal target, added 2026-09-18 for the TOIS submission.
+#
+# Built from the same convert() output as the LNCS target, deliberately: the
+# manuscript verifier's cross-artifact bindings compare paper.md against the
+# generated .tex and the compiled PDF, and a hand-written .tex would break that
+# chain. One converter, two templates.
+#
+# acmart supplies fonts, hyperref, booktabs, caption and microtype itself, so the
+# LNCS preamble's lmodern/fontenc/inputenc/graphicx/caption/booktabs/microtype
+# loads are dropped here rather than duplicated. What is kept is the pair that
+# acmart does not provide and that this manuscript needs: xurl, because the FDA
+# guidance URL in the bibliography overhangs the margin without it, and the
+# \emergencystretch that absorbs the long \texttt paths.
+ACM_TEMPLATE = r"""\documentclass[%(acmformat)s]{acmart}
+\usepackage{xurl}
+%% needspace: the converter emits \needspace before a verbatim listing so a short
+%% code block is not split across a page break. acmart does not load it.
+\usepackage{needspace}
+%% The Markdown captions carry their own "Table 1:" / "Figure 2:" labels and the
+%% in-text references point at those numbers, so suppress LaTeX's own float
+%% numbering rather than letting both run. acmart loads caption itself; this is
+%% \captionsetup only, not a second \usepackage.
+\captionsetup{labelformat=empty,labelsep=none}
+\emergencystretch=2em
+
+\acmJournal{TOIS}
+\acmYear{2026}
+\acmVolume{0}
+\acmNumber{0}
+\acmArticle{0}
+\acmMonth{0}
+\setcopyright{cc}
+\setcctype{by}
+
+\begin{document}
+
+\title{%(title)s}
+
+\author{Phani Kumar Balagam}
+\orcid{0009-0007-6762-399X}
+%% TOIS: "Current mailing addresses, including email addresses, should be given in a
+%% footnote." acmart renders \streetaddress/\city/\state/\postcode/\country into the
+%% "Authors' addresses:" footnote on page 1, which is what that instruction asks for.
+%% The postal address is therefore EXPECTED in this package and is not a scan finding.
+\affiliation{%%
+  \institution{Independent Researcher}
+  \streetaddress{82 Pleasant St}
+  \city{Westford}
+  \state{Massachusetts}
+  \postcode{01886}
+  \country{United States}
+}
+\email{balagam.phani@gmail.com}
+
+\begin{abstract}
+%(abstract)s
+\end{abstract}
+
+%(ccsxml)s
+
+\keywords{%(keywords)s}
+
+\maketitle
+
+%(body)s
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}
+"""
+
+# ACM Computing Classification System concepts, 2012 revision. Chosen against the
+# paper's own contributions, not its vocabulary: the primary is evaluation of
+# retrieval effectiveness, because the paper's claim is about what a benchmark
+# measures; test collections is the artifact; the two 500-weight entries are the
+# retrieval settings the benchmark is built on.
+CCSXML = r"""\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10002951.10003317.10003338.10003340</concept_id>
+       <concept_desc>Information systems~Retrieval effectiveness</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10002951.10003317.10003338.10003346</concept_id>
+       <concept_desc>Information systems~Test collections</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10002951.10003317.10003347.10003353</concept_id>
+       <concept_desc>Information systems~Query representation</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10002951.10003227.10003351</concept_id>
+       <concept_desc>Information systems~Data mining</concept_desc>
+       <concept_significance>100</concept_significance>
+       </concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Information systems~Retrieval effectiveness}
+\ccsdesc[500]{Information systems~Test collections}
+\ccsdesc[300]{Information systems~Query representation}
+\ccsdesc[100]{Information systems~Data mining}
+"""
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--md", default=os.path.join(ROOT, "paper.md"))
@@ -486,17 +616,29 @@ def main():
     ap.add_argument("--keywords", default="")
     ap.add_argument("--shorttitle", default="")
     ap.add_argument("--compile", action="store_true")
+    ap.add_argument("--venue", choices=("lncs", "acm"), default="lncs",
+                    help="lncs (default) or acm; acm emits the ACM authoring "
+                         "template with CCS concepts for a TOIS submission")
+    ap.add_argument("--acm-format", default="acmsmall",
+                    help="acmart class option for --venue acm. acmsmall is the "
+                         "journal format TOIS's 20-page minimum and 25-30 page "
+                         "band are stated in; manuscript,review is the "
+                         "wide-margin line-numbered submission build")
     a = ap.parse_args()
 
     md = open(a.md, encoding="utf-8").read()
     title, authors, abstract, body = convert(md)
     short = a.shorttitle or (title.split(":")[0] if ":" in title else title[:60])
-    tex = TEMPLATE % {"title": esc(title), "shorttitle": esc(short),
-                      "abstract": inline(abstract),
-                      "keywords": esc(a.keywords or "predicate-defined relevance, "
-                                          "retrieval benchmark, pharmaceutical "
-                                          "quality, evaluation circularity"),
-                      "body": body}
+    kw = esc(a.keywords or "predicate-defined relevance, retrieval benchmark, "
+                           "pharmaceutical quality, evaluation circularity")
+    if a.venue == "acm":
+        tex = ACM_TEMPLATE % {"title": esc(title), "abstract": inline(abstract),
+                              "keywords": kw, "ccsxml": CCSXML,
+                              "acmformat": a.acm_format, "body": body}
+    else:
+        tex = TEMPLATE % {"title": esc(title), "shorttitle": esc(short),
+                          "abstract": inline(abstract), "keywords": kw,
+                          "body": body}
     with open(a.out, "w", encoding="utf-8") as fh:
         fh.write(tex)
     print(f"wrote {a.out} ({len(tex.splitlines())} lines)")

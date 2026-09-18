@@ -41,6 +41,17 @@ paper = open(os.path.join(ROOT, "paper.md"), encoding="utf-8").read()
 fails = []
 counts = {"check": 0, "states": 0, "in_text": 0, "cross_artifact": 0}
 
+# Round 11, item 2: one stored value, one rendering. BGE-base on geography is
+# 0.0095 in results/ -- exactly on a half, so 0.009 and 0.010 are both
+# defensible -- and the manuscript printed one in Section 5.2 and the other in
+# Table 6, seven pages apart, with the half-rounding convention stated only in
+# Table 2's caption. Every binding passed, because each rendering was
+# individually within tolerance. Tolerance is the wrong instrument here: what is
+# wrong is not either digit, it is that a reader meets one number twice and sees
+# two. The map from an occurrence to the value behind it is what the bindings
+# already ARE, so this reads it off them rather than guessing from the text.
+_RENDERINGS = {}
+
 # Bindings compare against a whitespace-normalised copy: the manuscript is
 # reflowed from time to time, and a binding should fail when a NUMBER changes,
 # not when a line break moves.
@@ -61,8 +72,20 @@ def flat(t):
 # TRUNCATED it, the column was absent from the shipped PDF, and this script
 # reported "0 failure(s)". Numbers are now checked in all three.
 
-TEX_PATH = os.path.join(ROOT, "paper_lncs.tex")
-PDF_PATH = os.path.join(ROOT, "paper_lncs.pdf")
+# 2026-09-18: the manuscript is built for more than one venue, so the artifact stem
+# is a parameter rather than a literal. The default is unchanged, so every existing
+# invocation behaves exactly as before; QUESTQI_STEM=paper_acm points the same
+# bindings at the ACM build. The stem also names the artifacts in every failure
+# message, so a report cannot say "paper_lncs.pdf" about a file it did not read.
+# 2026-09-18: the default target is now the ACM build, because that is what is being
+# submitted. It was paper_lncs, which meant a plain run checked a stale artifact and
+# reported 349 bindings with 1 failure against a PDF built before the retitle, masking a
+# clean 384/0 ACM build. The LNCS artifacts have been moved to _superseded_20260918/;
+# QUESTQI_STEM still selects any stem, so nothing here is hard-wired to one venue.
+_STEM = os.environ.get("QUESTQI_STEM", "paper_acm")
+
+TEX_PATH = os.path.join(ROOT, f"{_STEM}.tex")
+PDF_PATH = os.path.join(ROOT, f"{_STEM}.pdf")
 
 # T1-encoded llncs carries ligatures as single glyphs that pdftotext emits as C0
 # control characters, so plain substring matching fails on words containing them.
@@ -158,13 +181,13 @@ def strip_markup(t):
 
 ARTIFACTS = {"paper.md": strip_markup(paper)}
 if os.path.exists(TEX_PATH):
-    ARTIFACTS["paper_lncs.tex"] = strip_markup(open(TEX_PATH, encoding="utf-8").read())
+    ARTIFACTS[f"{_STEM}.tex"] = strip_markup(open(TEX_PATH, encoding="utf-8").read())
 else:
-    fails.append("paper_lncs.tex is missing; run scripts/10_build_latex.py")
+    fails.append(f"{_STEM}.tex is missing; run scripts/10_build_latex.py")
 if os.path.exists(PDF_PATH):
     _pdf_raw = pdf_text(PDF_PATH)
     if _pdf_raw is None:
-        fails.append("cannot extract text from paper_lncs.pdf (install pdftotext or "
+        fails.append(f"cannot extract text from {_STEM}.pdf (install pdftotext or "
                      "pypdf); the shipped PDF is UNVERIFIED")
     else:
         # Round 7: LNCS puts a running head and a page number between every
@@ -224,9 +247,9 @@ if os.path.exists(PDF_PATH):
                 _keep.append(_ln)
             return "\n".join(_keep)
         _pdf_raw = _strip_running_heads(_pdf_raw)
-        ARTIFACTS["paper_lncs.pdf"] = strip_markup(_pdf_raw)
+        ARTIFACTS[f"{_STEM}.pdf"] = strip_markup(_pdf_raw)
 else:
-    fails.append("paper_lncs.pdf is missing; build it before verifying")
+    fails.append(f"{_STEM}.pdf is missing; build it before verifying")
 
 
 def in_all_artifacts(claim, value):
@@ -244,6 +267,13 @@ def check(claim, actual, expected, tol=0.0005):
     ok = (abs(actual - expected) <= tol) if isinstance(expected, float) else (actual == expected)
     if not ok:
         fails.append(f"{claim}: manuscript {expected!r} vs results {actual!r}")
+    if isinstance(actual, float) and isinstance(expected, float):
+        # Record how this occurrence renders the value it is bound to. Only a
+        # call site that passes the RAW stored value is visible here: one that
+        # rounds before calling has already thrown the stored value away, and
+        # the coverage denominator below says how many did.
+        _RENDERINGS.setdefault(round(actual, 9), {}).setdefault(
+            "%.3f" % expected, claim)
 
 
 def in_text(s):
@@ -564,7 +594,7 @@ for _label, _key in RETRIEVAL_ROWS:
     # follow it on that line.
     for _name, _body in ARTIFACTS.items():
         counts["cross_artifact"] += 1
-        if _name == "paper_lncs.pdf":
+        if _name == f"{_STEM}.pdf":
             # pdftotext emits a resized table column-major, so a row's numbers are
             # not adjacent to its label. The .tex-to-PDF decimal diff below covers
             # the PDF; here we only require the label to have survived.
@@ -590,7 +620,10 @@ for _label, _key in RETRIEVAL_ROWS:
 
 for frag in [
     "reaches 0.193,\n0.151, 0.161 and **0.024**",
-    "BGE, a pretrained\nretrieval encoder, reaches 0.010",
+    # 2026-09-18: 0.010 -> 0.009. The stored value is 0.0095, exactly on a half;
+    # Table 6's cell, generated from results/, prints 0.009, and this sentence
+    # printed 0.010 seven pages earlier. One value, one rendering.
+    "BGE, a pretrained\nretrieval encoder, reaches 0.009",
     "The point estimate moves from +0.014 to +0.020",
     "Neither encoder family dominates, and the aggregate decides which one looks better",
     "Under the macro-average\nover families the ordering reverses: BGE 0.296 against 0.280",
@@ -748,7 +781,7 @@ check("recovered fraction arithmetic (recomputed)",
 # Round 7, M25: the headline fraction (0.5318) and the pool-sensitivity row at
 # pool = 300 (0.5317) differ by 1e-4. They are not the same computation: the
 # pool sweep re-selects lambda on dev at every pool size, and at pool 300 that
-# selection lands on a neighbouring grid point. Both round to 0.53, which is the
+# selection lands on a neighboring grid point. Both round to 0.53, which is the
 # only form either appears in. Bound so the gap cannot silently widen.
 _pool300 = [r for r in recon["pool_sensitivity"]["rows"] if r["pool"] == 300]
 if _pool300:
@@ -878,25 +911,25 @@ DISCLAIMER_MARKERS = [
     "No proprietary, confidential or internal data of any organization was used",
 ]
 
-_tex_path = os.path.join(ROOT, "paper_lncs.tex")
-_pdf_path = os.path.join(ROOT, "paper_lncs.pdf")
+_tex_path = os.path.join(ROOT, f"{_STEM}.tex")
+_pdf_path = os.path.join(ROOT, f"{_STEM}.pdf")
 
 if not os.path.exists(_tex_path):
-    fails.append("paper_lncs.tex is missing; run scripts/10_build_latex.py")
+    fails.append(f"{_STEM}.tex is missing; run scripts/10_build_latex.py")
 else:
     _tex = flat(open(_tex_path, encoding="utf-8").read())
     if "\\section*{Disclaimer}" not in _tex:
-        fails.append("paper_lncs.tex has no Disclaimer section")
+        fails.append(f"{_STEM}.tex has no Disclaimer section")
     for _m in DISCLAIMER_MARKERS:
         if flat(_m) not in _tex:
-            fails.append(f"paper_lncs.tex is missing disclaimer text: {_m!r}")
+            fails.append(f"{_STEM}.tex is missing disclaimer text: {_m!r}")
 
 if not os.path.exists(_pdf_path):
-    fails.append("paper_lncs.pdf is missing; build it before verifying")
+    fails.append(f"{_STEM}.pdf is missing; build it before verifying")
 else:
     _txt = _pdf_text(_pdf_path)
     if _txt is None:
-        fails.append("cannot extract text from paper_lncs.pdf (install pdftotext or "
+        fails.append(f"cannot extract text from {_STEM}.pdf (install pdftotext or "
                      "pypdf); the disclaimer in the shipped PDF is UNVERIFIED")
     else:
         # A T1-encoded llncs build carries fi/fl/ff as single ligature glyphs that
@@ -917,10 +950,10 @@ else:
         _txt_letters = _letters(_txt)
         _txt = flat(_txt)
         if "Disclaimer" not in _txt:
-            fails.append("paper_lncs.pdf has no Disclaimer heading")
+            fails.append(f"{_STEM}.pdf has no Disclaimer heading")
         for _m in DISCLAIMER_MARKERS:
             if _letters(_m) not in _txt_letters:
-                fails.append(f"paper_lncs.pdf is missing disclaimer text: {_m!r}")
+                fails.append(f"{_STEM}.pdf is missing disclaimer text: {_m!r}")
 
 # Every script the reader runs carries the short code notice.
 _notice = "No proprietary, confidential or internal data of any organization was used"
@@ -957,18 +990,65 @@ for _ref in set(re.findall(r"(?:scripts|figures)/[A-Za-z0-9_.\-]+\.(?:py|pdf|png
 def _strip_tex(t):
     t = re.sub(r"\\(?:textbf|textit|texttt|emph)\{([^{}]*)\}", r"\1", t)
     t = re.sub(r"\\[a-zA-Z]+\s*", " ", t)
+    # Round 13: the five escaped specials have to be unescaped BEFORE the
+    # backslash sweep below, or "95\%" becomes "95 %" and no caption containing
+    # a percent sign can ever be located in the PDF. Table 9's caption is the
+    # first in this paper whose leading 45 characters carry one, and it reported
+    # as "that table did not typeset" when the table had typeset perfectly.
+    # strip_markup has done this since round 9; this function was never told.
+    for _e, _p in (("\\%", "%"), ("\\&", "&"), ("\\#", "#"),
+                   ("\\_", "_"), ("\\$", "$")):
+        t = t.replace(_e, _p)
     return re.sub(r"[{}$\\]", " ", t)
 
 
 def _tex_data_only(t):
     """Drop comments and typesetting lengths: neither is a claim in the paper."""
     t = re.sub(r"(?<!\\)%.*", " ", t)
+    # The ACM template carries a CCSXML block whose concept_id attributes are
+    # dotted CCS node identifiers -- 10002951.10003317.10003338.10003340 and the
+    # like. They are classification metadata, not claims: they are absent from
+    # paper.md by design and acmart renders only the human-readable descriptors,
+    # so they appear in neither of the artifacts this function feeds. Exempting
+    # them from the number comparisons is permitted ONLY because a check
+    # replaces it: _check_ccs below binds every CCSXML concept to its \ccsdesc
+    # entry and fails if the two lists disagree in descriptor or in weight.
+    t = re.sub(r"\\begin\{CCSXML\}.*?\\end\{CCSXML\}", " ", t, flags=re.S)
     t = re.sub(r"[pmb]\{[0-9.]+\\linewidth\}", " ", t)
     t = re.sub(r"\\(?:setlength|hspace|vspace|resizebox)\s*\{[^{}]*\}", " ", t)
     return t
 
 
-if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
+# --- CCS concepts: the XML block and the \ccsdesc list must agree -----------
+# Replaces the CCSXML exemption in _tex_data_only. Two lists state the same
+# classification in two syntaxes -- the machine-readable block the ACM Digital
+# Library ingests, and the \ccsdesc lines that are typeset for the reader -- and
+# nothing else compares them. A descriptor edited in one and not the other, or a
+# weight changed in one place, would publish a paper whose printed classification
+# and whose indexed classification disagree.
+if f"{_STEM}.tex" in ARTIFACTS:
+    _ccs_src = open(TEX_PATH, encoding="utf-8").read()
+    _xml = re.findall(r"<concept_desc>(.*?)</concept_desc>\s*"
+                      r"<concept_significance>(\d+)</concept_significance>",
+                      _ccs_src, re.S)
+    _desc = re.findall(r"\\ccsdesc\[(\d+)\]\{(.*?)\}", _ccs_src)
+    if _xml or _desc:
+        _xml_set = {(re.sub(r"\s+", " ", d).strip().replace("&lt;", "<"), int(w))
+                    for d, w in _xml}
+        _desc_set = {(re.sub(r"\s+", " ", d).strip(), int(w)) for w, d in _desc}
+        for _pair in sorted(_xml_set | _desc_set):
+            counts["cross_artifact"] += 1
+            if _pair not in _xml_set:
+                fails.append(f"CCS concept {_pair[0]!r} at weight {_pair[1]} is in the "
+                             f"\\ccsdesc list of {_STEM}.tex but not in its CCSXML "
+                             "block, so the typeset classification and the indexed one "
+                             "disagree")
+            elif _pair not in _desc_set:
+                fails.append(f"CCS concept {_pair[0]!r} at weight {_pair[1]} is in the "
+                             f"CCSXML block of {_STEM}.tex but has no \\ccsdesc line, "
+                             "so it is indexed and never printed")
+
+if f"{_STEM}.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
     _tex_raw = open(TEX_PATH, encoding="utf-8").read()
 
     # -layout preserves table structure, which the default extraction does not.
@@ -980,7 +1060,7 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
     except (FileNotFoundError, OSError, subprocess.SubprocessError):
         _layout = None
     if _layout is None:
-        _layout = ARTIFACTS.get("paper_lncs.pdf", "")
+        _layout = ARTIFACTS.get(f"{_STEM}.pdf", "")
     for _c, _s in T1_LIGATURES.items():
         _layout = _layout.replace(_c, _s)
     _layout_flat = re.sub(r"\s+", " ", _layout)
@@ -991,7 +1071,7 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
         _cap = re.search(r"\\caption\{(.*?)\}\s*(?:\n|\\)", _blk, re.S)
         _tab = re.search(r"\\begin\{tabular\}(.*?)\\end\{tabular\}", _blk, re.S)
         if not (_cap and _tab):
-            fails.append("a table in paper_lncs.tex has no caption, so its contents "
+            fails.append(f"a table in {_STEM}.tex has no caption, so its contents "
                          "cannot be located in the PDF and cannot be checked")
             continue
         _captxt = re.sub(r"\s+", " ", _strip_tex(_cap.group(1))).strip()
@@ -1072,7 +1152,7 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
         else:
             _n_tables += 1
     if _n_tables == 0:
-        fails.append("no numeric tables were found in paper_lncs.tex to check "
+        fails.append(f"no numeric tables were found in {_STEM}.tex to check "
                      "against the PDF")
 
     # Round 8, N51: name the defect directly rather than inferring it from a
@@ -1122,10 +1202,10 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
 
     # The global set difference is kept as a backstop for numbers outside tables.
     _tex_nums = set(re.findall(r"\d+\.\d+", _tex_data_only(_tex_raw)))
-    _pdf_nums = set(re.findall(r"\d+\.\d+", ARTIFACTS.get("paper_lncs.pdf", "")))
+    _pdf_nums = set(re.findall(r"\d+\.\d+", ARTIFACTS.get(f"{_STEM}.pdf", "")))
     _gone = sorted(_tex_nums - _pdf_nums, key=float)
     if _gone:
-        fails.append(f"{len(_gone)} number(s) present in paper_lncs.tex do not appear "
+        fails.append(f"{len(_gone)} number(s) present in {_STEM}.tex do not appear "
                      f"anywhere in the compiled PDF: {_gone[:12]}")
     # Round 8, N56 added this reverse direction; round 9, N60 found it explaining
     # 16 of its 28 divergences with a cause that did not apply to them. The text a
@@ -1135,7 +1215,7 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
     # then attribute what is left to the cause it actually has rather than to an
     # assumed one.
     _src_nums = set(_tex_nums)
-    _bblp = os.path.join(ROOT, "paper_lncs.bbl")
+    _bblp = os.path.join(ROOT, f"{_STEM}.bbl")
     if os.path.exists(_bblp):
         _src_nums |= set(re.findall(
             r"\d+\.\d+", _tex_data_only(open(_bblp, encoding="utf-8").read())))
@@ -1160,9 +1240,67 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
     # so the explanation is earned rather than assumed. That is the whole point
     # of N60, and this rule was breaking it in the same function.
     _doi_like = {y for y in _src_nums if y.startswith("10.") or len(y.split(".")[0]) > 5}
+    # A line break inside a DOI leaves a PREFIX of a source number when it breaks
+    # after the number starts, and a MIDDLE or SUFFIX fragment when the DOI itself is
+    # split -- 10.1145/3578337.3605136 wrapped after "3578" leaves "337.3605136",
+    # which prefixes nothing. Earn both the same way N67 requires: the fragment must
+    # be a contiguous substring of a DOI that the source actually contains, so a
+    # coincidental decimal cannot be laundered into "a DOI artifact".
+    _doi_strings = set(re.findall(r"10\.\d{4,9}/[^\s,}{)\]]+", _tex_raw))
+    if os.path.exists(_bblp):
+        _doi_strings |= set(re.findall(r"10\.\d{4,9}/[^\s,}{)\]]+",
+                                       open(_bblp, encoding="utf-8").read()))
+    # The substring test needs a length floor, or it launders short numbers: "4.0"
+    # is a substring of almost any DOI, and the first version of this rule stole it
+    # from the license-block explanation that had actually located it in a sentence.
+    # Five characters is the shortest fragment a broken DOI can leave that is not
+    # also an ordinary decimal in this manuscript.
     _split = [x for x in _rest
-              if any(y.startswith(x) and y != x for y in _doi_like)]
-    _unexplained = [x for x in _rest if x not in _split]
+              if any(y.startswith(x) and y != x for y in _doi_like)
+              or (len(x) >= 5 and any(x in d for d in _doi_strings))]
+    # acmart typesets a license line that no source file contains ("...Creative
+    # Commons Attribution 4.0 International License"), so its numbers reach the
+    # PDF and nothing else. Earn the explanation the way N67 requires: the number
+    # must actually occur inside the class-generated sentence, not merely equal a
+    # value that sentence happens to use.
+    # [^.]* was wrong here: the first "." it stops at is the one inside "4.0",
+    # so the matched sentence excluded the very number it exists to explain and
+    # the note still read "no known cause". Bound the window by length instead.
+    _lic = re.search(r"licensed under a Creative Commons Attribution.{0,60}?License",
+                     ARTIFACTS.get(f"{_STEM}.pdf", ""))
+    _from_class = [x for x in _rest
+                   if x not in _split and _lic and x in _lic.group(0)]
+    # Priority: a number located inside a real class-generated sentence keeps that
+    # explanation; only what is left is offered to the DOI-fragment test.
+    _split = [x for x in _split if x not in _from_class]
+    # Round 11: acmart numbers the sections itself, so a typeset heading number
+    # ("5.6") exists in the PDF and in no source file, and was landing in
+    # "accounted for by no known cause" -- which trains a reader to skim that
+    # list, which is how a real divergence gets waved through. Earn the
+    # explanation the way N67 requires: recompute acmart's numbering from the
+    # sectioning commands in the .tex (starred headings take no number), and
+    # accept the value only where the PDF carries it immediately in front of the
+    # heading that number belongs to. A heading number that is WRONG, or that
+    # sits anywhere but against its own heading, stays unexplained.
+    _sec_no, _sub_no, _headings = 0, 0, {}
+    for _sm in re.finditer(r"\\(sub)?section(\*?)\{((?:[^{}]|\{[^{}]*\})*)\}",
+                           _tex_raw):
+        if _sm.group(2):
+            continue                       # starred: unnumbered, so no number
+        if _sm.group(1):
+            _sub_no += 1
+            _headings[f"{_sec_no}.{_sub_no}"] = strip_markup(_sm.group(3)).strip()
+        else:
+            _sec_no += 1
+            _sub_no = 0
+            _headings[str(_sec_no)] = strip_markup(_sm.group(3)).strip()
+    _pdf_flat = ARTIFACTS.get(f"{_STEM}.pdf", "")
+    _from_secnum = [x for x in _rest
+                    if x not in _split and x not in _from_class
+                    and x in _headings and f"{x} {_headings[x]}" in _pdf_flat]
+    _unexplained = [x for x in _rest
+                    if x not in _split and x not in _from_class
+                    and x not in _from_secnum]
     # If the figure PDFs could not be read, say so: reporting "0 figure labels"
     # and reclassifying every axis tick would be a false explanation, not a
     # finding.
@@ -1174,9 +1312,14 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
                "unclassified rather than unexplained")
     if _extra:
         print(f"note: {len(_extra)} number(s) appear in the compiled PDF but not in "
-              f"paper_lncs.tex or paper_lncs.bbl: " + _figmsg
+              f"{_STEM}.tex or {_STEM}.bbl: " + _figmsg
               + (f"; {len(_split)} DOI fragment(s) left by a PDF line break "
                  f"({_split[:4]})" if _split else "")
+              + (f"; {len(_from_class)} from the acmart license block "
+                 f"({_from_class[:4]})" if _from_class else "")
+              + (f"; {len(_from_secnum)} heading number(s) typeset by acmart "
+                 f"({_from_secnum[:4]}), each matched against the heading it "
+                 "numbers" if _from_secnum else "")
               + (f"; {len(_unexplained)} accounted for by no known cause "
                  f"({_unexplained[:6]}) -- worth a look" if _unexplained else "")
               + ".")
@@ -1203,10 +1346,10 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
     counts["cross_artifact"] += 2
     if _md_only:
         fails.append(f"{len(_md_only)} number(s) in paper.md do not appear in "
-                     f"paper_lncs.tex: {_md_only[:12]} -- the authored source and the "
+                     f"{_STEM}.tex: {_md_only[:12]} -- the authored source and the "
                      "generated artifact have diverged; re-run scripts/10_build_latex.py")
     if _tex_only:
-        fails.append(f"{len(_tex_only)} number(s) in paper_lncs.tex do not appear in "
+        fails.append(f"{len(_tex_only)} number(s) in {_STEM}.tex do not appear in "
                      f"paper.md: {_tex_only[:12]} -- the artifact states something the "
                      "authored source does not")
 
@@ -1227,7 +1370,7 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
             # extraction, where a split block fails, and the block itself is now
             # in a minipage so it cannot split. When a check starts failing after
             # content moves, the content moved badly.
-            if strip_markup(_line).strip() not in ARTIFACTS.get("paper_lncs.pdf", ""):
+            if strip_markup(_line).strip() not in ARTIFACTS.get(f"{_STEM}.pdf", ""):
                 fails.append(f"a verbatim line is truncated in the PDF (it does not "
                              f"wrap, so the tail is lost): {_line!r}")
 
@@ -1243,9 +1386,9 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
     # The build now writes its artifacts into _build/ so they stay out of the
     # folder listing; older builds left the log at the root. Look in both, so the
     # overfull-box checks keep running either way rather than silently skipping.
-    _log = next((p for p in (os.path.join(ROOT, "_build", "paper_lncs.log"),
-                             os.path.join(ROOT, "paper_lncs.log"))
-                 if os.path.exists(p)), os.path.join(ROOT, "_build", "paper_lncs.log"))
+    _log = next((p for p in (os.path.join(ROOT, "_build", f"{_STEM}.log"),
+                             os.path.join(ROOT, f"{_STEM}.log"))
+                 if os.path.exists(p)), os.path.join(ROOT, "_build", f"{_STEM}.log"))
     if os.path.exists(_log):
         _logtxt = open(_log, errors="replace").read()
         # The log's line numbers belong to whichever file TeX had open, and TeX
@@ -1361,7 +1504,7 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
                   "cosmetic overhang into the right margin")
         if _bib:
             fails.append(f"{len(_bib)} overfull hbox(es) in the bibliography "
-                         f"(max {max(_bib)[0]:.0f}pt, paper_lncs.bbl line(s) "
+                         f"(max {max(_bib)[0]:.0f}pt, {_STEM}.bbl line(s) "
                          f"{[l for _, l in _bib][:6]}) -- a reference is running past "
                          "the right margin")
         # Round 7, N49 (related): `if _prose:` had always been a print, never a
@@ -1391,7 +1534,7 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
         # Round 6, N39: paper_lncs.log is gitignored, so for anyone working from
         # the release this whole block was skipped in silence -- including the
         # row-by-row table note, which reads as a pass. Say what was not run.
-        print("note: overfull-box check SKIPPED (paper_lncs.log absent -- it is "
+        print(f"note: overfull-box check SKIPPED ({_STEM}.log absent -- it is "
               "gitignored; run scripts/10_build_latex.py --compile to produce it).")
 
     # Round 7, N48: the coverage summary belongs to the table and verbatim checks,
@@ -1409,7 +1552,7 @@ if "paper_lncs.tex" in ARTIFACTS and os.path.exists(PDF_PATH):
 # build body-prose en-dashes extract as 0x15 rather than being dropped, so no
 # range is currently merged -- but that is a property of this TeX installation,
 # not a guarantee, so check it rather than assume it.
-if "paper_lncs.tex" in ARTIFACTS and "paper_lncs.pdf" in ARTIFACTS:
+if f"{_STEM}.tex" in ARTIFACTS and f"{_STEM}.pdf" in ARTIFACTS:
     _pdf_raw_txt = _pdf_raw if "_pdf_raw" in dir() else ""
     # Round 8, N52: _pdf_norm was the raw, newline-bearing extraction while the
     # needle demanded the two numbers be adjacent, so a line broken after an
@@ -1436,11 +1579,11 @@ if "paper_lncs.tex" in ARTIFACTS and "paper_lncs.pdf" in ARTIFACTS:
     # .tex. Counting the .tex alone undercounted every range that occurs in a
     # reference note, and that slack is what acquitted a merged 1--2 in round 7.
     _range_src = _tex_data_only(open(TEX_PATH, encoding="utf-8").read())
-    _bbl = os.path.join(ROOT, "paper_lncs.bbl")
+    _bbl = os.path.join(ROOT, f"{_STEM}.bbl")
     if os.path.exists(_bbl):
         _range_src += "\n" + _tex_data_only(open(_bbl, encoding="utf-8").read())
     else:
-        print("note: paper_lncs.bbl absent; range check counts the .tex only, so a "
+        print(f"note: {_STEM}.bbl absent; range check counts the .tex only, so a "
               "range that occurs in the bibliography is not covered")
     _tex_ranges = re.findall(
         r"(\d+(?:\.\d+)?)(?:--|\u2013|\u2014)(\d+(?:\.\d+)?)", _range_src)
@@ -1456,6 +1599,86 @@ if "paper_lncs.tex" in ARTIFACTS and "paper_lncs.pdf" in ARTIFACTS:
                 f"survives as a separated range only {_got} time(s) in the PDF: at "
                 f"{_want - _got} site(s) its separator was dropped, so two numbers have "
                 "merged into one wrong one")
+
+# --- Section 5.5: every cell of the per-family matrix, bound to results/ ------
+# Tables 6, 7 and 8 publish the full system x family matrix that the aggregates
+# summarise. 204 cells is 204 opportunities for a transcription error that no
+# aggregate could reveal, so each cell is read back out of paper.md and compared
+# to the value in results/ that it claims to be. The row label fixes the system
+# and the column position fixes the family, so a value moved onto the wrong row
+# or the wrong column fails even though the number itself exists in the file --
+# which is the N50 defect class, applied per cell.
+_FAMS_5_5 = ["A_defect_form", "B_defect_severity", "C_firm_history",
+             "D_defect_period", "E_defect_geography", "F_site_country"]
+_TEXT_ROWS_5_5 = [("BM25", "bm25"), ("TF-IDF", "tfidf"), ("LSA", "lsa"),
+                  ("word2vec", "w2v"), ("Hybrid RRF", "hybrid_rrf"),
+                  ("BGE-base", "bge_base"), ("MiniLM", "minilm"),
+                  ("Hybrid RRF + dense", "hybrid_rrf_dense")]
+_PROP_ROWS_5_5 = [("Hybrid RRF (text only)", "hybrid_rrf"),
+                  ("Classifier prior", "qir_clf"),
+                  ("Centroid prior", "qir_centroid"),
+                  ("Oracle defect category", "qir_oracle"),
+                  ("Soft metadata filter", "slots_only"),
+                  ("Hard metadata prefilter", "prefilter_hybrid"),
+                  ("Classifier prior + filter", "qir_clf_slots"),
+                  ("Centroid prior + filter", "qir_centroid_slots"),
+                  ("Oracle category + filter", "qir_oracle_slots"),
+                  ("Control: gold, down-weight", "gold_downweight_control"),
+                  ("Control: gold, additive", "gold_additive_control"),
+                  ("Ceiling: gold ranked first", "gold_lookup_ceiling")]
+
+
+def _matrix_rows(caption_marker):
+    """Return {row label: [cell strings]} for the table just above a caption."""
+    i = paper.find(caption_marker)
+    if i < 0:
+        fails.append(f"paper.md has no table captioned {caption_marker!r}")
+        return {}
+    rows = {}
+    for line in paper[:i].rstrip().split("\n")[::-1]:
+        line = line.strip()
+        if not line.startswith("|"):
+            break
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if set("".join(cells)) <= set("-: "):
+            continue
+        rows[cells[0].replace("*", "").strip()] = cells[1:]
+    return rows
+
+
+for _cap, _rowspec, _src, _metric in (
+        ("*Table 6: nDCG@10 by question family, text-only", _TEXT_ROWS_5_5,
+         base["by_family"], "ndcg@10"),
+        ("*Table 7: nDCG@10 by question family for the query-understanding",
+         _PROP_ROWS_5_5, prop["by_family"], "ndcg@10"),
+        ("*Table 8: recall@100 by question family, text-only", _TEXT_ROWS_5_5,
+         base["by_family"], "recall@100")):
+    _rows = _matrix_rows(_cap)
+    for _label, _key in _rowspec:
+        _cells = _rows.get(_label)
+        if _cells is None:
+            fails.append(f"{_cap[:24]}...: no row labelled {_label!r} in paper.md")
+            continue
+        if len(_cells) != len(_FAMS_5_5):
+            fails.append(f"{_cap[:24]}...: row {_label!r} has {len(_cells)} cells, "
+                         f"expected {len(_FAMS_5_5)}")
+            continue
+        for _fam, _cell in zip(_FAMS_5_5, _cells):
+            # Pass the RAW stored value, not round(...,3). Rounding here is
+            # equivalent at tol=0.0006 for the cell comparison itself, and it
+            # destroyed the one thing the rendering check needs: which stored
+            # value this cell is a rendering OF. 204 of the manuscript's cells
+            # were invisible to it for that reason.
+            check(f"{_metric} {_key} x {_fam}",
+                  _src[_key][_fam][_metric], float(_cell), tol=0.0006)
+
+# The four prose figures in 5.5 that are NOT cells of those three tables.
+states("prefilter recall@100 on geography",
+       round(prop["by_family"]["prefilter_hybrid"]["E_defect_geography"]["recall@100"], 3))
+states("geography query count",
+       base["by_family"]["bm25"]["E_defect_geography"]["n_queries"], fmt="{:d}")
+states("site-country query count",
+       base["by_family"]["bm25"]["F_site_country"]["n_queries"], fmt="{:d}")
 
 # --- claims of the form "X is worth N on top of Y" ------------------------
 # N26's class: a number can be correct, appear verbatim in two places, satisfy
@@ -1588,6 +1811,1026 @@ if os.path.exists(_man):
 else:
     fails.append("data/raw/MANIFEST.json is missing; it records the source URL and "
                  "digest a reader needs to obtain the same export")
+
+
+
+# --- Tables 9 and 10: every interval bound to results/ ----------------------
+# Round 13. results/ has carried ndcg@10_ci95_iid for every by_family cell from
+# the first run and the manuscript published none of it. Adding intervals adds
+# 34 numbers, and an interval is two numbers that a transcription error can swap,
+# widen or narrow without any aggregate noticing -- so each bound is read back
+# out of paper.md by row label and column position and compared to results/,
+# exactly as the Section 5.5 cells are.
+_CI_KEY = "ndcg@10_ci95_iid"
+
+
+def _ci_cells(caption_marker):
+    """{row label: [cell strings]} for the table above a caption. Same reader as
+    _matrix_rows; kept separate because these rows carry bracketed pairs rather
+    than bare decimals and a shared parser would have to branch anyway."""
+    _i = paper.find(caption_marker)
+    if _i < 0:
+        fails.append(f"paper.md has no table captioned {caption_marker!r}")
+        return {}
+    _rows = {}
+    for _line in paper[:_i].rstrip().split("\n")[::-1]:
+        _line = _line.strip()
+        if not _line.startswith("|"):
+            break
+        _cells = [_c.strip() for _c in _line.strip("|").split("|")]
+        if set("".join(_cells)) <= set("-: "):
+            continue
+        _rows[_cells[0].replace("*", "").strip()] = _cells[1:]
+    return _rows
+
+
+def _pair(cell):
+    _m = re.match(r"^\[(\d\.\d{3}),\s*(\d\.\d{3})\]$", cell.strip())
+    return (float(_m.group(1)), float(_m.group(2))) if _m else None
+
+
+# Table 9: the strongest text-only system across all six families.
+_T9 = _ci_cells("*Table 9: nDCG@10 with 95% confidence intervals")
+_t9_sys = "hybrid_rrf_dense"
+for _rowname, _what in (("nDCG@10", "point"), ("95% CI", "interval")):
+    _cells = _T9.get(_rowname)
+    if _cells is None:
+        fails.append(f"Table 9: no row labelled {_rowname!r} in paper.md")
+        continue
+    if len(_cells) != len(_FAMS_5_5):
+        fails.append(f"Table 9: row {_rowname!r} has {len(_cells)} cells, expected "
+                     f"{len(_FAMS_5_5)}")
+        continue
+    for _fam, _cell in zip(_FAMS_5_5, _cells):
+        _src = base["by_family"][_t9_sys][_fam]
+        if _what == "point":
+            check(f"Table 9 point, {_fam}", _src["ndcg@10"], float(_cell), tol=0.0006)
+        else:
+            _p = _pair(_cell)
+            if _p is None:
+                fails.append(f"Table 9: {_fam} interval cell {_cell!r} is not a "
+                             "[low, high] pair at three decimals")
+                continue
+            check(f"Table 9 CI low, {_fam}", _src[_CI_KEY][0], _p[0], tol=0.0006)
+            check(f"Table 9 CI high, {_fam}", _src[_CI_KEY][1], _p[1], tol=0.0006)
+            if not _src[_CI_KEY][0] <= _src["ndcg@10"] <= _src[_CI_KEY][1]:
+                fails.append(f"Table 9: {_fam} point estimate {_src['ndcg@10']} lies "
+                             f"outside its own interval {_src[_CI_KEY]} in results/")
+            counts["check"] += 1
+
+# Table 10: the geography column of Table 7, with intervals.
+_T10_ROWS = [("Hybrid RRF (text only)", "hybrid_rrf"),
+             ("Soft metadata filter", "slots_only"),
+             ("Hard metadata prefilter", "prefilter_hybrid"),
+             ("Centroid prior + filter", "qir_centroid_slots"),
+             ("Oracle category + filter", "qir_oracle_slots")]
+_T10 = _ci_cells("*Table 10: the geography column of Table 7")
+for _label, _key in _T10_ROWS:
+    _cells = _T10.get(_label)
+    if _cells is None:
+        fails.append(f"Table 10: no row labelled {_label!r} in paper.md")
+        continue
+    if len(_cells) != 2:
+        fails.append(f"Table 10: row {_label!r} has {len(_cells)} cells, expected 2")
+        continue
+    _src = prop["by_family"][_key]["E_defect_geography"]
+    check(f"Table 10 point, {_key}", _src["ndcg@10"], float(_cells[0]), tol=0.0006)
+    _p = _pair(_cells[1])
+    if _p is None:
+        fails.append(f"Table 10: {_key} interval cell {_cells[1]!r} is not a "
+                     "[low, high] pair at three decimals")
+        continue
+    check(f"Table 10 CI low, {_key}", _src[_CI_KEY][0], _p[0], tol=0.0006)
+    check(f"Table 10 CI high, {_key}", _src[_CI_KEY][1], _p[1], tol=0.0006)
+
+# Both captions name the field they were read from. If that field is ever
+# renamed in results/, the caption is a false provenance statement, so check it.
+for _cap_file, _blob in (("results/retrieval_results.json", base),
+                         ("results/proposed_results.json", prop)):
+    counts["check"] += 1
+    if _CI_KEY not in _blob["by_family"]["hybrid_rrf"]["E_defect_geography"]:
+        fails.append(f"the Table 9/10 captions name `{_CI_KEY}` in {_cap_file}, and "
+                     "that field is not there")
+in_text("`ndcg@10_ci95_iid`")
+
+# --- claim class N70: counts and superlatives over named systems/families ----
+# Round 11. Three sentences in Section 5.5 shipped false -- "five of the eight
+# score exactly 0.000" (four do), "leads form, severity, period and geography"
+# (it leads form, period, geography and site country, and does not lead
+# severity), "1.000 for six of the eight" (four). Every NUMBER in all three was
+# correct and bound; what was false was a COUNT over a column and an ORDERING
+# within one, and this script had no way to express either. 558 bindings passed
+# over them.
+#
+# The class this closes: a sentence that makes a quantified or superlative claim
+# ABOUT a table column without quoting a value the column contains. No value
+# binding can see it, because there is no value in the sentence to bind.
+#
+# The rule here is the scan-corpus rule applied to prose. Every sentence in
+# paper.md that (a) contains a count of the form "<n> of the <m>" or one of the
+# ranking words below and (b) names a system or a question family is a
+# candidate, the count of candidates is printed, and each one must be either
+# BOUND (recomputed from results/) or EXEMPT with a reason naming why no cell
+# can stand behind it. A candidate matching no registry entry is UNBOUND and
+# FAILS -- an unbound superlative is what went out. A registry entry matching no
+# candidate also fails: a claim edited out of the paper must not leave a green
+# check behind it, which is BUILD-CHECKS' "check the old path, every time".
+
+
+def _claim_sentences(md):
+    """Candidate claim sentences in the authored source, as a flat list."""
+    _keep, _fence = [], False
+    for _ln in md.split("\n"):
+        _s = _ln.strip()
+        if _s.startswith("```"):
+            _fence = not _fence
+            continue
+        # Table rows are checked cell by cell above; headings, rules and image
+        # includes are not prose and would merge two sentences into one.
+        if _fence or _s.startswith("|") or _s.startswith("#") \
+                or _s.startswith("---") or _s.startswith("!["):
+            continue
+        _keep.append(_ln)
+    _body = " ".join(_keep)
+    for _c in ("**", "*", "`", "_"):
+        _body = _body.replace(_c, "")
+    return [_s.strip() for _s in
+            re.split(r"(?<=[.!?])\s+(?=[A-Z(])", re.sub(r"\s+", " ", _body)) if _s.strip()]
+
+
+# "only" is excluded when it is the tail of a compound adjective (text-only,
+# lexical-only): that is a name, not a quantifier, and treating it as one made
+# every table caption in Section 5 a candidate.
+_WORDNUM = r"(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d+)"
+_PAT_COUNT = re.compile(
+    r"(?<![.\d])%s\s+of\s+the\s+%s(?![.\d])" % (_WORDNUM, _WORDNUM), re.I)
+_PAT_SUPER = re.compile(
+    r"\b(leads?|leading|best|worst|highest|lowest|(?<!-)only|every|none|no system"
+    r"|strongest|weakest|outperforms|beats|top of|bottom of)\b", re.I)
+_PAT_NAMED = re.compile(
+    r"\b(BM25|TF-IDF|LSA|word2vec|Hybrid RRF|BGE-base|BGE|MiniLM|dense channel"
+    r"|dense fusion|classifier prior|centroid prior|oracle|prefilter"
+    r"|soft metadata filter|hard metadata|gold control|firm history|site country"
+    r"|geography|severity|defect form|defect period|question famil\w+"
+    r"|text-only system\w*|lexical channel\w*|retrievers?)\b", re.I)
+
+# --- recompute helpers: every claim below is answered from results/ ----------
+_SYS8 = ["bm25", "tfidf", "lsa", "w2v", "hybrid_rrf", "bge_base", "minilm",
+         "hybrid_rrf_dense"]
+_CORPUS_TRAINED = ["bm25", "tfidf", "lsa", "w2v"]
+_NO_WEIGHTS = ["bm25", "tfidf", "lsa", "w2v", "hybrid_rrf"]
+_DEFECT_FAMS = ["A_defect_form", "B_defect_severity", "D_defect_period",
+                "E_defect_geography"]
+
+
+def _mic(k):
+    return base["summary"][k]["ndcg@10"]["mean"]
+
+
+def _mac(k):
+    return sum(base["by_family"][k][f]["ndcg@10"] for f in _FAMS_5_5) / len(_FAMS_5_5)
+
+
+def _col(fam, metric="ndcg@10", systems=None):
+    return {k: base["by_family"][k][fam][metric] for k in (systems or _SYS8)}
+
+
+def _amax(d):
+    return max(d, key=d.get)
+
+
+def _amin(d):
+    return min(d, key=d.get)
+
+
+def _shown(claim, stored, printed, tol=0.0006):
+    """A figure the manuscript PRINTS for a stored value.
+
+    Round 11, item 2: comparing a parsed prose number to a rounded stored value
+    with _cassert checks the value and records nothing, so the occurrence is
+    never tied to the value it renders and two places can print one value two
+    ways -- which is exactly what Section 5.2 and Table 6 did. Routing these
+    through check() ties them, because check() is what records a rendering.
+    """
+    check(claim, stored, printed, tol=tol)
+    return True
+
+
+def _cassert(name, ok, detail):
+    """A structural claim -- an ordering, a count, an identity -- not a value."""
+    counts["check"] += 1
+    if not ok:
+        fails.append(f"claim binding FAILED, {name}: {detail}")
+    return ok
+
+
+def _leaders(metric="ndcg@10"):
+    return {f: _amax(_col(f, metric)) for f in _FAMS_5_5}
+
+
+# A binding that compares results/ against a number TYPED HERE from the prose is
+# the defect it exists to catch, one level up: edit the sentence and the check
+# still passes. Every handler below is handed the sentence the scanner matched
+# and reads the assertion OUT OF IT -- the count, the range, the families named
+# -- so the comparison is sentence vs results/, never results/ vs a literal.
+_WORDVAL = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
+            "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11,
+            "twelve": 12}
+
+
+def _n(tok):
+    return _WORDVAL.get(tok.lower(), None) if not tok.isdigit() else int(tok)
+
+
+def _asserted_counts(sent):
+    """Every "<n> of the <m>" the sentence asserts, as (n, m) pairs."""
+    _out = []
+    for _m in _PAT_COUNT.finditer(sent):
+        _tok = re.findall(r"[\w.]+", _m.group(0))
+        _a, _b = _n(_tok[0]), _n(_tok[-1])
+        if _a is not None and _b is not None:
+            _out.append((_a, _b))
+    return _out
+
+
+def _asserted_nums(sent):
+    """The decimals the sentence states, in order, dashes folded first."""
+    return [float(_x) for _x in re.findall(r"\d\.\d{3}", normalise_dashes(sent))]
+
+
+# "form" also occurs in "the per-family form of the identity", which is not the
+# defect-form family; requiring it not to be followed by "of" keeps the family
+# word from collecting the ordinary noun, which made a true sentence read false.
+_FAMWORD = [("A_defect_form", r"\bform\b(?!\s+of\b)"),
+            ("B_defect_severity", r"\bseverity\b"),
+            ("C_firm_history", r"\bfirm history\b"), ("D_defect_period", r"\bperiod\b"),
+            ("E_defect_geography", r"\bgeography\b"),
+            ("F_site_country", r"\bsite country\b")]
+
+
+def _asserted_families(clause):
+    """Families a clause NAMES. The relative clause that follows a list is
+    commentary on the claim, not part of it, so stop at it."""
+    clause = re.split(r",?\s+which\b", clause, maxsplit=1)[0]
+    return [_f for _f, _p in _FAMWORD if re.search(_p, clause, re.I)]
+
+
+def _one_count(name, sent, want_n, want_m, what):
+    """The sentence's own "<n> of the <m>" against the recomputed pair."""
+    _cs = _asserted_counts(sent)
+    if len(_cs) != 1:
+        return _cassert(name, False,
+                        f"expected exactly one count of the form '<n> of the <m>' in "
+                        f"this sentence, found {len(_cs)}: {_cs}. The binding cannot "
+                        f"tell which count it is about, so it is UNBOUND.")
+    _sn, _sm = _cs[0]
+    return _cassert(name, (_sn, _sm) == (want_n, want_m),
+                    f"the manuscript says {_sn} of the {_sm}; recomputed from "
+                    f"results/, {what} gives {want_n} of {want_m}")
+
+
+def _b_abstract_spread(sent):
+    _m = {k: _mic(k) for k in _SYS8}
+    _got = _asserted_nums(sent)
+    _cassert("abstract states three figures", len(_got) >= 3,
+             f"expected the span and the geography ceiling; found {_got}")
+    _shown("abstract span, low end", min(_m.values()), _got[0])
+    _shown("abstract span, high end", max(_m.values()), _got[1])
+    _g = _col("E_defect_geography")
+    _shown("abstract geography ceiling", max(_g.values()), _got[2])
+    # "the micro and macro aggregates disagree on which leads" -- the pair the
+    # clause before it names: the pretrained encoder and the corpus-trained
+    # fusion. Recompute the winner under each and require them to differ, which
+    # is the entire content of the claim.
+    _pair = ["bge_base", "hybrid_rrf"]
+    _wm = _amax({k: _mic(k) for k in _pair})
+    _wM = _amax({k: _mac(k) for k in _pair})
+    _cassert("abstract aggregate disagreement", _wm != _wM,
+             f"the abstract says the aggregates disagree on which of {_pair} leads, "
+             f"but both pick {_wm}")
+    return (f"stated {_got[:3]}; results span {min(_m.values()):.3f}-"
+            f"{max(_m.values()):.3f}, geography best {max(_g.values()):.3f}; "
+            f"micro leader {_wm} vs macro leader {_wM}")
+
+
+def _b_contrib_diagnosis(sent):
+    _best = _amax({k: _mic(k) for k in _SYS8})
+    _bf = base["by_family"][_best]
+    _got = _asserted_nums(sent)
+    _ds = sorted(_bf[f]["ndcg@10"] for f in
+                 ("A_defect_form", "B_defect_severity", "D_defect_period"))
+    _want = [_bf["C_firm_history"]["ndcg@10"], _ds[0], _ds[-1],
+             _bf["E_defect_geography"]["ndcg@10"]]
+    _cassert("contribution states four figures", len(_got) == 4,
+             f"expected four figures for the best text-only system; found {_got}")
+    for _lbl, _w, _g2 in zip(("entity", "defect-semantics low", "defect-semantics high",
+                              "geography"), _want, _got + [None] * 4):
+        if _g2 is not None:
+            _shown(f"contribution, {_lbl}", _w, _g2)
+    return f"best text-only system is {_best}; stated {_got}"
+
+
+def _b_intro_spread(sent):
+    _m = {k: _mic(k) for k in _SYS8}
+    _sp = max(_m.values()) - min(_m.values())
+    _got = _asserted_nums(sent)
+    _cassert("intro spread, as stated", _got and _got[0] == round(_sp, 3),
+             f"the sentence states a spread of {_got[:1]}; results give {_sp:.4f}")
+    _said = re.search(r"across (\w+) systems", sent)
+    _cassert("intro spread denominator, as stated",
+             _said is not None and _n(_said.group(1)) == len(_SYS8),
+             f"the sentence says across {_said.group(1) if _said else '?'} systems; "
+             f"results/ carries {len(_SYS8)}")
+    return f"stated {_got[:1]} over {_said.group(1) if _said else '?'}; results {_sp:.4f} over {len(_SYS8)}"
+
+
+def _b_offline_base(sent):
+    _w = _amax({k: _mic(k) for k in _NO_WEIGHTS})
+    _cassert("strongest weight-free configuration", _w == "hybrid_rrf",
+             f"the sentence names Hybrid RRF the strongest configuration needing no "
+             f"downloaded weights; the argmax over {_NO_WEIGHTS} is {_w}")
+    return f"argmax over {_NO_WEIGHTS} is {_w} ({_mic(_w):.4f})"
+
+
+def _b_holm_family(sent):
+    _said = re.search(r"(\w+) in script 04", sent)
+    _cassert("script 04 comparison count, as stated",
+             _said is not None and _n(_said.group(1)) == len(_SYS8) - 1,
+             f"the sentence says {_said.group(1) if _said else '?'} comparisons, every "
+             f"other system in Table 2 against Hybrid RRF; Table 2 carries "
+             f"{len(_SYS8)} systems, so there are {len(_SYS8) - 1}")
+    return f"stated {_said.group(1) if _said else '?'}; {len(_SYS8)} systems give {len(_SYS8) - 1} contrasts"
+
+
+def _b_strongest_text_only(sent):
+    _wm = _amax({k: _mic(k) for k in _SYS8})
+    _wM = _amax({k: _mac(k) for k in _SYS8})
+    _cassert("strongest text-only system, both aggregates",
+             _wm == "hybrid_rrf_dense" and _wM == "hybrid_rrf_dense",
+             f"the sentence names Hybrid RRF + BGE strongest under both aggregates; "
+             f"the argmaxes are micro {_wm}, macro {_wM}")
+    return f"micro argmax {_wm} ({_mic(_wm):.4f}), macro argmax {_wM} ({_mac(_wM):.4f})"
+
+
+def _b_fusion_beats(sent):
+    # Read the delta the sentence attaches to each NAME, not any number in the
+    # sentence: the confidence intervals here carry eight more decimals of the
+    # same shape, and matching against the whole set would let a CI bound stand
+    # in for the point estimate.
+    _said = {}
+    for _who, _k in (("BM25", "bm25"), ("TF-IDF", "tfidf"), ("LSA", "lsa")):
+        _d = _mic("hybrid_rrf") - _mic(_k)
+        _m = re.search(r"%s alone \(([+\u2212-]?\d\.\d{3})" % _who,
+                       normalise_dashes(sent))
+        _said[_who] = _m.group(1) if _m else None
+        _cassert(f"fusion vs {_who}, as stated",
+                 _m is not None and float(_m.group(1)) == round(_d, 3),
+                 f"the sentence quotes {_said[_who]} against {_who} alone; results "
+                 f"give {_d:+.4f}")
+        if _who != "LSA":
+            _cassert(f"fusion beats {_who}, direction", _d > 0,
+                     f"the sentence says fusion beats {_who}; results give {_d:+.4f}")
+    return (f"stated {_said}; hybrid_rrf {_mic('hybrid_rrf'):.4f} vs bm25 "
+            f"{_mic('bm25'):.4f}, tfidf {_mic('tfidf'):.4f}, lsa {_mic('lsa'):.4f}")
+
+
+def _b_w2v_trails(sent):
+    _rest = [k for k in _SYS8 if k not in ("w2v", "minilm")]
+    _bad = [k for k in _rest if _mic(k) <= _mic("w2v")]
+    _cassert("word2vec trails everything but MiniLM", not _bad,
+             "the sentence says averaged word2vec trails everything, with MiniLM "
+             "named next as worse still; these do not beat it: "
+             + ", ".join(f"{k} {_mic(k):.3f}" for k in _bad))
+    _cassert("MiniLM is worse still", _mic("minilm") < _mic("w2v"),
+             f"the sentence says MiniLM is worse still; minilm {_mic('minilm'):.4f} "
+             f"vs w2v {_mic('w2v'):.4f}")
+    return f"w2v {_mic('w2v'):.4f}, minilm {_mic('minilm'):.4f} (floor of the eight)"
+
+
+def _b_dense_ahead(sent):
+    for _agg, _f in (("micro", _mic), ("macro", _mac)):
+        _w = _amax({k: _f(k) for k in _SYS8})
+        _cassert(f"dense fusion ahead under {_agg}", _w == "hybrid_rrf_dense",
+                 f"the sentence says the dense fusion is ahead under both aggregates; "
+                 f"the {_agg} argmax is {_w}")
+    _said = re.search(r"\((0\.\d{3}) micro, (0\.\d{3}) macro\)", sent)
+    _cassert("dense fusion aggregates are stated", _said is not None,
+             "the sentence claims the lead but prints no aggregates")
+    if _said:
+        _shown("dense fusion, micro", _mic("hybrid_rrf_dense"), float(_said.group(1)))
+        _shown("dense fusion, macro", _mac("hybrid_rrf_dense"), float(_said.group(2)))
+    return (f"stated {_said.groups() if _said else None}; argmax of both is "
+            f"hybrid_rrf_dense")
+
+
+def _b_entity_questions(sent):
+    _best = _amax({k: _mic(k) for k in _SYS8})
+    _bf = base["by_family"][_best]
+    _got = _asserted_nums(sent)
+    _cassert("entity questions states two figures", len(_got) == 2,
+             f"expected two entity figures; found {_got}")
+    _shown("entity questions, firm history", _bf["C_firm_history"]["ndcg@10"], _got[0])
+    _shown("entity questions, site country", _bf["F_site_country"]["ndcg@10"], _got[1])
+    return f"{_best}: stated {_got}"
+
+
+def _b_lexical_zero(sent):
+    _g = _col("E_defect_geography")
+    _lex = ["bm25", "tfidf"]
+    _bad = [(k, round(_g[k], 4)) for k in _lex if round(_g[k], 3) != 0.0]
+    _cassert("every lexical channel is 0.000 on geography", not _bad,
+             f"the sentence says every lexical channel scores exactly 0.000 on this "
+             f"family; nonzero: {_bad}")
+    _got = _asserted_nums(sent)
+    _cassert("5.2 geography states four figures", len(_got) == 4,
+             f"expected four figures; found {_got}")
+    for _lbl, _k, _i in (("lexical channels", "bm25", 0), ("LSA", "lsa", 1),
+                         ("BGE", "bge_base", 2), ("dense fusion",
+                                                  "hybrid_rrf_dense", 3)):
+        _shown(f"5.2 geography, {_lbl}", _g[_k], _got[_i])
+    return f"stated {_got}; lsa {_g['lsa']:.4f}, bge {_g['bge_base']:.4f}, dense fusion {_g['hybrid_rrf_dense']:.4f}"
+
+
+def _b_weakest_corpus_trained(sent):
+    _w = _amin({k: _mic(k) for k in _CORPUS_TRAINED})
+    _cassert("weakest corpus-trained channel", _w == "w2v",
+             f"the sentence names word2vec the weakest corpus-trained channel; the "
+             f"argmin over {_CORPUS_TRAINED} is {_w}")
+    _said = re.search(r"weakest corpus.trained channel \(word2vec, (\d\.\d{3})\)", sent)
+    _cassert("weakest corpus-trained value is stated", _said is not None,
+             "the sentence does not print the value it names")
+    if _said:
+        _shown("weakest corpus-trained value", _mic(_w), float(_said.group(1)))
+    return f"argmin over {_CORPUS_TRAINED} is {_w} ({_mic(_w):.4f})"
+
+
+def _b_oracle_headroom(sent):
+    _top = max(_mic(k) for k in _SYS8)
+    _orc = prop["summary"]["qir_oracle"]["ndcg@10"]["mean"]
+    _said = re.search(r"and (\d\.\d{3}) more than the strongest system", sent)
+    _cassert("oracle headroom over the strongest system, as stated",
+             _said is not None
+             and float(_said.group(1)) == round(_orc - _top, 3),
+             f"the sentence states {_said.group(1) if _said else '?'} more than the "
+             f"strongest system in that spread; results give {_orc:.4f} - {_top:.4f} "
+             f"= {_orc - _top:+.4f}")
+    return f"oracle {_orc:.4f} over strongest {_top:.4f} = {_orc - _top:+.4f}"
+
+
+def _b_metadata_ladder():
+    _s = round(prop["summary"]["slots_only"]["ndcg@10"]["mean"], 3)
+    _h = round(prop["summary"]["prefilter_hybrid"]["ndcg@10"]["mean"], 3)
+    _t = round(_mic("hybrid_rrf"), 3)
+    _cassert("metadata ladder ordering", _h > _s > _t,
+             f"5.4 orders hard prefilter above soft filter above the text-only "
+             f"baseline; results give {_h:.3f}, {_s:.3f}, {_t:.3f}")
+    return f"prefilter {_h:.3f} > soft {_s:.3f} > text-only {_t:.3f}"
+
+
+def _oracle_vs_control(where, sent=None):
+    _o = prop["by_family"]["qir_oracle_slots"]
+    _c = prop["by_family"]["gold_additive_control"]
+    _same = [f for f in _FAMS_5_5
+             if abs(_o[f]["ndcg@10"] - _c[f]["ndcg@10"]) < 1e-12]
+    _cassert(f"oracle-with-filter equals the additive control ({where})",
+             sorted(_same) == sorted(_DEFECT_FAMS),
+             f"the identity is claimed over the four defect-slot families "
+             f"{sorted(_DEFECT_FAMS)}; recomputed, it holds on {sorted(_same)}")
+    if sent is not None:
+        # Two of the three sentences name the families one by one; the third
+        # says "the four families whose predicate is defect category x
+        # constraint" and names none. Read whichever form the sentence uses --
+        # the list if it gives one, the cardinal if it gives that instead -- and
+        # require it to agree with the recomputed set. A sentence that gives
+        # neither is not tied to anything, so it fails rather than passes.
+        # One of the three names the families it holds on AND the families it
+        # departs on, in one sentence. Split at the contrast before reading
+        # either list, or the positive set collects all six and the claim looks
+        # false when it is not.
+        _parts = re.split(r"\b(?:and departs from it only on|and does not hold on"
+                          r"|but not on|except on)\b", sent, maxsplit=1)
+        _named = _asserted_families(_parts[0])
+        _excl = _asserted_families(_parts[1]) if len(_parts) == 2 else []
+        if _excl:
+            _cassert(f"families excluded from the identity claim ({where})",
+                     all(f not in _same for f in _excl)
+                     and sorted(_named + _excl) == sorted(_FAMS_5_5),
+                     f"the sentence says the identity departs on {sorted(_excl)} and "
+                     f"holds on {sorted(_named)}; recomputed it holds on "
+                     f"{sorted(_same)}")
+        _card = re.search(r"\b(\w+) families\b", sent)
+        if _named:
+            _cassert(f"families named in the identity claim ({where})",
+                     sorted(_named) == sorted(_same),
+                     f"the sentence names {sorted(_named)}; the identity holds on "
+                     f"{sorted(_same)}")
+        elif _card is not None and _n(_card.group(1)) is not None:
+            _cassert(f"family count in the identity claim ({where})",
+                     _n(_card.group(1)) == len(_same),
+                     f"the sentence says {_card.group(1)} families; the identity "
+                     f"holds on {len(_same)}: {sorted(_same)}")
+        else:
+            _cassert(f"identity claim scope ({where})",
+                     bool(re.search(r"every family where a defect slot exists", sent)),
+                     "the sentence names neither the families nor how many, so no "
+                     "cell can be tied to it")
+    return f"identity holds on {sorted(_same)}, and on no other family"
+
+
+def _b_firm_history_only(sent):
+    _thr = _asserted_nums(sent)
+    _bar = _thr[-1] if _thr else 0.200
+    _mins = {f: min(_col(f).values()) for f in _FAMS_5_5}
+    _above = [f for f, v in _mins.items() if v >= _bar]
+    _cassert("firm history is the only family every system answers",
+             _above == ["C_firm_history"],
+             f"the sentence says firm history is the only family every text-only "
+             f"system answers, at the bar {_bar} it names; the families whose column "
+             f"minimum clears {_bar} are {_above}")
+    _c = _col("C_firm_history")
+    _cassert("firm history spread is stated", len(_thr) >= 2,
+             f"expected a two-ended spread; found {_thr}")
+    if len(_thr) >= 2:
+        _shown("firm history spread, low end", min(_c.values()), _thr[0])
+        _shown("firm history spread, high end", max(_c.values()), _thr[1])
+    _over = {f: (_amax(_col(f)), round(max(_col(f).values()), 3))
+             for f in ("A_defect_form", "B_defect_severity", "D_defect_period")
+             if max(_col(f).values()) >= _bar}
+    _cassert(f"no system reaches {_bar} on form, severity or period", not _over,
+             f"the sentence says no system reaches {_bar} on those three families; "
+             f"column maxima that do: {_over}")
+    return (f"stated spread {_thr[:2]}, bar {_bar}; column minima "
+            f"{dict((f.split('_', 1)[1], round(v, 3)) for f, v in _mins.items())}")
+
+
+def _b_geography_zeros(sent):
+    _g = _col("E_defect_geography")
+    _z = [k for k in _SYS8 if round(_g[k], 3) == 0.000]
+    _one_count("geography zero count", sent, len(_z), len(_SYS8),
+               "the number of systems whose geography nDCG@10 rounds to 0.000")
+    _got = _asserted_nums(sent)
+    _cassert("geography best is stated", bool(_got), "no figure in the sentence")
+    if _got:
+        _shown("geography best", max(_g.values()), _got[-1])
+    return (f"stated {_asserted_counts(sent)}, best {_got[-1:]}; results give "
+            f"{len(_z)} of {len(_SYS8)} at 0.000 {_z}, best {_amax(_g)} "
+            f"{max(_g.values()):.4f}")
+
+
+def _b_ordering_not_stable(sent):
+    _lead = _leaders()
+    _cassert("TF-IDF leads firm history", _lead["C_firm_history"] == "tfidf",
+             f"the sentence says TF-IDF leads firm history; the column argmax is "
+             f"{_lead['C_firm_history']}")
+    _got = _asserted_nums(sent)
+    _cassert("TF-IDF firm history value is stated", bool(_got),
+             "no figure in the sentence")
+    if _got:
+        _shown("TF-IDF firm history value", _col("C_firm_history")["tfidf"], _got[0])
+    _a = sorted(_col("A_defect_form").items(), key=lambda kv: kv[1])
+    _cassert("TF-IDF sits second from last on form", _a[1][0] == "tfidf",
+             f"the sentence says TF-IDF sits second from last on form; the ascending "
+             f"order is {[k for k, _ in _a]}")
+    _cassert("TF-IDF form value is stated", len(_got) > 1,
+             "the sentence names the position but prints no value")
+    if len(_got) > 1:
+        _shown("TF-IDF form value", _a[1][1], _got[1])
+    # The ordering claim that shipped false. Read the families the sentence
+    # NAMES as led, and the families it names as not led, and compare both
+    # against the per-column argmax. Nothing here is typed from the prose.
+    _led = [f for f in _FAMS_5_5 if _lead[f] == "hybrid_rrf_dense"]
+    _m = re.search(r"dense channel leads (.*?)(?:$|\. )", sent)
+    _clause = _m.group(1) if _m else ""
+    _pos, _neg = _clause, ""
+    _split = re.split(r"\b(?:and leads neither|and does not lead|but not)\b",
+                      _clause, maxsplit=1)
+    if len(_split) == 2:
+        _pos, _neg = _split
+    _said_led = _asserted_families(_pos)
+    _said_not = _asserted_families(_neg)
+    _cassert("families the dense fusion is said to lead",
+             sorted(_said_led) == sorted(_led),
+             f"the sentence names {sorted(_said_led)} as led by hybrid RRF with the "
+             f"dense channel; the per-column argmax gives {sorted(_led)}")
+    _cassert("families the dense fusion is said not to lead",
+             all(f not in _led for f in _said_not),
+             f"the sentence names {sorted(_said_not)} as NOT led; the argmax puts "
+             f"hybrid_rrf_dense on top of "
+             f"{sorted(f for f in _said_not if f in _led)}")
+    _cassert("every family is accounted for",
+             sorted(_said_led + _said_not) == sorted(_FAMS_5_5)
+             or not _said_not,
+             f"the sentence splits the six families into led {sorted(_said_led)} and "
+             f"not led {sorted(_said_not)}, which does not cover {_FAMS_5_5}")
+    if _asserted_counts(_pos):
+        _one_count("dense fusion lead count", _pos, len(_led), len(_FAMS_5_5),
+                   "the number of families whose column argmax is hybrid_rrf_dense")
+    return (f"per-column argmax "
+            f"{dict((f.split('_', 1)[1], _lead[f]) for f in _FAMS_5_5)}; sentence "
+            f"names led={sorted(_said_led)} not-led={sorted(_said_not)}")
+
+
+def _b_geography_column(sent):
+    _p = prop["by_family"]
+    _reads = ["slots_only", "prefilter_hybrid", "qir_centroid_slots"]
+    _flat = [k for k in _reads
+             if round(_p[k]["E_defect_geography"]["ndcg@10"], 3) == 0.000]
+    _cassert("every constraint-reading system moves geography", not _flat,
+             f"the sentence says every system that reads a constraint off the "
+             f"question moves geography; still at 0.000: {_flat}")
+    _priors = ["qir_clf", "qir_centroid", "qir_oracle"]
+    _moved = [(k, round(_p[k]["E_defect_geography"]["ndcg@10"], 4)) for k in _priors
+              if round(_p[k]["E_defect_geography"]["ndcg@10"], 3) != 0.000]
+    _cassert("every slot-free prior stays at 0.000 on geography", not _moved,
+             f"the sentence says every system that infers the defect category without "
+             f"reading a slot stays at exactly 0.000, the oracle included; nonzero: "
+             f"{_moved}")
+    _got = _asserted_nums(sent)
+    _cassert("three constraint-reading figures are stated", len(_got) >= 3,
+             f"expected three figures; found {_got}")
+    for _i, _k in enumerate(("slots_only", "prefilter_hybrid", "qir_centroid_slots")):
+        if len(_got) > _i:
+            _shown(f"geography column, {_k}",
+                   _p[_k]["E_defect_geography"]["ndcg@10"], _got[_i])
+    return f"stated {_got[:3]}; slot-free priors all 0.000 {_priors}"
+
+
+def _b_firm_recall(sent):
+    _r = _col("C_firm_history", "recall@100")
+    _ones = [k for k in _SYS8 if round(_r[k], 3) == 1.000]
+    _one_count("firm-history recall@100 count", sent, len(_ones), len(_SYS8),
+               "the number of systems whose firm-history recall@100 rounds to 1.000")
+    return (f"stated {_asserted_counts(sent)}; results give {len(_ones)} of "
+            f"{len(_SYS8)} at 1.000 {_ones}")
+
+
+def _b_centroid_beats_classifier(sent):
+    _t = prop["query_category_top1_accuracy"]
+    _c, _k = _t["lsa_centroid_test"], _t["classifier_zero_shot_test"]
+    _cassert("centroid beats the trained classifier", _c > _k,
+             f"the sentence says the centroid prior beats a trained classifier; "
+             f"results give centroid {_c}, classifier {_k}")
+    _said = re.search(r"by (\d+) points of category accuracy", sent)
+    _cassert("centroid margin, as stated",
+             _said is not None and int(_said.group(1)) == round(100 * (_c - _k)),
+             f"the sentence says {_said.group(1) if _said else '?'} points; results "
+             f"give {100 * (_c - _k):.1f}")
+    return f"centroid {_c:.4f} vs classifier {_k:.4f}, margin {100 * (_c - _k):.1f} points"
+
+
+def _b_interval_tables(sent):
+    """Tables 9 and 10 are introduced as covering "the strongest text-only
+    system". Which system that is, is an argmax, not a label."""
+    _w = _amax({k: _mic(k) for k in _SYS8})
+    _cassert("Table 9 covers the strongest text-only system", _w == "hybrid_rrf_dense",
+             f"the sentence says Tables 9 and 10 cover the strongest text-only system "
+             f"and Table 9's rows are Hybrid RRF + dense; the micro argmax is {_w}")
+    return f"micro argmax is {_w}; Table 9's rows are that system"
+
+
+def _b_firm_interval(sent=None):
+    """Firm history's interval against the rest of its row. This sentence was
+    written first as "clears everything else in the row", which is false: site
+    country's interval [0.579, 0.913] covers firm history's [0.688, 0.888]
+    entirely. Recomputed, not read."""
+    _d = base["by_family"]["hybrid_rrf_dense"]
+    _lo = _d["C_firm_history"][_CI_KEY][0]
+    _clears = [f for f in _FAMS_5_5
+               if f != "C_firm_history" and _lo > _d[f][_CI_KEY][1]]
+    _cassert("firm history clears exactly the four defect-semantics families",
+             sorted(_clears) == sorted(_DEFECT_FAMS),
+             f"the sentence says firm history's lower bound clears the four "
+             f"defect-semantics families and not site country; recomputed, its lower "
+             f"bound {_lo:.4f} clears {sorted(_clears)}")
+    _cassert("site country covers firm history entirely",
+             _d["F_site_country"][_CI_KEY][0] <= _d["C_firm_history"][_CI_KEY][0]
+             and _d["F_site_country"][_CI_KEY][1] >= _d["C_firm_history"][_CI_KEY][1],
+             f"the sentence says site country's interval covers firm history's; "
+             f"{_d['F_site_country'][_CI_KEY]} vs {_d['C_firm_history'][_CI_KEY]}")
+    return (f"lower bound {_lo:.4f} clears {sorted(_clears)}; site country "
+            f"{_d['F_site_country'][_CI_KEY]} covers it")
+
+
+def _b_site_country_overlap():
+    """Unconditional: the site-country paragraph carries no ranking word, so the
+    scanner does not reach it, but every figure in it is a cell."""
+    _d = base["by_family"]
+    _n = _d["hybrid_rrf_dense"]["F_site_country"]["n_queries"]
+    _cassert("site country query count", _n == 4,
+             f"the paragraph says site country rests on four queries; results/ says {_n}")
+    _c = {k: _d[k]["F_site_country"] for k in
+          ("hybrid_rrf_dense", "hybrid_rrf", "bge_base")}
+    _width = _c["hybrid_rrf_dense"][_CI_KEY][1] - _c["hybrid_rrf_dense"][_CI_KEY][0]
+    _gap = _c["hybrid_rrf_dense"]["ndcg@10"] - _c["hybrid_rrf"]["ndcg@10"]
+    _cassert("site country interval is wider than the gap it is meant to resolve",
+             _width > _gap,
+             f"the paragraph says the interval is wider than the gap between 0.735 and "
+             f"0.506; width {_width:.4f}, gap {_gap:.4f}")
+    _pairs = [(a, b) for a in _c for b in _c if a < b
+              and not (_c[a][_CI_KEY][1] < _c[b][_CI_KEY][0]
+                       or _c[b][_CI_KEY][1] < _c[a][_CI_KEY][0])]
+    _cassert("all three site-country intervals overlap", len(_pairs) == 3,
+             f"the paragraph says all three overlap; overlapping pairs: {_pairs}")
+    for _k in ("hybrid_rrf", "bge_base"):
+        _shown(f"site country point, {_k}", _c[_k]["ndcg@10"],
+               round(_c[_k]["ndcg@10"], 3))
+        _shown(f"site country CI low, {_k}", _c[_k][_CI_KEY][0],
+               round(_c[_k][_CI_KEY][0], 3))
+        _shown(f"site country CI high, {_k}", _c[_k][_CI_KEY][1],
+               round(_c[_k][_CI_KEY][1], 3))
+    return (f"n={_n}; width {_width:.3f} > gap {_gap:.3f}; "
+            f"{len(_pairs)} of 3 pairs overlap")
+
+
+def _b_geography_precision():
+    """Unconditional: the Table 10 paragraph. Width, the ratio it quotes, the
+    non-separation it claims, and the floor it does claim."""
+    _g = prop["by_family"]
+    _c = _g["qir_centroid_slots"]["E_defect_geography"]
+    _h = _g["prefilter_hybrid"]["E_defect_geography"]
+    _w = _c[_CI_KEY][1] - _c[_CI_KEY][0]
+    _cassert("centroid-plus-filter interval width", round(_w, 3) == 0.362,
+             f"the paragraph says the interval is 0.362 wide; results give {_w:.4f}")
+    _textonly = base["by_family"]["hybrid_rrf_dense"]["E_defect_geography"]["ndcg@10"]
+    _cassert("width against the text-only geography reading",
+             round(_w / _textonly) == 15,
+             f"the paragraph says fifteen times the text-only reading of "
+             f"{_textonly:.3f}; the ratio is {_w / _textonly:.1f}")
+    _cassert("centroid and prefilter are not separated",
+             not (_c[_CI_KEY][0] > _h[_CI_KEY][1] or _h[_CI_KEY][0] > _c[_CI_KEY][1]),
+             f"the paragraph says the distance between {_c['ndcg@10']:.3f} and "
+             f"{_h['ndcg@10']:.3f} is not resolved; their intervals "
+             f"{_c[_CI_KEY]} and {_h[_CI_KEY]} do not overlap")
+    _readers = ["slots_only", "prefilter_hybrid", "qir_centroid_slots",
+                "qir_oracle_slots"]
+    _atzero = [k for k in _readers if _g[k]["E_defect_geography"][_CI_KEY][0] <= 0]
+    _cassert("every constraint-reading configuration has a lower bound above zero",
+             not _atzero,
+             f"the paragraph says every configuration that reads a constraint clears "
+             f"the text-only 0.000 with a lower bound above zero; these do not: "
+             f"{_atzero}")
+    return (f"width {_w:.4f} = {_w / _textonly:.1f}x the text-only {_textonly:.3f}; "
+            f"centroid {_c[_CI_KEY]} overlaps prefilter {_h[_CI_KEY]}; "
+            f"{len(_readers)} constraint readers all have lower bounds above zero")
+
+
+def _b_conclusion():
+    _best = _amax({k: _mic(k) for k in _SYS8})
+    _bf = base["by_family"][_best]
+    _cassert("conclusion, firm questions",
+             round(_bf["C_firm_history"]["ndcg@10"], 3) == 0.796,
+             f"the conclusion says 0.796; results give "
+             f"{_bf['C_firm_history']['ndcg@10']:.4f}")
+    _cassert("conclusion, geography questions",
+             round(max(_col("E_defect_geography").values()), 3) == 0.024,
+             f"the conclusion says 0.024; results give "
+             f"{max(_col('E_defect_geography').values()):.4f}")
+    _dense = _col("E_defect_geography")["bge_base"]
+    _cassert("conclusion, the encoder does not rescue geography",
+             _dense < max(_col("E_defect_geography").values()),
+             f"the conclusion says a pretrained encoder does not rescue geography; "
+             f"BGE-base reaches {_dense:.4f} there")
+    return (f"{_best} firm {_bf['C_firm_history']['ndcg@10']:.3f}, geography ceiling "
+            f"{max(_col('E_defect_geography').values()):.3f}, bge {_dense:.4f}")
+
+
+# Each entry: (anchor, "bound"|"exempt", recompute function | reason).
+# An exemption states WHY no cell can stand behind the sentence. An exemption
+# with no reason is indistinguishable from a missed hit, so there are none.
+_CLAIM_REGISTRY = [
+    ("Eight retrievers span", "bound", _b_abstract_spread),
+    ("the best text-only system answers entity questions at", "bound",
+     _b_contrib_diagnosis),
+    ("the spread across document representations is", "bound", _b_intro_spread),
+    ("it is the strongest configuration that needs no downloaded weights", "bound",
+     _b_offline_base),
+    ("every other system in Table 2 against Hybrid RRF", "bound", _b_holm_family),
+    ("is the strongest text-only system we have under both aggregates", "bound",
+     _b_strongest_text_only),
+    ("Fusion beats BM25 alone", "bound", _b_fusion_beats),
+    ("Averaged word2vec trails everything", "bound", _b_w2v_trails),
+    # One sentence carries both claims -- "the only pretrained dense channel
+    # added to a fusion here" (a fact about the design, which results/ cannot
+    # settle) and "the dense fusion is ahead under both aggregates" (a fact
+    # about two columns, which it can). One sentence gets one entry, anchored on
+    # a phrase unique to it, and the entry binds the part that is measurable.
+    ("adding BGE to the fusion is worth", "bound", _b_dense_ahead),
+    ("the best text-only system reaches 0.796 and 0.735", "bound",
+     _b_entity_questions),
+    ("Every lexical channel scores exactly 0.000 on this family", "bound",
+     _b_lexical_zero),
+    ("measuring instead from the weakest corpus-trained channel", "bound",
+     _b_weakest_corpus_trained),
+    ("reaches on its own, for free", "bound", _b_oracle_headroom),
+    ("it is numerically identical to the additive control, per family", "bound",
+     lambda _s: _oracle_vs_control("Table 4 prose", _s)),
+    ("Firm history is the only family every text-only system answers", "bound",
+     _b_firm_history_only),
+    ("score exactly 0.000 and the best of them reaches", "bound",
+     _b_geography_zeros),
+    ("TF-IDF leads firm history at", "bound", _b_ordering_not_stable),
+    ("Every system that reads a constraint off the question moves it", "bound",
+     _b_geography_column),
+    ("reproduces the additive gold control exactly on form, severity, period and "
+     "geography", "bound", lambda _s: _oracle_vs_control("Table 7 prose", _s)),
+    ("On firm history recall@100", "bound", _b_firm_recall),
+    ("identical to the gold-membership control on every family where a defect slot "
+     "exists", "bound", lambda _s: _oracle_vs_control("Section 5.6 parenthesis", _s)),
+    ("it beats a trained classifier by 27 points of category accuracy", "bound",
+     _b_centroid_beats_classifier),
+
+    ("with 95% confidence intervals for the strongest text-only system", "bound",
+     _b_interval_tables),
+
+    ("added to the RRF score of every candidate in the matching category", "exempt",
+     "'every' quantifies candidate documents inside the scoring rule, not systems "
+     "or families in a results table; there is no column to recompute"),
+    ("it already ranks every gold document in the pool first", "exempt",
+     "'every' quantifies gold documents in a 300-document pool, not table cells; "
+     "the lambda values in the same sentence are bound by the dev-curve check"),
+    ("lifts geography recall@100 only to", "exempt",
+     "adverbial 'only' meaning 'merely'; the value is bound by "
+     "states('prefilter recall@100 on geography')"),
+    ("a plain absence of the phrase from every document", "exempt",
+     "'every' quantifies corpus documents, not table cells; the corpus counts are "
+     "bound in the corpus section"),
+    ("the retriever it sits on top of was too weak", "exempt",
+     "'on top of' is the preposition, not a ranking: the sentence states an "
+     "objection and names no system's position in any column"),
+    ("No AI system selected the corpus", "exempt",
+     "the AI-disclosure statement required by AI-DISCLOSURE-STANDARD.md; 'no "
+     "system' there is not a retriever in Table 2 and results/ holds nothing that "
+     "could stand behind it"),
+    ("both gold controls draw from a 300-document pool", "exempt",
+     "describes pool construction; the pool size 300 is bound above"),
+]
+
+# Two bindings whose sentences carry no count and no ranking word, so the
+# scanner does not reach them: the metadata ladder in 5.4 and the conclusion's
+# two headline figures. They are recomputed the same way, unconditionally,
+# rather than left in the registry where they would report as stale.
+print("claim class, unconditional: metadata ladder -- " + _b_metadata_ladder())
+print("claim class, unconditional: conclusion figures -- " + _b_conclusion())
+print("claim class, unconditional: firm-history interval -- " + _b_firm_interval())
+print("claim class, unconditional: site-country intervals -- "
+      + _b_site_country_overlap())
+print("claim class, unconditional: geography interval precision -- "
+      + _b_geography_precision())
+
+_CLAIM_CANDIDATES = [_s for _s in _claim_sentences(paper)
+                     if (_PAT_COUNT.search(_s) or _PAT_SUPER.search(_s))
+                     and _PAT_NAMED.search(_s)]
+_claim_report, _claim_used = [], set()
+for _sent in _CLAIM_CANDIDATES:
+    _flatsent = flat(_sent)
+    _hit = [_i for _i, (_a, _k, _p) in enumerate(_CLAIM_REGISTRY)
+            if flat(_a) in _flatsent]
+    if not _hit:
+        fails.append(
+            "UNBOUND claim: a sentence makes a count or ranking claim about a named "
+            "system or family and no binding stands behind it -- "
+            + _flatsent[:160])
+        _claim_report.append(("UNBOUND", _flatsent[:110], "no registry entry"))
+        continue
+    if len(_hit) > 1:
+        fails.append("ambiguous claim anchors "
+                     + str([_CLAIM_REGISTRY[_i][0] for _i in _hit])
+                     + " all match one sentence; make them distinct")
+        _claim_report.append(("AMBIGUOUS", _flatsent[:110], "several anchors match"))
+        continue
+    _i = _hit[0]
+    _claim_used.add(_i)
+    _anchor, _kind, _payload = _CLAIM_REGISTRY[_i]
+    if _kind == "exempt":
+        _claim_report.append(("EXEMPT", _anchor, _payload))
+    else:
+        _claim_report.append(("BOUND", _anchor, _payload(_flatsent)))
+        # A claim fixed in the Markdown and not regenerated is the N45 class, so
+        # the sentence carrying it has to reach every surface a reader opens.
+        in_all_artifacts(f"claim anchor {_anchor!r}", _anchor)
+_stale = [_a for _i, (_a, _k, _p) in enumerate(_CLAIM_REGISTRY)
+          if _i not in _claim_used]
+if _stale:
+    fails.append(f"{len(_stale)} claim registry entr(y/ies) match no sentence in "
+                 f"paper.md, so a green check stands behind prose that is no longer "
+                 f"there: {_stale}")
+print(f"claim class: {len(_CLAIM_CANDIDATES)} count/superlative sentence(s) over "
+      f"named systems or families in paper.md; "
+      f"{sum(1 for v, _, _ in _claim_report if v == 'BOUND')} BOUND, "
+      f"{sum(1 for v, _, _ in _claim_report if v == 'EXEMPT')} EXEMPT, "
+      f"{sum(1 for v, _, _ in _claim_report if v not in ('BOUND', 'EXEMPT'))} UNBOUND")
+for _v, _a, _d in _claim_report:
+    print(f"  {_v:9s} {_a[:66]:68s} {_d}")
+
+
+# --- one stored value, one rendering ----------------------------------------
+# The bindings above recorded, for every float they checked, the stored value
+# and the three-decimal string the manuscript uses for it. A stored value that
+# two places render differently fails here. Nothing is typed from the prose:
+# both sides come from the binding that already ties that occurrence to results/.
+_rend_conflicts = [(_v, _r) for _v, _r in sorted(_RENDERINGS.items()) if len(_r) > 1]
+counts["check"] += len(_RENDERINGS)
+for _v, _r in _rend_conflicts:
+    fails.append(
+        f"one stored value, two renderings: {_v!r} is printed "
+        + " and ".join(f"{_s} ({_c})" for _s, _c in sorted(_r.items()))
+        + ". Both are within tolerance of the stored value, which is why every "
+          "value binding passed; a reader meets the same number twice and sees "
+          "two different digits. Pick one and use it in both places.")
+
+# The denominator. A call site that rounded before calling check() threw away
+# the stored value, so this check cannot see it -- saying how many is the
+# difference between a measured coverage and an assumed one.
+_stored_all = set()
+
+
+def _walk_floats(o):
+    if isinstance(o, dict):
+        for _v in o.values():
+            _walk_floats(_v)
+    elif isinstance(o, list):
+        for _v in o:
+            _walk_floats(_v)
+    elif isinstance(o, float):
+        _stored_all.add(round(o, 9))
+
+
+for _rf in sorted(glob.glob(os.path.join(ROOT, "results", "*.json"))):
+    _walk_floats(json.load(open(_rf, encoding="utf-8")))
+_tied = sum(1 for _v in _RENDERINGS if _v in _stored_all)
+print(f"rendering check: {len(_RENDERINGS)} bound value(s), {_tied} of them tied to a "
+      f"raw value in results/ ({len(_RENDERINGS) - _tied} came from a call site that "
+      f"rounded first and are checked only against themselves); "
+      f"{len(_rend_conflicts)} conflict(s).")
+
+# The sweep the check cannot cover: every stored value that sits exactly on a
+# half at three decimals has two defensible renderings. Where BOTH strings occur
+# in paper.md and no binding ties them to this value, that is reported and left
+# alone -- the two strings are far more often two different cells than one value
+# printed twice, and saying "hit" about those would be the same false
+# explanation this script keeps having to undo.
+_halves, _both = [], []
+for _v in sorted(_stored_all):
+    if _v <= 0:
+        continue
+    _s = f"{_v:.10f}".rstrip("0")
+    _frac = _s.split(".")[1]
+    if len(_frac) != 4 or not _frac.endswith("5"):
+        continue
+    _halves.append(_v)
+    _lo = "%.3f" % (int(round(_v * 10000)) // 10 / 1000.0)
+    _hi = "%.3f" % ((int(round(_v * 10000)) // 10 + 1) / 1000.0)
+    if _lo in paper_flat and _hi in paper_flat:
+        _both.append((_v, _lo, _hi, _v in _RENDERINGS))
+print(f"rendering sweep: {len(_halves)} stored value(s) sit exactly on a half at three "
+      f"decimals; {len(_both)} have both renderings present somewhere in paper.md, of "
+      f"which {sum(1 for _x in _both if _x[3])} are tied to a binding and therefore "
+      f"checked above; the rest are two different cells sharing two strings and are "
+      f"left alone: "
+      + ", ".join(f"{_v}->{_lo}/{_hi}" for _v, _lo, _hi, _t in _both if not _t) + ".")
+
+
+# --- the venue's page floor, as a binding -----------------------------------
+# Round 13. Round 12 reported "905 bindings, 0 failures" against a build whose
+# References heading sat on page 20, breaching TOIS's 20-page minimum excluding
+# references. Nothing here knew about the floor, so a green run said nothing
+# about the one constraint that blocked submission. That is the same shape as
+# every other defect this script exists to catch: a true statement about what
+# was checked, mistaken for a statement about what matters.
+#
+# It was not added in round 12 because it would have failed on arrival, and a
+# check written while it fails is a note. It passes now, so it is a check.
+_FLOOR_PAGE = 21          # references must begin here or later: 20 body pages
+_pdf_pages = None
+if os.path.exists(PDF_PATH):
+    _raw = pdf_text(PDF_PATH)
+    if _raw is None:
+        fails.append("the page floor cannot be checked: no text could be extracted "
+                     f"from {_STEM}.pdf")
+    else:
+        _pages = _raw.split("\f")
+        _pdf_pages = sum(1 for _p in _pages if _p.strip())
+        # The heading acmart typesets, not the word "references" wherever it
+        # occurs: [51] cites a paper with "preferences" in its title, and the
+        # bibliography itself is full of the word.
+        _ref_page = None
+        for _i, _p in enumerate(_pages, 1):
+            if _p.lstrip().startswith("References") or "\nReferences\n" in _p:
+                _ref_page = _i
+                break
+        counts["check"] += 1
+        if _ref_page is None:
+            fails.append("no References heading found in the compiled PDF, so the "
+                         "page floor cannot be checked -- which is not a pass")
+        elif _ref_page < _FLOOR_PAGE:
+            fails.append(
+                f"page floor: references begin on page {_ref_page} of {_pdf_pages}. "
+                f"TOIS requires a minimum of {_FLOOR_PAGE - 1} pages excluding "
+                f"references, so the heading must fall on page {_FLOOR_PAGE} or "
+                f"later. The build is {_FLOOR_PAGE - _ref_page} page(s) short.")
+        else:
+            print(f"page floor: references begin on page {_ref_page} of "
+                  f"{_pdf_pages} (minimum {_FLOOR_PAGE}).")
 
 _covered = sorted(ARTIFACTS) + ["references.bib", "data/raw/MANIFEST.json"]
 print(f"bindings: {counts['check']} check() · {counts['states']} states() · "
